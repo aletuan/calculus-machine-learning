@@ -1,5 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+
+# Tạo thư mục images nếu chưa tồn tại
+if not os.path.exists('images'):
+    os.makedirs('images')
 
 # Thiết lập vẽ đẹp hơn
 plt.style.use('seaborn-v0_8')
@@ -38,7 +43,7 @@ plt.xlabel('x')
 plt.ylabel('y')
 plt.title('Biểu diễn vector trong không gian 2D')
 plt.legend()
-plt.savefig('vectors_basic.png')
+plt.savefig('images/vectors_basic.png')
 plt.close()
 
 ###########################################
@@ -110,7 +115,7 @@ plt.xlabel('x')
 plt.ylabel('y')
 plt.title('Góc giữa hai vector')
 plt.legend()
-plt.savefig('vector_angle.png')
+plt.savefig('images/vector_angle.png')
 plt.close()
 
 ###########################################
@@ -150,7 +155,7 @@ plt.ylabel('y')
 plt.title('Linear Regression')
 plt.legend()
 plt.grid(True)
-plt.savefig('linear_regression.png')
+plt.savefig('images/linear_regression.png')
 plt.close()
 
 ###########################################
@@ -189,7 +194,7 @@ plt.xlabel('x')
 plt.ylabel('y')
 plt.title('Chiếu vector v1 lên v2')
 plt.legend()
-plt.savefig('vector_projection.png')
+plt.savefig('images/vector_projection.png')
 plt.close()
 
-print("\nHình ảnh kết quả đã được lưu: 'vectors_basic.png', 'vector_angle.png', 'linear_regression.png', 'vector_projection.png'")
+print("\nHình ảnh kết quả đã được lưu trong thư mục 'images':")
