@@ -24,7 +24,3 @@
 5. **Chiếu vector và ứng dụng**
    - Chiếu vector lên một vector khác
    - Biểu diễn trực quan phép chiếu
-
-Khi chạy code này sẽ tạo ra 4 file hình ảnh minh họa các khái niệm vector cơ bản. Bạn có thể dùng nó để hiểu từng bước và xem các trực quan hóa kết quả.
-
-Đây là nền tảng quan trọng trước khi học về ma trận và calculus trong machine learning. Bạn muốn tìm hiểu sâu hơn về phần nào trong những kiến thức này không?
