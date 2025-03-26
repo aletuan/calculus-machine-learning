@@ -1,8 +1,8 @@
-# Calculus and Machine Learning Examples
+# Ứng Dụng Giải Tích và Học Máy
 
-A collection of examples demonstrating vector operations and their applications in machine learning.
+Bộ ví dụ minh họa về các phép toán vector và ứng dụng trong học máy.
 
-## Project Structure
+## Cấu Trúc Dự Án
 
 ```
 calculus-machine-learning/
@@ -20,7 +20,7 @@ calculus-machine-learning/
     └── ...
 ```
 
-## Features
+## Tính Năng
 
 1. **Vector cơ bản và biểu diễn trực quan**
    - Tạo và vẽ vector trong không gian 2D
@@ -47,40 +47,40 @@ calculus-machine-learning/
    - Chiếu vector lên một vector khác
    - Biểu diễn trực quan phép chiếu
 
-## Installation
+## Hướng Dẫn Cài Đặt
 
-1. Clone the repository:
+1. Tải mã nguồn:
 ```bash
 git clone https://github.com/aletuan/calculus-machine-learning.git
 cd calculus-machine-learning
 ```
 
-2. Install dependencies:
+2. Cài đặt các thư viện phụ thuộc:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Install the package in development mode:
+3. Cài đặt gói phần mềm ở chế độ phát triển:
 ```bash
 pip install -e .
 ```
 
-## Usage
+## Cách Sử Dụng
 
-Run the main script to see all examples:
+Chạy chương trình chính để xem tất cả các ví dụ:
 ```bash
 python -m calculus_ml.main
 ```
 
-## Development
+## Phát Triển
 
-To contribute to the project:
+Để đóng góp cho dự án:
 
-1. Fork the repository
-2. Create a new branch for your feature
-3. Make your changes
-4. Submit a pull request
+1. Fork repository này
+2. Tạo nhánh mới cho tính năng của bạn
+3. Thực hiện các thay đổi
+4. Gửi pull request
 
-## License
+## Giấy Phép
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+Dự án này được cấp phép theo giấy phép MIT - xem file LICENSE để biết thêm chi tiết.
