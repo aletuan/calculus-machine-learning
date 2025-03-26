@@ -1,3 +1,32 @@
+Metadata-Version: 2.4
+Name: calculus_ml
+Version: 0.1.0
+Summary: A collection of examples demonstrating vector operations and their applications in machine learning
+Home-page: https://github.com/aletuan/calculus-machine-learning
+Author: Andy Le
+Author-email: your.email@example.com
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Education
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: matplotlib>=3.7.0
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
 # Calculus and Machine Learning Examples
 
 A collection of examples demonstrating vector operations and their applications in machine learning.

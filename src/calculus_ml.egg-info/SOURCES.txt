@@ -1,0 +1,12 @@
+README.md
+setup.py
+src/calculus_ml/__init__.py
+src/calculus_ml/linear_regression.py
+src/calculus_ml/main.py
+src/calculus_ml/vector_operations.py
+src/calculus_ml/vector_visualization.py
+src/calculus_ml.egg-info/PKG-INFO
+src/calculus_ml.egg-info/SOURCES.txt
+src/calculus_ml.egg-info/dependency_links.txt
+src/calculus_ml.egg-info/requires.txt
+src/calculus_ml.egg-info/top_level.txt
