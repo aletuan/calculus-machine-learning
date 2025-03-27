@@ -245,11 +245,72 @@ plot_model_errors(x_train, y_train, w, b)
 plot_squared_errors(x_train, y_train, w, b)
 ```
 
+Hình minh họa trên cho thấy:
+- Các điểm dữ liệu thực tế (màu xanh)
+- Đường hồi quy (màu đỏ)
+- Hình vuông màu đỏ nhạt thể hiện bình phương sai số tại mỗi điểm
+- Độ lớn của hình vuông tỷ lệ với bình phương sai số
+- Tổng diện tích các hình vuông (chia cho 2m) chính là giá trị của cost function
+
+Ví dụ chi tiết:
+```python
+# Tính bình phương sai số cho từng điểm
+for i in range(len(x_train)):
+    x_i = x_train[i]
+    y_i = y_train[i]
+    y_pred_i = predict(x_i, w, b)
+    
+    # Sai số
+    error = y_pred_i - y_i
+    # Bình phương sai số
+    squared_error = error ** 2
+    
+    print(f"Điểm {i+1}:")
+    print(f"  Giá trị thực: {y_i}")
+    print(f"  Dự đoán: {y_pred_i:.1f}")
+    print(f"  Sai số: {error:.1f}")
+    print(f"  Bình phương sai số: {squared_error:.1f}")
+```
+
 5. **Đường Đồng Mức của Cost Function**
 ![Đường Đồng Mức](images/cost_contour.png)
 ```python
 # Vẽ đường đồng mức của cost function
 plot_cost_contour(x_train, y_train, w_range=(100, 300), b_range=(-200, 200))
+```
+
+Hình minh họa trên cho thấy:
+- Trục x: giá trị của tham số w (hệ số góc)
+- Trục y: giá trị của tham số b (hệ số tự do)
+- Màu sắc: giá trị của cost function J(w,b)
+  - Màu đỏ: giá trị cost cao (mô hình kém)
+  - Màu xanh: giá trị cost thấp (mô hình tốt)
+- Các đường đồng mức: nối các điểm có cùng giá trị cost
+- Các điểm đánh dấu: vị trí của các mô hình đã thử nghiệm
+
+Ví dụ chi tiết:
+```python
+# Tạo lưới các giá trị w và b
+w_values = np.linspace(100, 300, 20)
+b_values = np.linspace(-200, 200, 20)
+W, B = np.meshgrid(w_values, b_values)
+
+# Tính cost function cho mỗi cặp giá trị (w, b)
+Z = np.zeros_like(W)
+for i in range(len(w_values)):
+    for j in range(len(b_values)):
+        Z[j, i] = compute_cost(x_train, y_train, W[j, i], B[j, i])
+
+# Tìm giá trị tối ưu
+min_cost_idx = np.unravel_index(Z.argmin(), Z.shape)
+w_opt = W[min_cost_idx]
+b_opt = B[min_cost_idx]
+min_cost = Z[min_cost_idx]
+
+print(f"Giá trị tối ưu:")
+print(f"  w = {w_opt:.1f}")
+print(f"  b = {b_opt:.1f}")
+print(f"  Cost = {min_cost:.1f}")
 ```
 
 ## Ví Dụ Sử Dụng
