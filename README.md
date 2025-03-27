@@ -207,6 +207,51 @@ def compute_cost(x, y, w, b):
     return total_cost / (2 * m)
 ```
 
+#### Minh Họa Trực Quan Cost Function
+
+1. **Dữ Liệu Giá Nhà**
+![Dữ Liệu Giá Nhà](images/house_data.png)
+```python
+# Dữ liệu mẫu về giá nhà
+x_train = [1.0, 2.0, 3.0, 4.0, 5.0]  # kích thước (1000 sqft)
+y_train = [300, 500, 700, 900, 1100]  # giá (1000s $)
+```
+
+2. **So Sánh Các Mô Hình Khác Nhau**
+![So Sánh Các Mô Hình](images/different_models.png)
+```python
+# So sánh các mô hình với các tham số khác nhau
+models = [
+    (100, 100),  # w=100, b=100
+    (200, 100),  # w=200, b=100
+    (200, 0),    # w=200, b=0
+    (200, -100)  # w=200, b=-100
+]
+plot_different_models(x_train, y_train, models)
+```
+
+3. **Chi Tiết Sai Số của Mô Hình**
+![Chi Tiết Sai Số](images/model_errors.png)
+```python
+# Vẽ chi tiết sai số của mô hình
+w, b = 200, 100
+plot_model_errors(x_train, y_train, w, b)
+```
+
+4. **Bình Phương Sai Số**
+![Bình Phương Sai Số](images/squared_errors.png)
+```python
+# Vẽ bình phương sai số
+plot_squared_errors(x_train, y_train, w, b)
+```
+
+5. **Đường Đồng Mức của Cost Function**
+![Đường Đồng Mức](images/cost_contour.png)
+```python
+# Vẽ đường đồng mức của cost function
+plot_cost_contour(x_train, y_train, w_range=(100, 300), b_range=(-200, 200))
+```
+
 ## Ví Dụ Sử Dụng
 
 ### 1. Minh Họa Cost Function
