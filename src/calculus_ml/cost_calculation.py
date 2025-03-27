@@ -193,7 +193,7 @@ plt.show()
 
 def plot_cost_3d(x_train, y_train, w_range=(100, 300), b_range=(-200, 200)):
     """
-    Vẽ cost function J(w,b) trong không gian 3D
+    Vẽ cost function J(w,b) trong không gian 3D với hiển thị rõ ràng điểm tối ưu
     
     Args:
         x_train: dữ liệu đầu vào
@@ -205,9 +205,9 @@ def plot_cost_3d(x_train, y_train, w_range=(100, 300), b_range=(-200, 200)):
     if not os.path.exists('images'):
         os.makedirs('images')
     
-    # Tạo lưới các giá trị w và b
-    w_values = np.linspace(w_range[0], w_range[1], 50)
-    b_values = np.linspace(b_range[0], b_range[1], 50)
+    # Tạo lưới các giá trị w và b với độ phân giải cao hơn
+    w_values = np.linspace(w_range[0], w_range[1], 100)  # Tăng độ phân giải
+    b_values = np.linspace(b_range[0], b_range[1], 100)
     W, B = np.meshgrid(w_values, b_values)
     
     # Tính cost function cho mỗi cặp giá trị (w, b)
@@ -222,34 +222,53 @@ def plot_cost_3d(x_train, y_train, w_range=(100, 300), b_range=(-200, 200)):
     b_opt = B[min_cost_idx]
     min_cost = Z[min_cost_idx]
     
-    # Tạo đồ thị 3D
-    fig = plt.figure(figsize=(12, 8))
+    # Tạo đồ thị 3D với kích thước lớn hơn
+    fig = plt.figure(figsize=(15, 12))
     ax = fig.add_subplot(111, projection='3d')
     
-    # Vẽ bề mặt với gradient màu
+    # Vẽ bề mặt với gradient màu và độ trong suốt
     surface = ax.plot_surface(W, B, Z, cmap='viridis',
-                            linewidth=0, antialiased=True)
+                            linewidth=0.5, antialiased=True, alpha=0.8)
     
-    # Đánh dấu điểm tối ưu
+    # Thêm lưới để dễ đọc hơn
+    ax.grid(True)
+    
+    # Đánh dấu điểm tối ưu với marker lớn hơn và màu nổi bật
     ax.scatter([w_opt], [b_opt], [min_cost],
-              color='red', s=100, label='Điểm tối ưu')
+              color='red', s=300, marker='*', 
+              label='Điểm tối ưu', linewidth=2)
+    
+    # Vẽ đường dọc từ điểm tối ưu xuống mặt phẳng w-b
+    ax.plot([w_opt, w_opt], [b_opt, b_opt], [min_cost, Z.max()],
+            color='red', linestyle='--', linewidth=2)
+    
+    # Điều chỉnh góc nhìn để dễ quan sát
+    ax.view_init(elev=20, azim=45)
     
     # Thêm các thành phần trang trí
-    ax.set_xlabel('w (hệ số góc)')
-    ax.set_ylabel('b (hệ số tự do)')
-    ax.set_zlabel('J(w,b) (cost)')
-    plt.colorbar(surface, label='Giá trị cost')
-    plt.title('Cost Function J(w,b) trong Không Gian 3D')
-    plt.legend()
+    ax.set_xlabel('w (hệ số góc)', labelpad=10)
+    ax.set_ylabel('b (hệ số tự do)', labelpad=10)
+    ax.set_zlabel('J(w,b) (cost)', labelpad=10)
+    
+    # Thêm colorbar với label rõ ràng
+    cbar = plt.colorbar(surface, label='Giá trị cost function J(w,b)', pad=0.1)
+    cbar.ax.tick_params(labelsize=10)
+    
+    plt.title('Cost Function J(w,b) trong Không Gian 3D\n' +
+              f'Điểm tối ưu: w* = {w_opt:.1f}, b* = {b_opt:.1f}, J(w*,b*) = {min_cost:.1f}',
+              pad=20)
+    
+    # Điều chỉnh legend
+    plt.legend(loc='upper right', bbox_to_anchor=(1.15, 1))
+    
+    # Lưu hình ảnh với chất lượng cao
+    plt.savefig('images/cost_3d.png', bbox_inches='tight', dpi=300)
+    
+    # Hiển thị đồ thị
+    plt.show()
     
     # In thông tin về điểm tối ưu
     print(f"\nTham số tối ưu tìm được:")
     print(f"  w* = {w_opt:.1f}")
     print(f"  b* = {b_opt:.1f}")
     print(f"  J(w*,b*) = {min_cost:.1f}")
-    
-    # Lưu hình ảnh
-    plt.savefig('images/cost_3d.png', bbox_inches='tight', dpi=300)
-    
-    # Hiển thị đồ thị
-    plt.show()
