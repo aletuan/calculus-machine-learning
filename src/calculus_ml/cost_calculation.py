@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 # 1. Tạo dữ liệu đơn giản - chỉ 5 mẫu
 x_train = np.array([1.0, 2.0, 3.0, 4.0, 5.0])  # kích thước (1000 sqft)
@@ -200,6 +201,10 @@ def plot_cost_3d(x_train, y_train, w_range=(100, 300), b_range=(-200, 200)):
         w_range: khoảng giá trị của w (hệ số góc)
         b_range: khoảng giá trị của b (hệ số tự do)
     """
+    # Tạo thư mục images nếu chưa tồn tại
+    if not os.path.exists('images'):
+        os.makedirs('images')
+    
     # Tạo lưới các giá trị w và b
     w_values = np.linspace(w_range[0], w_range[1], 50)
     b_values = np.linspace(b_range[0], b_range[1], 50)
@@ -243,5 +248,8 @@ def plot_cost_3d(x_train, y_train, w_range=(100, 300), b_range=(-200, 200)):
     print(f"  b* = {b_opt:.1f}")
     print(f"  J(w*,b*) = {min_cost:.1f}")
     
-    # Cho phép xoay đồ thị
+    # Lưu hình ảnh
+    plt.savefig('images/cost_3d.png', bbox_inches='tight', dpi=300)
+    
+    # Hiển thị đồ thị
     plt.show()
