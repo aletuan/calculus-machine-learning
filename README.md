@@ -15,7 +15,9 @@ calculus-machine-learning/
 │       ├── vector_operations.py
 │       ├── vector_visualization.py
 │       ├── linear_regression.py
-│       └── main.py
+│       ├── cost_calculation.py
+│       ├── cost_calculation_main.py
+│       └── cost_function.py
 └── images/
     └── ...
 ```
@@ -46,6 +48,88 @@ calculus-machine-learning/
 5. **Chiếu vector và ứng dụng**
    - Chiếu vector lên một vector khác
    - Biểu diễn trực quan phép chiếu
+
+6. **Tính toán Cost Function trong Học Máy**
+   - Minh họa chi tiết cách tính cost function
+   - So sánh các mô hình khác nhau
+   - Trực quan hóa sai số và bình phương sai số
+   - Vẽ đường đồng mức của cost function
+
+## Chi Tiết Các Hàm Chính
+
+### 1. Vector Operations (`vector_operations.py`)
+
+```python
+def add_vectors(v1, v2):
+    """
+    Cộng hai vector
+    Ví dụ: add_vectors([1, 2], [3, 4]) -> [4, 6]
+    """
+    return [x + y for x, y in zip(v1, v2)]
+
+def dot_product(v1, v2):
+    """
+    Tính tích vô hướng của hai vector
+    Ví dụ: dot_product([1, 2], [3, 4]) -> 11
+    """
+    return sum(x * y for x, y in zip(v1, v2))
+```
+
+### 2. Cost Calculation (`cost_calculation.py`)
+
+```python
+def predict(x, w, b):
+    """
+    Dự đoán giá trị y dựa trên x, w, b
+    y = w*x + b
+    
+    Ví dụ:
+    x = 2.0, w = 200, b = 100
+    predict(2.0, 200, 100) -> 500
+    """
+    return w * x + b
+
+def compute_cost(x, y, w, b):
+    """
+    Tính cost function J(w,b)
+    J(w,b) = (1/2m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)²
+    
+    Ví dụ:
+    x = [1.0, 2.0], y = [300, 500], w = 200, b = 100
+    compute_cost(x, y, w, b) -> 2500
+    """
+    m = len(x)
+    total_cost = sum((predict(x[i], w, b) - y[i]) ** 2 for i in range(m))
+    return total_cost / (2 * m)
+```
+
+## Ví Dụ Sử Dụng
+
+### 1. Minh Họa Cost Function
+
+```python
+# Tạo dữ liệu mẫu
+x_train = [1.0, 2.0, 3.0, 4.0, 5.0]  # kích thước nhà (1000 sqft)
+y_train = [300, 500, 700, 900, 1100]  # giá nhà (1000s $)
+
+# Tính cost cho các mô hình khác nhau
+w1, b1 = 100, 100
+cost1 = compute_cost(x_train, y_train, w1, b1)
+print(f"Cost với w={w1}, b={b1}: {cost1:.2f}")
+
+# Vẽ biểu đồ so sánh các mô hình
+plot_different_models(x_train, y_train, [(w1, b1), (w2, b2), (w3, b3)])
+```
+
+### 2. Trực Quan Hóa Sai Số
+
+```python
+# Vẽ chi tiết sai số của mô hình
+plot_model_errors(x_train, y_train, w, b)
+
+# Vẽ bình phương sai số
+plot_squared_errors(x_train, y_train, w, b)
+```
 
 ## Hướng Dẫn Cài Đặt
 
