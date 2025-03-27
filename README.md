@@ -67,12 +67,116 @@ def add_vectors(v1, v2):
     """
     return [x + y for x, y in zip(v1, v2)]
 
+def subtract_vectors(v1, v2):
+    """
+    Trừ hai vector
+    Ví dụ: subtract_vectors([3, 4], [1, 2]) -> [2, 2]
+    """
+    return [x - y for x, y in zip(v1, v2)]
+
+def scalar_multiply(v, scalar):
+    """
+    Nhân vector với số vô hướng
+    Ví dụ: scalar_multiply([1, 2], 3) -> [3, 6]
+    """
+    return [x * scalar for x in v]
+
+def vector_norm(v):
+    """
+    Tính độ dài (norm) của vector
+    Ví dụ: vector_norm([3, 4]) -> 5.0
+    """
+    return np.sqrt(sum(x * x for x in v))
+
 def dot_product(v1, v2):
     """
     Tính tích vô hướng của hai vector
     Ví dụ: dot_product([1, 2], [3, 4]) -> 11
     """
     return sum(x * y for x, y in zip(v1, v2))
+
+def cross_product(v1, v2):
+    """
+    Tính tích có hướng của hai vector trong không gian 2D
+    Ví dụ: cross_product([1, 0], [0, 1]) -> 1
+    """
+    return v1[0] * v2[1] - v1[1] * v2[0]
+
+def normalize_vector(v):
+    """
+    Chuẩn hóa vector thành vector đơn vị
+    Ví dụ: normalize_vector([3, 4]) -> [0.6, 0.8]
+    """
+    norm = vector_norm(v)
+    return [x / norm for x in v]
+
+def angle_between_vectors(v1, v2):
+    """
+    Tính góc giữa hai vector (đơn vị: độ)
+    Ví dụ: angle_between_vectors([1, 0], [0, 1]) -> 90.0
+    """
+    dot = dot_product(v1, v2)
+    norms = vector_norm(v1) * vector_norm(v2)
+    return np.degrees(np.arccos(dot / norms))
+```
+
+#### Ví dụ Sử Dụng Vector Operations
+
+```python
+# Tạo các vector mẫu
+v1 = [3, 4]
+v2 = [1, 2]
+v3 = [0, 1]
+
+# Các phép toán cơ bản
+print(f"Tổng vector: {add_vectors(v1, v2)}")  # [4, 6]
+print(f"Hiệu vector: {subtract_vectors(v1, v2)}")  # [2, 2]
+print(f"Nhân với số vô hướng: {scalar_multiply(v1, 2)}")  # [6, 8]
+
+# Tính toán độ dài và góc
+print(f"Độ dài vector v1: {vector_norm(v1)}")  # 5.0
+print(f"Góc giữa v1 và v2: {angle_between_vectors(v1, v2)}°")  # 10.3°
+
+# Vector đơn vị
+v1_unit = normalize_vector(v1)
+print(f"Vector đơn vị của v1: {v1_unit}")  # [0.6, 0.8]
+```
+
+#### Minh Họa Trực Quan
+
+Dưới đây là các hình minh họa cho các phép toán vector:
+
+1. **Vector Cơ Bản**
+![Vector Cơ Bản](images/vectors_basic.png)
+```python
+v1 = [3, 4]
+v2 = [1, 2]
+result = add_vectors(v1, v2)  # [4, 6]
+```
+
+2. **Góc Giữa Hai Vector**
+![Góc Giữa Hai Vector](images/vector_angle.png)
+```python
+v1 = [3, 4]
+v2 = [1, 2]
+angle = angle_between_vectors(v1, v2)  # 10.3°
+```
+
+3. **Chiếu Vector**
+![Chiếu Vector](images/vector_projection.png)
+```python
+v1 = [3, 4]
+v2 = [1, 2]
+projection = project_vector(v1, v2)  # Chiếu v1 lên v2
+```
+
+4. **Linear Regression với Vector**
+![Linear Regression](images/linear_regression.png)
+```python
+# Sử dụng vector để tìm đường hồi quy
+X = np.array([1, 2, 3, 4, 5])
+y = np.array([2, 4, 6, 8, 10])
+w, b = find_linear_regression(X, y)
 ```
 
 ### 2. Cost Calculation (`cost_calculation.py`)
