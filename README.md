@@ -288,11 +288,30 @@ Hình minh họa trên cho thấy:
 - Các đường đồng mức: nối các điểm có cùng giá trị cost
 - Các điểm đánh dấu: vị trí của các mô hình đã thử nghiệm
 
-Ví dụ chi tiết:
+6. **Cost Function trong Không Gian 3D**
+![Cost Function 3D](images/cost_3d.png)
+```python
+# Vẽ cost function trong không gian 3D
+plot_cost_3d(x_train, y_train, w_range=(100, 300), b_range=(-200, 200))
+```
+
+Hình minh họa 3D cho thấy:
+- Trục x: giá trị của tham số w (hệ số góc)
+- Trục y: giá trị của tham số b (hệ số tự do)
+- Trục z: giá trị của cost function J(w,b)
+- Bề mặt 3D thể hiện:
+  - Điểm thấp nhất: tham số tối ưu (w*, b*)
+  - Hình dạng "bowl" (bát) đặc trưng của hàm lồi
+  - Độ dốc tại mỗi điểm: gradient của cost function
+  - Các vùng màu: mức độ tốt của mô hình
+    - Vùng tối màu (thấp): mô hình tốt
+    - Vùng sáng màu (cao): mô hình kém
+
+Ví dụ chi tiết về tạo và phân tích đồ thị 3D:
 ```python
 # Tạo lưới các giá trị w và b
-w_values = np.linspace(100, 300, 20)
-b_values = np.linspace(-200, 200, 20)
+w_values = np.linspace(100, 300, 50)  # Tăng độ phân giải
+b_values = np.linspace(-200, 200, 50)
 W, B = np.meshgrid(w_values, b_values)
 
 # Tính cost function cho mỗi cặp giá trị (w, b)
@@ -307,10 +326,43 @@ w_opt = W[min_cost_idx]
 b_opt = B[min_cost_idx]
 min_cost = Z[min_cost_idx]
 
-print(f"Giá trị tối ưu:")
-print(f"  w = {w_opt:.1f}")
-print(f"  b = {b_opt:.1f}")
-print(f"  Cost = {min_cost:.1f}")
+# Vẽ đồ thị 3D với các tùy chọn nâng cao
+fig = plt.figure(figsize=(12, 8))
+ax = fig.add_subplot(111, projection='3d')
+
+# Vẽ bề mặt với gradient màu
+surface = ax.plot_surface(W, B, Z, cmap='viridis', 
+                         linewidth=0, antialiased=True)
+
+# Đánh dấu điểm tối ưu
+ax.scatter([w_opt], [b_opt], [min_cost], 
+          color='red', s=100, label='Điểm tối ưu')
+
+# Thêm các thành phần trang trí
+ax.set_xlabel('w (hệ số góc)')
+ax.set_ylabel('b (hệ số tự do)')
+ax.set_zlabel('J(w,b) (cost)')
+plt.colorbar(surface, label='Giá trị cost')
+plt.title('Cost Function J(w,b) trong Không Gian 3D')
+plt.legend()
+
+# Thêm chú thích về điểm tối ưu
+print(f"Tham số tối ưu tìm được:")
+print(f"  w* = {w_opt:.1f}")
+print(f"  b* = {b_opt:.1f}")
+print(f"  J(w*,b*) = {min_cost:.1f}")
+
+# Phân tích gradient tại một số điểm
+test_points = [
+    (150, 0),   # Điểm xa tối ưu
+    (200, -50), # Điểm gần tối ưu
+    (w_opt, b_opt)  # Điểm tối ưu
+]
+
+for w, b in test_points:
+    cost = compute_cost(x_train, y_train, w, b)
+    print(f"\nPhân tích tại điểm (w={w}, b={b}):")
+    print(f"  Cost = {cost:.1f}")
 ```
 
 ## Ví Dụ Sử Dụng
