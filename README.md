@@ -365,34 +365,6 @@ for w, b in test_points:
     print(f"  Cost = {cost:.1f}")
 ```
 
-## Ví Dụ Sử Dụng
-
-### 1. Minh Họa Cost Function
-
-```python
-# Tạo dữ liệu mẫu
-x_train = [1.0, 2.0, 3.0, 4.0, 5.0]  # kích thước nhà (1000 sqft)
-y_train = [300, 500, 700, 900, 1100]  # giá nhà (1000s $)
-
-# Tính cost cho các mô hình khác nhau
-w1, b1 = 100, 100
-cost1 = compute_cost(x_train, y_train, w1, b1)
-print(f"Cost với w={w1}, b={b1}: {cost1:.2f}")
-
-# Vẽ biểu đồ so sánh các mô hình
-plot_different_models(x_train, y_train, [(w1, b1), (w2, b2), (w3, b3)])
-```
-
-### 2. Trực Quan Hóa Sai Số
-
-```python
-# Vẽ chi tiết sai số của mô hình
-plot_model_errors(x_train, y_train, w, b)
-
-# Vẽ bình phương sai số
-plot_squared_errors(x_train, y_train, w, b)
-```
-
 ## Hướng Dẫn Cài Đặt
 
 1. Tải mã nguồn:
