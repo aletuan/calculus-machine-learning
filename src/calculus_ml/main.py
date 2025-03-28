@@ -1,26 +1,32 @@
 import os
 import numpy as np
-from .vector_operations import (
+
+# Import core functionality
+from .core.vector import (
+    add_vectors,
+    dot_product,
+    vector_norm,
     create_vectors,
     vector_operations,
     unit_vector_and_angle,
     vector_projection
 )
-from .vector_visualization import (
+from .core.linear_model import find_linear_regression
+from .core.cost_function import compute_cost, generate_house_data
+from .core.gradient_descent import gradient_descent, compute_gradient
+
+# Import visualization
+from .visualization.vector_plot import (
     plot_basic_vectors,
     plot_vector_angle,
     plot_vector_projection
 )
-from .linear_regression import (
-    generate_data,
-    fit_linear_regression,
-    plot_linear_regression
+from .visualization.cost_plot import (
+    plot_cost_surface,
+    plot_cost_contour,
+    plot_model_errors,
+    plot_squared_errors
 )
-from .core.vector import *
-from .core.linear_model import *
-from .core.cost_function import compute_cost, generate_house_data
-from .core.gradient_descent import gradient_descent, compute_gradient
-from .visualization.cost_plot import plot_cost_surface, plot_cost_contour
 from .visualization.gradient_plot import plot_gradient_descent, plot_gradient_steps
 
 def run_vector_examples():

@@ -65,4 +65,16 @@ def vector_projection(v1, v2):
     return {
         'projection_vector': projection_vector,
         'projection_norm': projection_norm
-    } 
+    }
+
+def add_vectors(v1, v2):
+    """Cộng hai vector"""
+    return np.array(v1) + np.array(v2)
+
+def dot_product(v1, v2):
+    """Tính tích vô hướng của hai vector"""
+    return np.dot(np.array(v1), np.array(v2))
+
+def vector_norm(v):
+    """Tính độ dài (norm) của vector"""
+    return np.linalg.norm(np.array(v)) 

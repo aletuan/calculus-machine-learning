@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import os
+from ..core.cost_function import compute_cost
 
 def plot_cost_surface(x, y, w_range=(100, 300), b_range=(-200, 200)):
     """

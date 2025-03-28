@@ -9,7 +9,7 @@ def generate_data():
     y = 2 * x + 1 + np.random.randn(5) * 0.5
     return x, y
 
-def fit_linear_regression(x, y):
+def find_linear_regression(x, y):
     """Tính toán các tham số của hồi quy tuyến tính"""
     # Chuyển x thành ma trận thiết kế (thêm cột 1 cho bias)
     X = np.column_stack((np.ones_like(x), x))
