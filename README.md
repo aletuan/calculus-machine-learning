@@ -55,6 +55,12 @@ calculus-machine-learning/
    - Trực quan hóa sai số và bình phương sai số
    - Vẽ đường đồng mức của cost function
 
+7. **Gradient Descent**
+   - Cài đặt thuật toán gradient descent
+   - Trực quan hóa quá trình học
+   - Theo dõi sự hội tụ của thuật toán
+   - Phân tích ảnh hưởng của learning rate
+
 ## Chi Tiết Các Hàm Chính
 
 ### 1. Vector Operations (`vector_operations.py`)
@@ -364,6 +370,102 @@ for w, b in test_points:
     print(f"\nPhân tích tại điểm (w={w}, b={b}):")
     print(f"  Cost = {cost:.1f}")
 ```
+
+### 7. Gradient Descent (`gradient_descent.py`)
+
+```python
+def compute_gradient(x, y, w, b):
+    """
+    Tính gradient của cost function J(w,b)
+    
+    Args:
+        x (ndarray (m,)): Data, m examples 
+        y (ndarray (m,)): target values
+        w,b (scalar)    : model parameters
+    
+    Returns:
+        dj_dw (scalar): The gradient of the cost w.r.t. the parameters w
+        dj_db (scalar): The gradient of the cost w.r.t. the parameter b
+    """
+    m = x.shape[0]
+    dj_dw = 0
+    dj_db = 0
+    
+    for i in range(m):
+        f_wb = w * x[i] + b
+        dj_dw_i = (f_wb - y[i]) * x[i]  # Gradient của w
+        dj_db_i = f_wb - y[i]           # Gradient của b
+        dj_db += dj_db_i
+        dj_dw += dj_dw_i
+    
+    dj_dw = dj_dw / m
+    dj_db = dj_db / m
+    
+    return dj_dw, dj_db
+
+def gradient_descent(x, y, w_init, b_init, alpha, num_iters):
+    """
+    Thực hiện gradient descent để tối ưu w,b
+    
+    Args:
+        x (ndarray (m,))  : Data, m examples
+        y (ndarray (m,))  : target values
+        w_init,b_init (scalar) : initial values of model parameters  
+        alpha (float)     : Learning rate
+        num_iters (int)   : number of iterations
+    
+    Returns:
+        w (scalar): Updated value of parameter after running gradient descent
+        b (scalar): Updated value of parameter after running gradient descent
+        J_history : History of cost values
+        p_history : History of parameters [w,b] 
+    """
+```
+
+#### Ví dụ Sử Dụng Gradient Descent
+
+```python
+# Khởi tạo dữ liệu và tham số
+x_train = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
+y_train = np.array([300, 500, 700, 900, 1100])
+initial_w = 100
+initial_b = 0
+iterations = 1000
+alpha = 0.01
+
+# Thực hiện gradient descent
+w_final, b_final, J_hist, p_hist = gradient_descent(
+    x_train, y_train, initial_w, initial_b, alpha, iterations)
+
+print(f"Tham số tối ưu: w = {w_final:.2f}, b = {b_final:.2f}")
+print(f"Cost cuối cùng = {J_hist[-1]:.2f}")
+```
+
+#### Minh Họa Trực Quan Gradient Descent
+
+1. **Quá Trình Gradient Descent trên Bề Mặt Cost**
+![Gradient Descent 3D](images/gradient_descent_3d.png)
+- Đường màu đỏ thể hiện quá trình tối ưu
+- Điểm đỏ: vị trí bắt đầu
+- Điểm xanh: vị trí kết thúc (tối ưu)
+
+2. **Đường Đồng Mức và Quá Trình Gradient Descent**
+![Gradient Descent Contour](images/gradient_descent_contour.png)
+- Các đường đồng mức thể hiện các điểm có cùng giá trị cost
+- Đường màu đỏ thể hiện quá trình tối ưu
+- Gradient descent di chuyển vuông góc với các đường đồng mức
+
+3. **Cost Function qua các Iteration**
+![Cost History](images/cost_history.png)
+- Trục x: số iteration
+- Trục y: giá trị của cost function
+- Đường cong giảm dần thể hiện sự hội tụ của thuật toán
+
+4. **Các Bước của Gradient Descent trên Dữ Liệu**
+![Gradient Steps](images/gradient_steps.png)
+- Các điểm xanh: dữ liệu training
+- Các đường thẳng: mô hình tại các iteration khác nhau
+- Màu sắc thể hiện thứ tự iteration (từ đậm đến nhạt)
 
 ## Hướng Dẫn Cài Đặt
 
