@@ -2,8 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import os
+from .cost_plot import ensure_images_dir
 
-def plot_gradient_descent(x, y, w_history, b_history, cost_history, compute_cost):
+def plot_gradient_descent(x, y, w_history, b_history, cost_history, compute_cost, save_as='gradient_descent_3d.png'):
     """
     Vẽ quá trình gradient descent
     
@@ -12,9 +13,9 @@ def plot_gradient_descent(x, y, w_history, b_history, cost_history, compute_cost
         w_history, b_history : lịch sử các tham số
         cost_history : lịch sử giá trị cost
         compute_cost : hàm tính cost
+        save_as : tên file để lưu (default: 'gradient_descent_3d.png')
     """
-    if not os.path.exists('images'):
-        os.makedirs('images')
+    ensure_images_dir()
         
     # Tạo lưới các điểm w,b để vẽ bề mặt
     w = np.linspace(100, 300, 100)
@@ -54,7 +55,7 @@ def plot_gradient_descent(x, y, w_history, b_history, cost_history, compute_cost
     plt.colorbar(surface, label='Giá trị cost function')
     plt.legend()
     
-    plt.savefig('images/gradient_descent_3d.png', bbox_inches='tight', dpi=300)
+    plt.savefig(os.path.join('images', save_as), bbox_inches='tight', dpi=300)
     plt.close()
     
     # Vẽ đồ thị 2D của cost function theo số iteration
@@ -64,7 +65,7 @@ def plot_gradient_descent(x, y, w_history, b_history, cost_history, compute_cost
     plt.ylabel('Cost J(w,b)')
     plt.title('Cost Function qua các iteration')
     plt.grid(True)
-    plt.savefig('images/cost_history.png')
+    plt.savefig(os.path.join('images', 'cost_history.png'))
     plt.close()
     
     # Vẽ đường đồng mức với quá trình gradient descent
@@ -79,10 +80,10 @@ def plot_gradient_descent(x, y, w_history, b_history, cost_history, compute_cost
     plt.title('Quá trình Gradient Descent trên Contour Plot')
     plt.legend()
     plt.grid(True)
-    plt.savefig('images/gradient_descent_contour.png')
+    plt.savefig(os.path.join('images', 'gradient_descent_contour.png'))
     plt.close()
 
-def plot_gradient_steps(x, y, w_history, b_history, compute_cost, num_points=5):
+def plot_gradient_steps(x, y, w_history, b_history, compute_cost, save_as='gradient_descent_steps.png', num_points=5):
     """
     Vẽ các bước của gradient descent trên dữ liệu
     
@@ -90,8 +91,11 @@ def plot_gradient_steps(x, y, w_history, b_history, compute_cost, num_points=5):
         x,y : training data
         w_history, b_history : lịch sử các tham số
         compute_cost : hàm tính cost
+        save_as : tên file để lưu (default: 'gradient_descent_steps.png')
         num_points : số điểm cần vẽ
     """
+    ensure_images_dir()
+    
     plt.figure(figsize=(12, 8))
     plt.scatter(x, y, color='blue', s=100, label='Dữ liệu')
     
@@ -113,5 +117,5 @@ def plot_gradient_steps(x, y, w_history, b_history, compute_cost, num_points=5):
     plt.title('Các bước của Gradient Descent')
     plt.legend()
     plt.grid(True)
-    plt.savefig('images/gradient_steps.png')
+    plt.savefig(os.path.join('images', save_as))
     plt.close() 

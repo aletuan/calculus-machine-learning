@@ -4,44 +4,101 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich.progress import track
+from rich.tree import Tree
+from rich import print as rprint
 
 # Import core functionality
 from .core.vector import (
     add_vectors,
     dot_product,
-    vector_norm
+    vector_norm,
+    create_vectors,
+    vector_operations,
+    unit_vector_and_angle,
+    vector_projection
 )
 from .core.linear_model import find_linear_regression
 from .core.cost_function import compute_cost, generate_house_data
-from .core.gradient_descent import gradient_descent
+from .core.gradient_descent import gradient_descent, compute_gradient
 
 # Import visualization
 from .visualization.cost_plot import (
-    plot_cost_surface,
-    plot_cost_contour
+    plot_cost_3d,
+    plot_cost_contour,
+    plot_linear_regression_fit
 )
 from .visualization.gradient_plot import plot_gradient_descent, plot_gradient_steps
 
 # Initialize rich console
 console = Console()
 
+# Dictionary quản lý hình ảnh
+IMAGES = {
+    "Linear Regression": {
+        "linear_regression_fit.png": "Kết quả hồi quy tuyến tính với dữ liệu training và đường hồi quy"
+    },
+    "Cost Function": {
+        "cost_function_3d.png": "Bề mặt cost function trong không gian 3D",
+        "cost_function_contour.png": "Đường đồng mức của cost function"
+    },
+    "Gradient Descent": {
+        "gradient_descent_3d.png": "Quá trình gradient descent trên bề mặt cost 3D",
+        "gradient_descent_contour.png": "Quá trình gradient descent trên contour",
+        "gradient_descent_steps.png": "Các bước của gradient descent trên dữ liệu",
+        "cost_history.png": "Lịch sử cost function qua các iteration"
+    }
+}
+
+def ensure_images_dir():
+    """Đảm bảo thư mục images tồn tại"""
+    if not os.path.exists('images'):
+        os.makedirs('images')
+
+def print_generated_images():
+    """In thông tin về các hình ảnh đã tạo"""
+    tree = Tree("📊 Hình ảnh đã tạo")
+    
+    for category, images in IMAGES.items():
+        category_tree = tree.add(f"📁 {category}")
+        for img_name, description in images.items():
+            img_path = os.path.join('images', img_name)
+            if os.path.exists(img_path):
+                size = os.path.getsize(img_path) / 1024  # Convert to KB
+                category_tree.add(f"📄 {img_name} ({size:.1f}KB) - {description}")
+            else:
+                category_tree.add(f"❌ {img_name} (không tìm thấy) - {description}")
+    
+    console.print("\n")
+    console.print(Panel(tree, title="[bold blue]Thông tin hình ảnh[/bold blue]"))
+    console.print("\n")
+
 def run_vector_examples():
     """Chạy các ví dụ về vector"""
     console.print("\n[bold cyan]Vector Operations Examples[/bold cyan]", justify="center")
     
-    # Create table for vector operations
+    # Create sample vectors
+    v1, v2 = create_vectors()
+    
+    # Perform vector operations
+    operations = vector_operations(v1, v2)
+    unit_angle = unit_vector_and_angle(v1, v2)
+    projection = vector_projection(v1, v2)
+    
+    # Create table for results
     table = Table(title="Vector Operations Results")
     table.add_column("Operation", style="cyan")
     table.add_column("Result", style="green")
     
-    v1 = [3, 4]
-    v2 = [1, 2]
-    
     table.add_row("Vector 1", str(v1))
     table.add_row("Vector 2", str(v2))
-    table.add_row("Sum", str(add_vectors(v1, v2)))
-    table.add_row("Dot product", str(dot_product(v1, v2)))
-    table.add_row("Norm of v1", f"{vector_norm(v1):.2f}")
+    table.add_row("Sum", str(operations['v_sum']))
+    table.add_row("Difference", str(operations['v_diff']))
+    table.add_row("Scaled (2*v1)", str(operations['v_scaled']))
+    table.add_row("Norm of v1", f"{operations['v1_norm']:.2f}")
+    table.add_row("Dot product", str(operations['dot_product']))
+    table.add_row("Cross product", str(operations['cross_product']))
+    table.add_row("Angle between vectors", f"{unit_angle['angle']:.2f}°")
+    table.add_row("Projection norm", f"{projection['projection_norm']:.2f}")
     
     console.print(table)
 
@@ -62,9 +119,14 @@ def run_linear_regression():
         border_style="cyan"
     )
     console.print(panel)
+    
+    # Create and save visualization
+    with console.status("[bold green]Generating visualization..."):
+        plot_linear_regression_fit(x, y, w, b, save_as='linear_regression_fit.png')
+        console.print("[green]✓[/green] Linear regression visualization saved")
 
-def run_cost_visualization():
-    """Chạy ví dụ về cost function visualization"""
+def run_cost_calculation():
+    """Chạy ví dụ về cost calculation"""
     console.print("\n[bold cyan]Cost Function Visualization[/bold cyan]", justify="center")
     
     with console.status("[bold green]Generating cost function visualizations..."):
@@ -82,10 +144,10 @@ def run_cost_visualization():
         )
         console.print(panel)
         
-        plot_cost_surface(x_train, y_train)
-        plot_cost_contour(x_train, y_train)
+        plot_cost_3d(x_train, y_train, w_range=(100, 300), b_range=(-200, 200), save_as='cost_function_3d.png')
+        plot_cost_contour(x_train, y_train, w_range=(100, 300), b_range=(-200, 200), save_as='cost_function_contour.png')
         
-        console.print("[green]✓[/green] Cost function visualizations saved to 'images' directory")
+        console.print("[green]✓[/green] Cost function visualizations saved")
 
 def run_gradient_descent():
     """Chạy ví dụ về gradient descent"""
@@ -127,30 +189,32 @@ def run_gradient_descent():
     
     # Vẽ đồ thị
     with console.status("[bold green]Generating visualizations..."):
-        plot_gradient_descent(x_train, y_train, w_hist, b_hist, J_hist, compute_cost)
-        plot_gradient_steps(x_train, y_train, w_hist, b_hist, compute_cost)
-        console.print("[green]✓[/green] Gradient descent visualizations saved to 'images' directory")
+        plot_gradient_descent(x_train, y_train, w_hist, b_hist, J_hist, compute_cost, save_as='gradient_descent_3d.png')
+        plot_gradient_steps(x_train, y_train, w_hist, b_hist, compute_cost, save_as='gradient_descent_steps.png')
+        console.print("[green]✓[/green] Gradient descent visualizations saved")
 
 def main():
     """Hàm main chạy tất cả các ví dụ"""
-    console.print("[bold magenta]Calculus Machine Learning Examples[/bold magenta]", justify="center")
-    console.print("=" * 50, justify="center")
+    console.print(Panel.fit(
+        "[bold blue]Ứng Dụng Giải Tích và Học Máy[/bold blue]\n"
+        "[italic]Minh họa các khái niệm cơ bản trong học máy[/italic]",
+        border_style="blue"
+    ))
     
     # Ensure images directory exists
-    if not os.path.exists('images'):
-        os.makedirs('images')
+    ensure_images_dir()
     
     # Chạy các ví dụ
     for example in track([
         run_vector_examples,
         run_linear_regression,
-        run_cost_visualization,
+        run_cost_calculation,
         run_gradient_descent
     ], description="Running examples..."):
         example()
     
-    console.print("\n[bold green]✓ All examples completed![/bold green]")
-    console.print("[dim]Check 'images' directory for visualizations.[/dim]")
+    # In thông tin về các hình ảnh đã tạo
+    print_generated_images()
 
 if __name__ == "__main__":
     main() 

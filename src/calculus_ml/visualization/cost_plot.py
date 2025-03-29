@@ -4,12 +4,16 @@ from mpl_toolkits.mplot3d import Axes3D
 import os
 from ..core.cost_function import compute_cost
 
-def plot_cost_surface(x, y, w_range=(100, 300), b_range=(-200, 200)):
+def ensure_images_dir():
+    """Đảm bảo thư mục images tồn tại"""
+    if not os.path.exists('images'):
+        os.makedirs('images')
+
+def plot_cost_3d(x, y, w_range=(100, 300), b_range=(-200, 200), save_as='cost_function_3d.png'):
     """
     Vẽ bề mặt cost function trong không gian 3D
     """
-    if not os.path.exists('images'):
-        os.makedirs('images')
+    ensure_images_dir()
         
     # Tạo lưới các điểm w,b
     w = np.linspace(w_range[0], w_range[1], 100)
@@ -33,15 +37,14 @@ def plot_cost_surface(x, y, w_range=(100, 300), b_range=(-200, 200)):
     plt.title('Cost Function J(w,b) trong Không Gian 3D')
     plt.colorbar(surface)
     
-    plt.savefig('images/cost_3d.png', bbox_inches='tight', dpi=300)
+    plt.savefig(os.path.join('images', save_as), bbox_inches='tight', dpi=300)
     plt.close()
 
-def plot_cost_contour(x, y, w_range=(100, 300), b_range=(-200, 200)):
+def plot_cost_contour(x, y, w_range=(100, 300), b_range=(-200, 200), save_as='cost_function_contour.png'):
     """
     Vẽ đường đồng mức của cost function
     """
-    if not os.path.exists('images'):
-        os.makedirs('images')
+    ensure_images_dir()
         
     # Tạo lưới các điểm w,b
     w = np.linspace(w_range[0], w_range[1], 100)
@@ -63,7 +66,32 @@ def plot_cost_contour(x, y, w_range=(100, 300), b_range=(-200, 200)):
     plt.title('Đường Đồng Mức của Cost Function')
     plt.grid(True)
     
-    plt.savefig('images/cost_contour.png')
+    plt.savefig(os.path.join('images', save_as))
+    plt.close()
+
+def plot_linear_regression_fit(x, y, w, b, save_as='linear_regression_fit.png'):
+    """
+    Vẽ kết quả linear regression
+    """
+    ensure_images_dir()
+        
+    plt.figure(figsize=(10, 6))
+    
+    # Vẽ dữ liệu thực tế
+    plt.scatter(x, y, color='blue', label='Dữ liệu thực tế')
+    
+    # Vẽ đường dự đoán
+    x_line = np.linspace(min(x), max(x), 100)
+    y_line = w * x_line + b
+    plt.plot(x_line, y_line, color='red', label='Mô hình dự đoán')
+    
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.title('Linear Regression')
+    plt.legend()
+    plt.grid(True)
+    
+    plt.savefig(os.path.join('images', save_as))
     plt.close()
 
 def plot_model_errors(x, y, w, b):
