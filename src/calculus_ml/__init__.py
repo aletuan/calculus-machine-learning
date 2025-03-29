@@ -12,7 +12,6 @@ from .core.vector import (
     vector_projection
 )
 
-from .core.linear_model import find_linear_regression
 from .core.cost_function import compute_cost, generate_house_data
 from .core.gradient_descent import gradient_descent, compute_gradient
 
@@ -37,7 +36,6 @@ __all__ = [
     'vector_operations',
     'unit_vector_and_angle',
     'vector_projection',
-    'find_linear_regression',
     'compute_cost',
     'generate_house_data',
     'gradient_descent',

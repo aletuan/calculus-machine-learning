@@ -17,7 +17,6 @@ from .core.vector import (
     unit_vector_and_angle,
     vector_projection
 )
-from .core.linear_model import find_linear_regression
 from .core.cost_function import compute_cost, generate_house_data
 from .core.gradient_descent import gradient_descent, compute_gradient
 
@@ -103,18 +102,29 @@ def run_vector_examples():
     console.print(table)
 
 def run_linear_regression():
-    """Chạy ví dụ về linear regression"""
+    """Chạy ví dụ về linear regression sử dụng gradient descent"""
     console.print("\n[bold cyan]Linear Regression Example[/bold cyan]", justify="center")
     
+    # Tạo dữ liệu mẫu
     x = np.array([1, 2, 3, 4, 5])
     y = np.array([2, 4, 6, 8, 10])
-    w, b = find_linear_regression(x, y)
+    
+    # Khởi tạo tham số
+    initial_w = 0
+    initial_b = 0
+    iterations = 1000
+    alpha = 0.01
+    
+    # Thực hiện gradient descent
+    with console.status("[bold green]Running gradient descent..."):
+        w_final, b_final, J_hist, p_hist = gradient_descent(
+            x, y, initial_w, initial_b, alpha, iterations, compute_cost)
     
     panel = Panel(
         f"[green]Found parameters:[/green]\n"
-        f"w = {w:.2f}\n"
-        f"b = {b:.2f}\n"
-        f"Equation: y = {w:.2f}x + {b:.2f}",
+        f"w = {w_final:.2f}\n"
+        f"b = {b_final:.2f}\n"
+        f"Equation: y = {w_final:.2f}x + {b_final:.2f}",
         title="Linear Regression Results",
         border_style="cyan"
     )
@@ -122,7 +132,7 @@ def run_linear_regression():
     
     # Create and save visualization
     with console.status("[bold green]Generating visualization..."):
-        plot_linear_regression_fit(x, y, w, b, save_as='linear_regression_fit.png')
+        plot_linear_regression_fit(x, y, w_final, b_final, save_as='linear_regression_fit.png')
         console.print("[green]✓[/green] Linear regression visualization saved")
 
 def run_cost_calculation():
