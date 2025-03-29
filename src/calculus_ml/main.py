@@ -105,6 +105,21 @@ def run_linear_regression():
     """Chạy ví dụ về linear regression sử dụng gradient descent"""
     console.print("\n[bold cyan]Linear Regression Example[/bold cyan]", justify="center")
     
+    # Hiển thị công thức và giải thích
+    console.print(Panel(
+        "[bold green]Công thức tính toán:[/bold green]\n"
+        "1. Hàm dự đoán: f(x) = wx + b\n"
+        "2. Cost function: J(w,b) = (1/2m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)²\n"
+        "3. Gradient:\n"
+        "   - ∂J/∂w = (1/m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x⁽ⁱ⁾\n"
+        "   - ∂J/∂b = (1/m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)\n"
+        "4. Cập nhật tham số:\n"
+        "   - w = w - α * ∂J/∂w\n"
+        "   - b = b - α * ∂J/∂b",
+        title="Mathematical Formulas",
+        border_style="cyan"
+    ))
+    
     # Tạo dữ liệu mẫu
     x = np.array([1, 2, 3, 4, 5])
     y = np.array([2, 4, 6, 8, 10])
@@ -115,17 +130,32 @@ def run_linear_regression():
     iterations = 1000
     alpha = 0.01
     
+    # Hiển thị thông tin về quá trình tối ưu
+    console.print(Panel(
+        f"[bold green]Thông tin tối ưu:[/bold green]\n"
+        f"- Số mẫu dữ liệu: {len(x)}\n"
+        f"- Learning rate (α): {alpha}\n"
+        f"- Số iteration: {iterations}\n"
+        f"- Tham số khởi tạo: w = {initial_w}, b = {initial_b}",
+        title="Optimization Setup",
+        border_style="cyan"
+    ))
+    
     # Thực hiện gradient descent
     with console.status("[bold green]Running gradient descent..."):
         w_final, b_final, J_hist, p_hist = gradient_descent(
             x, y, initial_w, initial_b, alpha, iterations, compute_cost)
     
+    # Hiển thị kết quả
     panel = Panel(
-        f"[green]Found parameters:[/green]\n"
-        f"w = {w_final:.2f}\n"
-        f"b = {b_final:.2f}\n"
-        f"Equation: y = {w_final:.2f}x + {b_final:.2f}",
-        title="Linear Regression Results",
+        f"[bold green]Kết quả tối ưu:[/bold green]\n"
+        f"1. Tham số tối ưu:\n"
+        f"   w = {w_final:.2f}\n"
+        f"   b = {b_final:.2f}\n"
+        f"2. Phương trình hồi quy:\n"
+        f"   y = {w_final:.2f}x + {b_final:.2f}\n"
+        f"3. Cost cuối cùng: {J_hist[-1]:.4f}",
+        title="Optimization Results",
         border_style="cyan"
     )
     console.print(panel)
