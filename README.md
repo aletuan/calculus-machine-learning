@@ -6,22 +6,26 @@ Bộ ví dụ minh họa về các phép toán vector và ứng dụng trong h�
 
 ```
 calculus-machine-learning/
-├── README.md
-├── requirements.txt
-├── setup.py
+├── README.md                 # Tài liệu hướng dẫn và mô tả dự án
+├── requirements.txt          # Danh sách các thư viện phụ thuộc
+├── setup.py                  # File cấu hình cho việc cài đặt package
 ├── src/
-│   └── calculus_ml/
-│       ├── __init__.py
-│       ├── core/
-│       │   ├── vector.py
-│       │   ├── linear_model.py
-│       │   ├── cost_function.py
-│       │   └── gradient_descent.py
-│       └── visualization/
-│           ├── cost_plot.py
-│           └── gradient_plot.py
-└── images/
-    └── ...
+│   └── calculus_ml/         # Package chính
+│       ├── __init__.py      # Khởi tạo package và export các hàm chính
+│       ├── core/            # Module chứa các hàm tính toán cốt lõi
+│       │   ├── vector.py    # Các phép toán vector cơ bản (cộng, trừ, tích vô hướng)
+│       │   ├── cost_function.py    # Tính toán cost function và tạo dữ liệu mẫu
+│       │   └── gradient_descent.py # Cài đặt thuật toán gradient descent
+│       └── visualization/    # Module chứa các hàm vẽ đồ thị
+│           ├── cost_plot.py        # Vẽ đồ thị cost function và kết quả hồi quy
+│           └── gradient_plot.py    # Vẽ đồ thị quá trình gradient descent
+└── images/                  # Thư mục lưu các hình ảnh được tạo ra
+    ├── cost_function_3d.png        # Bề mặt cost function trong không gian 3D
+    ├── cost_function_contour.png   # Đường đồng mức của cost function
+    ├── gradient_descent_3d.png     # Quá trình gradient descent trên bề mặt 3D
+    ├── gradient_descent_contour.png # Quá trình gradient descent trên contour
+    ├── gradient_descent_steps.png   # Các bước của gradient descent
+    └── cost_history.png            # Lịch sử cost function qua các iteration
 ```
 
 ## Tính Năng Chính
