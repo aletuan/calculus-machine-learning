@@ -134,9 +134,9 @@ def gradient_descent(x, y, w_init, b_init, alpha, num_iters):
     """
 ```
 
-## Minh Họa Trực Quan
+## Minh Họa Trực Quan (1 tham số)
 
-1. **Cost Function 3D (1 tham số)**
+1. **Cost Function 3D**
 ![Cost Function 3D](images/cost_function_3d.png)
 - Bề mặt cost function J(w,b)
 - Điểm thấp nhất: tham số tối ưu (w*, b*)
@@ -152,7 +152,7 @@ def gradient_descent(x, y, w_init, b_init, alpha, num_iters):
 - Sự hội tụ của cost function
 - Ảnh hưởng của learning rate
 
-## Chi Tiết Các Ví Dụ
+## Ví dụ với 1 và 2 tham số
 
 ### 1. Ví dụ với 1 tham số
 - **Dữ liệu**: Giá nhà dựa trên kích thước
