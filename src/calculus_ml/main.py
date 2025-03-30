@@ -17,8 +17,14 @@ from .core.vector import (
     unit_vector_and_angle,
     vector_projection
 )
-from .core.cost_function import compute_cost, generate_house_data
-from .core.gradient_descent import gradient_descent, compute_gradient
+from .core.cost_function import (
+    compute_cost, compute_cost_2d,
+    generate_house_data, generate_house_data_2d
+)
+from .core.gradient_descent import (
+    gradient_descent, gradient_descent_2d,
+    compute_gradient, compute_gradient_2d
+)
 
 # Import visualization
 from .visualization.cost_plot import (
@@ -102,6 +108,16 @@ def run_cost_and_gradient_example():
     """Chạy ví dụ về cost function và gradient descent"""
     console.print("\n[bold cyan]2. Cost Function và Gradient Descent[/bold cyan]", justify="center")
     
+    # Phần 1: Ví dụ với 1 tham số
+    console.print("\n[bold magenta]2.1. Ví dụ với 1 tham số (kích thước nhà)[/bold magenta]")
+    run_one_feature_example()
+    
+    # Phần 2: Ví dụ với 2 tham số
+    console.print("\n[bold magenta]2.2. Ví dụ với 2 tham số (kích thước và số phòng ngủ)[/bold magenta]")
+    run_two_features_example()
+
+def run_one_feature_example():
+    """Chạy ví dụ với 1 tham số"""
     # Tạo dữ liệu mẫu về giá nhà
     x_train, y_train = generate_house_data()
     
@@ -237,6 +253,128 @@ def run_cost_and_gradient_example():
     with console.status("[bold green]Tạo đồ thị gradient descent..."):
         plot_gradient_descent(x_train, y_train, w_hist, b_hist, J_hist, compute_cost, save_as='gradient_descent_3d.png')
         plot_gradient_steps(x_train, y_train, w_hist, b_hist, compute_cost, save_as='gradient_descent_steps.png')
+
+def run_two_features_example():
+    """Chạy ví dụ với 2 tham số"""
+    # Tạo dữ liệu mẫu về giá nhà
+    x1_train, x2_train, y_train = generate_house_data_2d()
+    
+    # Hiển thị thông tin về ví dụ
+    console.print(Panel(
+        "[bold green]Thông tin về ví dụ 2 tham số:[/bold green]\n"
+        "1. Dữ liệu mẫu:\n"
+        "   - x₁: kích thước nhà (1000 sqft)\n"
+        "   - x₂: số phòng ngủ\n"
+        "   - y: giá nhà (1000s $)\n"
+        "   - Số mẫu: {len(x1_train)}\n\n"
+        "2. Công thức:\n"
+        "   - Hàm dự đoán: f(x₁,x₂) = w₁x₁ + w₂x₂ + b\n"
+        "   - Cost function: J(w₁,w₂,b) = (1/2m) * Σ(f(x₁⁽ⁱ⁾,x₂⁽ⁱ⁾) - y⁽ⁱ⁾)²\n"
+        "   - Gradient:\n"
+        "     * ∂J/∂w₁ = (1/m) * Σ(f(x₁⁽ⁱ⁾,x₂⁽ⁱ⁾) - y⁽ⁱ⁾) * x₁⁽ⁱ⁾\n"
+        "     * ∂J/∂w₂ = (1/m) * Σ(f(x₁⁽ⁱ⁾,x₂⁽ⁱ⁾) - y⁽ⁱ⁾) * x₂⁽ⁱ⁾\n"
+        "     * ∂J/∂b = (1/m) * Σ(f(x₁⁽ⁱ⁾,x₂⁽ⁱ⁾) - y⁽ⁱ⁾)",
+        title="Example Overview (2 Features)",
+        border_style="cyan"
+    ))
+    
+    # Hiển thị dữ liệu mẫu
+    console.print(Panel(
+        f"[bold green]Dữ liệu training:[/bold green]\n"
+        f"Kích thước nhà (x₁): {x1_train}\n"
+        f"Số phòng ngủ (x₂): {x2_train}\n"
+        f"Giá nhà (y): {y_train}",
+        title="Training Data (2 Features)",
+        border_style="cyan"
+    ))
+    
+    # Tính cost function tại một điểm
+    w1_example, w2_example, b_example = 150, 50, 100
+    cost = compute_cost_2d(x1_train, x2_train, y_train, w1_example, w2_example, b_example)
+    
+    console.print(Panel(
+        f"[bold green]Minh họa Cost Function tại một điểm:[/bold green]\n"
+        f"Chọn điểm (w₁={w1_example}, w₂={w2_example}, b={b_example}) để minh họa:\n"
+        f"- w₁ = {w1_example}: giá tăng {w1_example}$ cho mỗi 1000 sqft\n"
+        f"- w₂ = {w2_example}: giá tăng {w2_example}$ cho mỗi phòng ngủ\n"
+        f"- b = {b_example}: giá cơ bản {b_example}$1000\n"
+        f"- Cost = {cost:.2f}: độ lệch trung bình bình phương của dự đoán\n\n"
+        f"[yellow]Giải thích:[/yellow]\n"
+        f"Tại điểm này, mô hình dự đoán:\n"
+        f"- Nhà 1000sqft, 1 phòng ngủ: {w1_example*1 + w2_example*1 + b_example:.0f} (thực tế: 250)\n"
+        f"- Nhà 2000sqft, 1 phòng ngủ: {w1_example*2 + w2_example*1 + b_example:.0f} (thực tế: 350)\n"
+        f"- Nhà 2000sqft, 2 phòng ngủ: {w1_example*2 + w2_example*2 + b_example:.0f} (thực tế: 400)\n"
+        f"- Nhà 3000sqft, 2 phòng ngủ: {w1_example*3 + w2_example*2 + b_example:.0f} (thực tế: 500)\n"
+        f"- Nhà 3000sqft, 3 phòng ngủ: {w1_example*3 + w2_example*3 + b_example:.0f} (thực tế: 550)\n"
+        f"- Nhà 4000sqft, 3 phòng ngủ: {w1_example*4 + w2_example*3 + b_example:.0f} (thực tế: 650)",
+        title="Cost Function Evaluation (2 Features)",
+        border_style="cyan"
+    ))
+    
+    # Thực hiện gradient descent
+    initial_w1, initial_w2, initial_b = 100, 0, 0
+    iterations = 1000
+    alpha = 0.01
+    
+    console.print(Panel(
+        f"[bold green]Thông tin gradient descent:[/bold green]\n"
+        f"- Learning rate (α): {alpha}\n"
+        f"- Số iteration: {iterations}\n"
+        f"- Tham số khởi tạo:\n"
+        f"  * w₁ = {initial_w1}\n"
+        f"  * w₂ = {initial_w2}\n"
+        f"  * b = {initial_b}",
+        title="Gradient Descent Setup (2 Features)",
+        border_style="cyan"
+    ))
+    
+    with console.status("[bold green]Running gradient descent..."):
+        w1_final, w2_final, b_final, J_hist, p_hist = gradient_descent_2d(
+            x1_train, x2_train, y_train,
+            initial_w1, initial_w2, initial_b,
+            alpha, iterations, compute_cost_2d)
+    
+    # Hiển thị kết quả
+    console.print(Panel(
+        f"[bold green]Kết quả tối ưu sau {iterations} iterations:[/bold green]\n"
+        f"1. Tham số tối ưu (w₁*, w₂*, b*):\n"
+        f"   w₁* = {w1_final:.2f}: ảnh hưởng của kích thước nhà\n"
+        f"   w₂* = {w2_final:.2f}: ảnh hưởng của số phòng ngủ\n"
+        f"   b* = {b_final:.2f}: giá cơ bản\n"
+        f"2. Phương trình hồi quy tối ưu:\n"
+        f"   y = {w1_final:.2f}x₁ + {w2_final:.2f}x₂ + {b_final:.2f}\n"
+        f"3. Cost tối ưu: {J_hist[-1]:.4f}\n\n"
+        f"[yellow]So sánh với điểm minh họa:[/yellow]\n"
+        f"- Điểm minh họa (w₁={w1_example}, w₂={w2_example}, b={b_example}): Cost = {cost:.2f}\n"
+        f"- Điểm tối ưu (w₁*={w1_final:.2f}, w₂*={w2_final:.2f}, b*={b_final:.2f}): Cost = {J_hist[-1]:.4f}\n"
+        f"→ Điểm tối ưu có cost thấp hơn, nghĩa là mô hình dự đoán chính xác hơn.",
+        title="Optimization Results (2 Features)",
+        border_style="cyan"
+    ))
+    
+    # Tạo bảng theo dõi cost
+    cost_table = Table(title="Theo dõi Cost qua các Iteration (2 Features)")
+    cost_table.add_column("Iteration", style="cyan", justify="right")
+    cost_table.add_column("Cost", style="green", justify="right")
+    cost_table.add_column("Thay đổi", style="yellow", justify="right")
+    
+    # Thêm các mốc quan trọng
+    milestones = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, iterations-1]
+    for i in milestones:
+        if i < len(J_hist):
+            cost = J_hist[i]
+            if i > 0:
+                change = J_hist[i] - J_hist[i-1]
+                change_str = f"{change:+.4f}"
+            else:
+                change_str = "-"
+            cost_table.add_row(
+                f"{i:4d}",
+                f"{cost:.4f}",
+                change_str
+            )
+    
+    console.print(cost_table)
 
 def main():
     """Hàm main chạy tất cả các ví dụ"""
