@@ -1,6 +1,6 @@
 # Ứng Dụng Giải Tích và Học Máy
 
-Bộ ví dụ minh họa về các phép toán vector và ứng dụng trong học máy, tập trung vào cost function và gradient descent.
+Tập hợp ví dụ minh họa về các phép toán vector và ứng dụng trong học máy, tập trung vào cost function và gradient descent.
 
 ## Cấu Trúc Dự Án
 
@@ -76,7 +76,7 @@ def normalize_vector(v):
     return [x / norm for x in v]
 ```
 
-### 2. Cost Function (`cost_function.py`)
+### 2. Cost Function (1 tham số) (`cost_function.py`)
 
 ```python
 def compute_cost(x, y, w, b):
@@ -97,7 +97,7 @@ def compute_cost(x, y, w, b):
     return total_cost / (2 * m)
 ```
 
-### 3. Gradient Descent (`gradient_descent.py`)
+### 3. Gradient Descent (1 tham số) (`gradient_descent.py`)
 
 ```python
 def compute_gradient(x, y, w, b):
@@ -136,7 +136,7 @@ def gradient_descent(x, y, w_init, b_init, alpha, num_iters):
 
 ## Minh Họa Trực Quan
 
-1. **Cost Function 3D**
+1. **Cost Function 3D (1 tham số)**
 ![Cost Function 3D](images/cost_function_3d.png)
 - Bề mặt cost function J(w,b)
 - Điểm thấp nhất: tham số tối ưu (w*, b*)
