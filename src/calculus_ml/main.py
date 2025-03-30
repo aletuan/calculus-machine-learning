@@ -194,7 +194,7 @@ def run_cost_and_gradient_example():
     
     # Hiển thị kết quả
     console.print(Panel(
-        f"[bold green]Kết quả tối ưu sau gradient descent:[/bold green]\n"
+        f"[bold green]Kết quả tối ưu sau {iterations} iterations:[/bold green]\n"
         f"1. Tham số tối ưu (w*, b*):\n"
         f"   w* = {w_final:.2f}\n"
         f"   b* = {b_final:.2f}\n"
@@ -208,6 +208,30 @@ def run_cost_and_gradient_example():
         title="Optimization Results",
         border_style="cyan"
     ))
+    
+    # Tạo bảng theo dõi cost
+    cost_table = Table(title="Theo dõi Cost qua các Iteration")
+    cost_table.add_column("Iteration", style="cyan", justify="right")
+    cost_table.add_column("Cost", style="green", justify="right")
+    cost_table.add_column("Thay đổi", style="yellow", justify="right")
+    
+    # Thêm các mốc quan trọng
+    milestones = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, iterations-1]
+    for i in milestones:
+        if i < len(J_hist):
+            cost = J_hist[i]
+            if i > 0:
+                change = J_hist[i] - J_hist[i-1]
+                change_str = f"{change:+.4f}"
+            else:
+                change_str = "-"
+            cost_table.add_row(
+                f"{i:4d}",
+                f"{cost:.4f}",
+                change_str
+            )
+    
+    console.print(cost_table)
     
     # Vẽ đồ thị gradient descent
     with console.status("[bold green]Tạo đồ thị gradient descent..."):
