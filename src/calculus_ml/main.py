@@ -34,6 +34,18 @@ from .visualization.cost_plot import (
 )
 from .visualization.gradient_plot import plot_gradient_descent, plot_gradient_steps
 
+# Import logistic regression
+from .core.logistic_regression import (
+    generate_admission_data,
+    gradient_descent_logistic,
+    compute_cost_logistic
+)
+from .visualization.logistic_plot import (
+    plot_decision_boundary,
+    plot_cost_surface_logistic,
+    plot_gradient_descent_logistic
+)
+
 # Initialize rich console
 console = Console()
 
@@ -41,13 +53,16 @@ console = Console()
 IMAGES = {
     "Cost Function": {
         "cost_function_3d.png": "Bề mặt cost function trong không gian 3D",
-        "cost_function_contour.png": "Đường đồng mức của cost function"
+        "cost_function_contour.png": "Đường đồng mức của cost function",
+        "logistic_cost_3d.png": "Bề mặt cost function cho logistic regression"
     },
     "Gradient Descent": {
         "gradient_descent_3d.png": "Quá trình gradient descent trên bề mặt cost 3D",
         "gradient_descent_contour.png": "Quá trình gradient descent trên contour",
         "gradient_descent_steps.png": "Các bước của gradient descent trên dữ liệu",
-        "cost_history.png": "Lịch sử cost function qua các iteration"
+        "cost_history.png": "Lịch sử cost function qua các iteration",
+        "decision_boundary.png": "Decision boundary cho logistic regression",
+        "logistic_gradient_descent.png": "Quá trình gradient descent cho logistic regression"
     }
 }
 
@@ -376,6 +391,109 @@ def run_two_features_example():
     
     console.print(cost_table)
 
+def run_logistic_regression_example():
+    """Chạy ví dụ về logistic regression"""
+    console.print("\n[bold cyan]3. Logistic Regression Example[/bold cyan]", justify="center")
+    
+    # Hiển thị công thức
+    console.print(Panel(
+        "[bold green]Công thức tính toán:[/bold green]\n"
+        "1. Hàm sigmoid: g(z) = 1 / (1 + e^(-z))\n"
+        "2. Hàm dự đoán: h(x) = g(w₁x₁ + w₂x₂ + b)\n"
+        "3. Cost function: J(w₁,w₂,b) = -(1/m) * Σ[y⁽ⁱ⁾log(h(x⁽ⁱ⁾)) + (1-y⁽ⁱ⁾)log(1-h(x⁽ⁱ⁾))]\n"
+        "4. Gradient:\n"
+        "   - ∂J/∂w₁ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₁⁽ⁱ⁾\n"
+        "   - ∂J/∂w₂ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₂⁽ⁱ⁾\n"
+        "   - ∂J/∂b = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾)",
+        title="Logistic Regression Formulas",
+        border_style="cyan"
+    ))
+    
+    # Tạo dữ liệu mẫu
+    x1, x2, y = generate_admission_data()
+    
+    # Hiển thị thông tin về dữ liệu
+    console.print(Panel(
+        f"[bold green]Dữ liệu tuyển sinh:[/bold green]\n"
+        f"- Số lượng mẫu: {len(y)}\n"
+        f"- Số lượng sinh viên đỗ: {np.sum(y)}\n"
+        f"- Số lượng sinh viên trượt: {len(y) - np.sum(y)}\n"
+        f"- Điểm thi: min={x1.min():.1f}, max={x1.max():.1f}, mean={x1.mean():.1f}\n"
+        f"- GPA: min={x2.min():.1f}, max={x2.max():.1f}, mean={x2.mean():.1f}",
+        title="Training Data",
+        border_style="cyan"
+    ))
+    
+    # Thực hiện gradient descent
+    initial_w1, initial_w2, initial_b = 0, 0, 0
+    iterations = 1000
+    alpha = 0.01
+    
+    console.print(Panel(
+        f"[bold green]Thông tin gradient descent:[/bold green]\n"
+        f"- Learning rate (α): {alpha}\n"
+        f"- Số iteration: {iterations}\n"
+        f"- Tham số khởi tạo:\n"
+        f"  * w₁ = {initial_w1}\n"
+        f"  * w₂ = {initial_w2}\n"
+        f"  * b = {initial_b}",
+        title="Gradient Descent Setup",
+        border_style="cyan"
+    ))
+    
+    with console.status("[bold green]Running gradient descent..."):
+        w1_final, w2_final, b_final, J_hist, p_hist = gradient_descent_logistic(
+            x1, x2, y, initial_w1, initial_w2, initial_b, alpha, iterations)
+    
+    # Tách lịch sử tham số
+    w1_hist = [p[0] for p in p_hist]
+    w2_hist = [p[1] for p in p_hist]
+    b_hist = [p[2] for p in p_hist]
+    
+    # Hiển thị kết quả
+    console.print(Panel(
+        f"[bold green]Kết quả tối ưu sau {iterations} iterations:[/bold green]\n"
+        f"1. Tham số tối ưu (w₁*, w₂*, b*):\n"
+        f"   w₁* = {w1_final:.4f}: trọng số điểm thi\n"
+        f"   w₂* = {w2_final:.4f}: trọng số GPA\n"
+        f"   b* = {b_final:.4f}: độ chệch\n"
+        f"2. Phương trình phân loại:\n"
+        f"   P(đỗ) = g({w1_final:.4f}x₁ + {w2_final:.4f}x₂ + {b_final:.4f})\n"
+        f"3. Cost tối ưu: {J_hist[-1]:.4f}",
+        title="Optimization Results",
+        border_style="cyan"
+    ))
+    
+    # Tạo bảng theo dõi cost
+    cost_table = Table(title="Theo dõi Cost qua các Iteration")
+    cost_table.add_column("Iteration", style="cyan", justify="right")
+    cost_table.add_column("Cost", style="green", justify="right")
+    cost_table.add_column("Thay đổi", style="yellow", justify="right")
+    
+    # Thêm các mốc quan trọng
+    milestones = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, iterations-1]
+    for i in milestones:
+        if i < len(J_hist):
+            cost = J_hist[i]
+            if i > 0:
+                change = J_hist[i] - J_hist[i-1]
+                change_str = f"{change:+.4f}"
+            else:
+                change_str = "-"
+            cost_table.add_row(
+                f"{i:4d}",
+                f"{cost:.4f}",
+                change_str
+            )
+    
+    console.print(cost_table)
+    
+    # Vẽ các đồ thị
+    with console.status("[bold green]Tạo đồ thị..."):
+        plot_decision_boundary(x1, x2, y, w1_final, w2_final, b_final)
+        plot_cost_surface_logistic(x1, x2, y, [-1, 1], [-1, 1], b_final)
+        plot_gradient_descent_logistic(x1, x2, y, w1_hist, w2_hist, b_hist, J_hist)
+
 def main():
     """Hàm main chạy tất cả các ví dụ"""
     console.print(Panel.fit(
@@ -390,7 +508,8 @@ def main():
     # Chạy các ví dụ
     for example in track([
         run_vector_examples,
-        run_cost_and_gradient_example
+        run_cost_and_gradient_example,
+        run_logistic_regression_example
     ], description="Running examples..."):
         example()
     

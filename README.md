@@ -174,6 +174,18 @@ def gradient_descent(x, y, w_init, b_init, alpha, num_iters):
   - Cost function trong không gian nhiều chiều
   - Quá trình tối ưu với nhiều tham số
 
+### 3. Ví dụ với Logistic Regression
+- **Dữ liệu**: Kết quả tuyển sinh dựa trên điểm thi và GPA
+- **Mô hình**: P(y=1) = g(w₁x₁ + w₂x₂ + b), với g(z) = 1/(1+e^(-z))
+- **Tham số**: 
+  - w₁ (trọng số điểm thi)
+  - w₂ (trọng số GPA)
+  - b (độ chệch)
+- **Trực quan hóa**:
+  - Decision boundary
+  - Cost function surface
+  - Quá trình tối ưu
+
 ## Cài Đặt và Sử Dụng
 
 1. Cài đặt:
