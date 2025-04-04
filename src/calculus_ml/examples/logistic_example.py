@@ -40,15 +40,23 @@ def plot_logistic_results(model, X1, X2, y, history, save_dir='images'):
     
     # Plot 1: Decision boundary
     setup_plot('Logistic Regression Decision Boundary', 'Test Score', 'GPA')
-    plt.scatter(X1[y==0], X2[y==0], color='red', alpha=0.5, label='Rejected')
-    plt.scatter(X1[y==1], X2[y==1], color='blue', alpha=0.5, label='Admitted')
     
-    # Vẽ decision boundary
-    xx1, xx2 = create_meshgrid(X1, X2)
+    # Vẽ decision boundary với contour fill
+    xx1, xx2 = create_meshgrid(X1, X2, n_points=200)  # Tăng số điểm lưới
     X_grid = np.c_[xx1.ravel(), xx2.ravel()]
     Z = model.predict(X_grid)
     Z = Z.reshape(xx1.shape)
-    plt.contour(xx1, xx2, Z, levels=[0.5], colors='green', label='Decision Boundary')
+    
+    # Vẽ contour fill để thể hiện xác suất
+    contour = plt.contourf(xx1, xx2, Z, levels=np.linspace(0, 1, 11), alpha=0.3, cmap='RdYlBu')
+    plt.colorbar(contour, label='P(Admitted)')
+    
+    # Vẽ decision boundary với độ dày tăng
+    plt.contour(xx1, xx2, Z, levels=[0.5], colors='green', linewidths=2, linestyles='--', label='Decision Boundary')
+    
+    # Vẽ scatter plot các điểm dữ liệu
+    plt.scatter(X1[y==0], X2[y==0], color='red', alpha=0.7, label='Rejected', edgecolors='k')
+    plt.scatter(X1[y==1], X2[y==1], color='blue', alpha=0.7, label='Admitted', edgecolors='k')
     
     plt.legend()
     save_plot(os.path.join(save_dir, 'logistic_decision_boundary.png'))
