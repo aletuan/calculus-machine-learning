@@ -59,7 +59,37 @@ Machine Learning (Học máy) là một nhánh của trí tuệ nhân tạo, cho
    - **Iteration**: Số lần lặp lại quá trình học
 
 3. **Đánh giá (Evaluation)**
-   - **Loss Function**: Hàm đo lường độ sai lệch giữa dự đoán và giá trị thực
+   - **Loss Function (Hàm mất mát)**: 
+     - **Định nghĩa**: Hàm số đo lường mức độ sai lệch giữa giá trị dự đoán của mô hình và giá trị thực tế
+     - **Vai trò**:
+       - Đóng vai trò là "la bàn" định hướng quá trình học của mô hình
+       - Cung cấp một giá trị số (scalar) có thể tối ưu hóa bằng gradient descent
+       - Là cầu nối giữa lý thuyết toán học và ứng dụng thực tế của mô hình
+     
+     - **Các loại hàm mất mát phổ biến**:
+       1. **Mean Squared Error (MSE)**:
+          - Công thức: MSE = (1/m) * Σ(y_pred - y_true)²
+          - Phù hợp với: Linear Regression và các bài toán dự đoán giá trị liên tục
+          - Đặc điểm: Phạt nặng các sai số lớn (do bình phương), nhạy cảm với outliers
+       
+       2. **Binary Cross-Entropy**:
+          - Công thức: BCE = -(1/m) * Σ[y_true*log(y_pred) + (1-y_true)*log(1-y_pred)]
+          - Phù hợp với: Logistic Regression và các bài toán phân loại nhị phân
+          - Đặc điểm: Đánh giá tốt xác suất dự đoán, phù hợp với dữ liệu nhãn 0/1
+       
+       3. **Categorical Cross-Entropy**:
+          - Phù hợp với: Bài toán phân loại nhiều lớp
+          - Mở rộng của Binary Cross-Entropy cho nhiều lớp
+       
+       4. **Hinge Loss**:
+          - Sử dụng cho: Support Vector Machines
+          - Tối ưu hóa biên phân loại (margin)
+     
+     - **Lựa chọn hàm mất mát**:
+       - Phụ thuộc vào bản chất của bài toán (hồi quy/phân loại)
+       - Phụ thuộc vào phân phối của dữ liệu
+       - Ảnh hưởng trực tiếp đến quá trình học và kết quả cuối cùng của mô hình
+   
    - **Training**: Quá trình tối ưu mô hình trên tập dữ liệu huấn luyện
    - **Convergence**: Sự hội tụ của quá trình học, thể hiện qua đồ thị loss function
 
