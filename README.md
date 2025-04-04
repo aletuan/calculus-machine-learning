@@ -1,6 +1,42 @@
-# Ứng Dụng Giải Tích và Học Máy
+# Regression Models in Machine Learning
 
-Tập hợp ví dụ minh họa về các thuật toán học máy cơ bản, tập trung vào linear regression và logistic regression.
+Triển khai và trực quan hóa hai mô hình học máy cơ bản: Linear Regression và Logistic Regression, với các ví dụ thực tế về dự đoán giá nhà và phân loại kết quả tuyển sinh.
+
+## Giới Thiệu Khái Niệm
+
+### Machine Learning là gì?
+Machine Learning (Học máy) là một nhánh của trí tuệ nhân tạo, cho phép máy tính "học" từ dữ liệu mà không cần được lập trình một cách tường minh. Trong project này, chúng ta tập trung vào học có giám sát (supervised learning) với hai dạng bài toán phổ biến:
+
+### 1. Regression (Hồi quy)
+- **Định nghĩa**: Dự đoán một giá trị liên tục dựa trên các đặc trưng đầu vào
+- **Ví dụ**: Dự đoán giá nhà, dự báo nhiệt độ, dự đoán doanh thu
+- **Đánh giá**: Sử dụng các metrics như MSE (Mean Squared Error), MAE (Mean Absolute Error)
+
+### 2. Classification (Phân loại)
+- **Định nghĩa**: Phân loại dữ liệu vào các nhóm/lớp rời rạc
+- **Ví dụ**: Phân loại email (spam/không spam), chẩn đoán bệnh (có/không)
+- **Đánh giá**: Accuracy, Precision, Recall, F1-score
+
+### Các Khái Niệm Quan Trọng
+
+1. **Mô hình (Model)**
+   - Hàm số toán học mô tả mối quan hệ giữa đầu vào và đầu ra
+   - Được xác định bởi các tham số (parameters) cần tối ưu
+
+2. **Học (Learning)**
+   - **Gradient Descent**: Thuật toán tối ưu tham số bằng cách di chuyển ngược hướng gradient
+   - **Learning Rate**: Tốc độ học, quyết định độ lớn của bước cập nhật trong gradient descent
+   - **Iteration**: Số lần lặp lại quá trình học
+
+3. **Đánh giá (Evaluation)**
+   - **Loss Function**: Hàm đo lường độ sai lệch giữa dự đoán và giá trị thực
+   - **Training**: Quá trình tối ưu mô hình trên tập dữ liệu huấn luyện
+   - **Convergence**: Sự hội tụ của quá trình học, thể hiện qua đồ thị loss function
+
+### Các Công Cụ Sử Dụng
+- **NumPy**: Thư viện tính toán số học
+- **Matplotlib**: Thư viện vẽ đồ thị
+- **Rich**: Thư viện định dạng output trong terminal
 
 ## Cấu Trúc Dự Án
 
