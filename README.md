@@ -118,26 +118,42 @@ class LogisticRegression:
 
 ## Ví dụ Minh Họa
 
-### 1. Linear Regression
-- **Dữ liệu**: Giá nhà dựa trên kích thước
-- **Mô hình**: y = wx + b
-- **Tham số**: 
-  - w: giá tăng theo mỗi 1000 sqft
-  - b: giá cơ bản
+### 1. Linear Regression - Dự Đoán Giá Nhà
+- **Dữ liệu**: 
+  - Tập dữ liệu mô phỏng về giá nhà (100 mẫu)
+  - Biến đầu vào: Kích thước nhà (1000 sqft), phân phối chuẩn quanh 2.5 (1-5)
+  - Biến đầu ra: Giá nhà (1000$), tương quan tuyến tính với kích thước
+- **Mô hình**: 
+  - Phương trình: y = wx + b
+  - Hàm mất mát: J(w,b) = (1/2m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)²
+  - Gradient descent: 
+    - ∂J/∂w = (1/m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x⁽ⁱ⁾
+    - ∂J/∂b = (1/m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)
 - **Trực quan hóa**: 
-  - Đường hồi quy tối ưu
-  - Lịch sử cost function
+  - Scatter plot dữ liệu thực tế
+  - Đường hồi quy tối ưu (đỏ)
+  - Đồ thị hội tụ của hàm mất mát
 
-### 2. Logistic Regression
-- **Dữ liệu**: Kết quả tuyển sinh dựa trên điểm thi và GPA
-- **Mô hình**: P(y=1) = g(w₁x₁ + w₂x₂ + b)
-- **Tham số**: 
-  - w₁: trọng số điểm thi
-  - w₂: trọng số GPA
-  - b: độ chệch
+### 2. Logistic Regression - Dự Đoán Kết Quả Tuyển Sinh
+- **Dữ liệu**:
+  - Tập dữ liệu mô phỏng về tuyển sinh (100 mẫu)
+  - Biến đầu vào:
+    - x₁: Điểm thi (0-100), phân phối chuẩn quanh 65
+    - x₂: GPA (0-4), phân phối chuẩn quanh 3.0
+  - Biến đầu ra: Kết quả (Đỗ/Trượt)
+- **Mô hình**:
+  - Hàm sigmoid: g(z) = 1 / (1 + e^(-z))
+  - Hàm dự đoán: P(đỗ) = g(w₁x₁ + w₂x₂ + b)
+  - Binary cross-entropy loss: J(w₁,w₂,b) = -(1/m) * Σ[y⁽ⁱ⁾log(h(x⁽ⁱ⁾)) + (1-y⁽ⁱ⁾)log(1-h(x⁽ⁱ⁾))]
+  - Gradient descent:
+    - ∂J/∂w₁ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₁⁽ⁱ⁾
+    - ∂J/∂w₂ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₂⁽ⁱ⁾
+    - ∂J/∂b = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾)
 - **Trực quan hóa**:
-  - Decision boundary
-  - Lịch sử cost function
+  - Scatter plot phân loại sinh viên (Đỗ: xanh dương, Trượt: đỏ)
+  - Decision boundary (đường xanh lá)
+  - Contour plot thể hiện xác suất đỗ
+  - Đồ thị hội tụ của hàm mất mát
 
 ## Cài Đặt và Sử Dụng
 
