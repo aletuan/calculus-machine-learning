@@ -28,132 +28,112 @@ calculus-machine-learning/
     └── logistic_cost_history.png     # Lịch sử cost function của logistic regression
 ```
 
-## Tính Năng Chính
+## Ví Dụ Minh Họa
 
-1. **Linear Regression**
-   - Mô hình hồi quy tuyến tính một biến
-   - Tối ưu hóa bằng gradient descent
-   - Trực quan hóa đường hồi quy và quá trình học
+### 1. Linear Regression - Dự Đoán Giá Nhà
 
-2. **Logistic Regression**
-   - Mô hình phân loại nhị phân
-   - Tối ưu hóa bằng gradient descent
-   - Trực quan hóa decision boundary và quá trình học
+#### Mô tả bài toán
+- **Mục tiêu**: Dự đoán giá nhà dựa trên diện tích
+- **Dữ liệu**: 
+  - 100 mẫu nhà với diện tích và giá
+  - Biến đầu vào (x): Diện tích (1000 sqft), phân phối chuẩn quanh 2.5 (1-5)
+  - Biến đầu ra (y): Giá nhà (1000$), tương quan tuyến tính với diện tích
 
-## Chi Tiết Các Module
+#### Công thức toán học
+- **Mô hình dự đoán**: y = wx + b
+  - w: hệ số ảnh hưởng của diện tích đến giá
+  - b: giá cơ bản của nhà
+- **Hàm mất mát**: J(w,b) = (1/2m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)²
+- **Gradient descent**: 
+  - ∂J/∂w = (1/m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x⁽ⁱ⁾
+  - ∂J/∂b = (1/m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)
 
-### 1. Linear Regression
+#### Trực quan hóa kết quả
+![Linear Regression Fit](images/linear_regression_fit.png)
+- **Đồ thị dự đoán**:
+  - Điểm xanh: dữ liệu thực tế (diện tích, giá)
+  - Đường đỏ: mô hình dự đoán tối ưu
+  - Trục x: Diện tích nhà (1000 sqft)
+  - Trục y: Giá nhà (1000$)
 
+![Linear Cost History](images/linear_cost_history.png)
+- **Đồ thị huấn luyện**:
+  - Trục x: Số vòng lặp
+  - Trục y: Giá trị hàm mất mát
+  - Đường cong giảm thể hiện mô hình đang học tốt
+
+### 2. Logistic Regression - Dự Đoán Kết Quả Tuyển Sinh
+
+#### Mô tả bài toán
+- **Mục tiêu**: Dự đoán kết quả tuyển sinh (Đỗ/Trượt) dựa trên điểm thi và GPA
+- **Dữ liệu**:
+  - 100 hồ sơ tuyển sinh
+  - Biến đầu vào:
+    - x₁: Điểm thi (0-100), phân phối chuẩn quanh 65
+    - x₂: GPA (0-4), phân phối chuẩn quanh 3.0
+  - Biến đầu ra: Kết quả (1: Đỗ, 0: Trượt)
+
+#### Công thức toán học
+- **Hàm sigmoid**: g(z) = 1 / (1 + e^(-z))
+- **Mô hình dự đoán**: P(đỗ) = g(w₁x₁ + w₂x₂ + b)
+  - w₁: trọng số của điểm thi
+  - w₂: trọng số của GPA
+  - b: độ chệch
+- **Binary cross-entropy loss**: 
+  J(w₁,w₂,b) = -(1/m) * Σ[y⁽ⁱ⁾log(h(x⁽ⁱ⁾)) + (1-y⁽ⁱ⁾)log(1-h(x⁽ⁱ⁾))]
+- **Gradient descent**:
+  - ∂J/∂w₁ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₁⁽ⁱ⁾
+  - ∂J/∂w₂ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₂⁽ⁱ⁾
+  - ∂J/∂b = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾)
+
+#### Trực quan hóa kết quả
+![Decision Boundary](images/logistic_decision_boundary.png)
+- **Đồ thị phân loại**:
+  - Điểm xanh dương: Sinh viên đỗ
+  - Điểm đỏ: Sinh viên trượt
+  - Đường xanh lá: Decision boundary (P(đỗ) = 0.5)
+  - Vùng màu: Xác suất đỗ (từ 0 đến 1)
+  - Trục x: Điểm thi
+  - Trục y: GPA
+
+![Logistic Cost History](images/logistic_cost_history.png)
+- **Đồ thị huấn luyện**:
+  - Trục x: Số vòng lặp
+  - Trục y: Giá trị hàm mất mát
+  - Đường cong giảm thể hiện mô hình đang học tốt
+
+## Chi Tiết Triển Khai
+
+### Các Module Chính
+
+1. **Core Module**: Cài đặt các thuật toán
 ```python
 class LinearRegression:
-    """
-    Mô hình hồi quy tuyến tính
-    y = wx + b
-    
-    Thuộc tính:
-        weights: Trọng số w
-        bias: Độ chệch b
-        learning_rate: Tốc độ học α
-        num_iterations: Số vòng lặp
-    """
-    
+    """Mô hình hồi quy tuyến tính: y = wx + b"""
     def predict(self, X):
-        """Dự đoán giá trị y = w*X + b"""
         return np.dot(X, self.weights) + self.bias
     
     def compute_cost(self, X, y):
-        """Tính MSE cost function"""
         m = len(y)
         predictions = self.predict(X)
         return (1/(2*m)) * np.sum((predictions - y)**2)
-```
 
-### 2. Logistic Regression
-
-```python
 class LogisticRegression:
-    """
-    Mô hình phân loại nhị phân
-    P(y=1) = g(w₁x₁ + w₂x₂ + b)
-    với g(z) = 1/(1+e^(-z))
-    
-    Thuộc tính:
-        weights: Trọng số [w₁, w₂]
-        bias: Độ chệch b
-        learning_rate: Tốc độ học α
-        num_iterations: Số vòng lặp
-    """
-    
+    """Mô hình phân loại nhị phân: P(y=1) = g(w₁x₁ + w₂x₂ + b)"""
     def predict(self, X):
-        """Dự đoán xác suất P(y=1)"""
         z = np.dot(X, self.weights) + self.bias
         return 1 / (1 + np.exp(-z))
     
     def compute_cost(self, X, y):
-        """Binary cross-entropy loss"""
         m = len(y)
         predictions = self.predict(X)
         return -(1/m) * np.sum(y*np.log(predictions) + (1-y)*np.log(1-predictions))
 ```
 
-## Minh Họa Trực Quan
-
-1. **Linear Regression**
-![Linear Regression Fit](images/linear_regression_fit.png)
-- Dữ liệu: Điểm và đường hồi quy tối ưu
-- Đường màu đỏ: mô hình dự đoán
-
-![Linear Cost History](images/linear_cost_history.png)
-- Sự hội tụ của cost function
-- Ảnh hưởng của learning rate
-
-2. **Logistic Regression**
-![Decision Boundary](images/logistic_decision_boundary.png)
-- Dữ liệu phân loại (đỗ/trượt)
-- Đường màu xanh: decision boundary
-
-![Logistic Cost History](images/logistic_cost_history.png)
-- Sự hội tụ của binary cross-entropy loss
-- Quá trình tối ưu tham số
-
-## Ví dụ Minh Họa
-
-### 1. Linear Regression - Dự Đoán Giá Nhà
-- **Dữ liệu**: 
-  - Tập dữ liệu mô phỏng về giá nhà (100 mẫu)
-  - Biến đầu vào: Kích thước nhà (1000 sqft), phân phối chuẩn quanh 2.5 (1-5)
-  - Biến đầu ra: Giá nhà (1000$), tương quan tuyến tính với kích thước
-- **Mô hình**: 
-  - Phương trình: y = wx + b
-  - Hàm mất mát: J(w,b) = (1/2m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)²
-  - Gradient descent: 
-    - ∂J/∂w = (1/m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x⁽ⁱ⁾
-    - ∂J/∂b = (1/m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)
-- **Trực quan hóa**: 
-  - Scatter plot dữ liệu thực tế
-  - Đường hồi quy tối ưu (đỏ)
-  - Đồ thị hội tụ của hàm mất mát
-
-### 2. Logistic Regression - Dự Đoán Kết Quả Tuyển Sinh
-- **Dữ liệu**:
-  - Tập dữ liệu mô phỏng về tuyển sinh (100 mẫu)
-  - Biến đầu vào:
-    - x₁: Điểm thi (0-100), phân phối chuẩn quanh 65
-    - x₂: GPA (0-4), phân phối chuẩn quanh 3.0
-  - Biến đầu ra: Kết quả (Đỗ/Trượt)
-- **Mô hình**:
-  - Hàm sigmoid: g(z) = 1 / (1 + e^(-z))
-  - Hàm dự đoán: P(đỗ) = g(w₁x₁ + w₂x₂ + b)
-  - Binary cross-entropy loss: J(w₁,w₂,b) = -(1/m) * Σ[y⁽ⁱ⁾log(h(x⁽ⁱ⁾)) + (1-y⁽ⁱ⁾)log(1-h(x⁽ⁱ⁾))]
-  - Gradient descent:
-    - ∂J/∂w₁ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₁⁽ⁱ⁾
-    - ∂J/∂w₂ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₂⁽ⁱ⁾
-    - ∂J/∂b = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾)
-- **Trực quan hóa**:
-  - Scatter plot phân loại sinh viên (Đỗ: xanh dương, Trượt: đỏ)
-  - Decision boundary (đường xanh lá)
-  - Contour plot thể hiện xác suất đỗ
-  - Đồ thị hội tụ của hàm mất mát
+2. **Visualization Module**: Trực quan hóa kết quả
+- Vẽ dữ liệu và mô hình dự đoán
+- Vẽ đồ thị hội tụ của hàm mất mát
+- Tạo các đồ thị tương tác
 
 ## Cài Đặt và Sử Dụng
 
