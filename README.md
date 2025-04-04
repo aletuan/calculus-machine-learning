@@ -184,13 +184,23 @@ calculus-machine-learning/
 
 #### Trực quan hóa kết quả
 ![Decision Boundary](images/logistic_decision_boundary.png)
-- **Đồ thị phân loại**:
-  - Điểm xanh dương: Sinh viên đỗ
-  - Điểm đỏ: Sinh viên trượt
-  - Đường xanh lá: Decision boundary (P(đỗ) = 0.5)
-  - Vùng màu: Xác suất đỗ (từ 0 đến 1)
-  - Trục x: Điểm thi
-  - Trục y: GPA
+- **Khái niệm về Decision Boundary**:
+  - **Định nghĩa**: Decision boundary là đường phân chia không gian đặc trưng thành các vùng khác nhau, mỗi vùng tương ứng với một lớp dự đoán.
+  - **Ý nghĩa**: Trong logistic regression, decision boundary là nơi mà xác suất dự đoán của hai lớp là 0.5, tức là mô hình không chắc chắn về lớp của điểm dữ liệu.
+
+- **Phân tích kết quả đồ thị**:
+  - **Điểm xanh dương**: Sinh viên đỗ
+  - **Điểm đỏ**: Sinh viên trượt
+  - **Đường xanh lá**: Decision boundary (P(đỗ) = 0.5)
+  - **Vùng màu**: Xác suất đỗ (từ 0 đến 1)
+  - **Trục x**: Điểm thi
+  - **Trục y**: GPA
+  
+  - **Giải thích**:
+    - Decision boundary chia không gian thành hai vùng: một bên là vùng dự đoán đỗ, bên kia là vùng dự đoán trượt.
+    - Vị trí và hình dạng của decision boundary cho thấy sự phân tách giữa hai lớp.
+    - Các điểm gần decision boundary có xác suất dự đoán gần 0.5, cho thấy mô hình không chắc chắn.
+    - Các điểm xa decision boundary có xác suất dự đoán gần 0 hoặc 1, cho thấy mô hình rất chắc chắn về dự đoán của mình.
 
 ![Logistic Cost History](images/logistic_cost_history.png)
 - **Đồ thị huấn luyện**:
