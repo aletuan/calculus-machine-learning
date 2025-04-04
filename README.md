@@ -23,42 +23,7 @@ Machine Learning (Học máy) là một nhánh của trí tuệ nhân tạo, cho
    - Hàm số toán học mô tả mối quan hệ giữa đầu vào và đầu ra
    - Được xác định bởi các tham số (parameters) cần tối ưu
 
-2. **Học (Learning)**
-   - **Gradient Descent**: Thuật toán tối ưu tham số quan trọng nhất trong học máy
-     - **Gradient là gì?**
-       - Gradient là vector chứa các đạo hàm riêng của hàm mất mát theo từng tham số
-       - Gradient chỉ ra hướng tăng nhanh nhất của hàm mất mát tại một điểm
-       - Ví dụ: Với hàm mất mát J(w,b), gradient là [∂J/∂w, ∂J/∂b]
-     
-     - **Tại sao đi ngược hướng gradient?**
-       - Mục tiêu: Tìm tham số để hàm mất mát đạt giá trị nhỏ nhất
-       - Gradient chỉ hướng tăng nhanh nhất → Ngược gradient là hướng giảm nhanh nhất
-       - Giống như đi xuống đồi: luôn chọn hướng dốc nhất để xuống nhanh nhất
-     
-     - **Quá trình cập nhật tham số**:
-       1. Tính gradient tại vị trí hiện tại
-       2. Cập nhật tham số: θ_new = θ_old - α * gradient
-          - α (learning rate): điều chỉnh độ lớn của bước di chuyển
-          - Nếu α quá lớn: có thể vượt qua điểm tối ưu
-          - Nếu α quá nhỏ: hội tụ chậm
-     
-     - **Ví dụ trực quan**:
-       ![Gradient Descent Example](images/gradient_descent_example.png)
-       - **Đồ thị minh họa**:
-         - Đường cong xanh: Hàm mất mát (Loss function)
-         - Điểm đỏ: Vị trí hiện tại của tham số
-         - Đường đứt nét đỏ: Gradient (độ dốc) tại điểm hiện tại
-         - Mũi tên xanh lá: Hướng cập nhật tham số (ngược với gradient)
-       
-       - **Giải thích**:
-         - Gradient dương (độ dốc đi lên) → Di chuyển sang trái (giảm tham số)
-         - Gradient âm (độ dốc đi xuống) → Di chuyển sang phải (tăng tham số)
-         - Quá trình lặp lại cho đến khi đạt điểm có gradient ≈ 0 (điểm tối ưu)
-
-   - **Learning Rate**: Tốc độ học, quyết định độ lớn của bước cập nhật trong gradient descent
-   - **Iteration**: Số lần lặp lại quá trình học
-
-3. **Đánh giá (Evaluation)**
+2. **Đánh giá (Evaluation)**
    - **Loss Function (Hàm mất mát)**: 
      - **Định nghĩa**: Hàm số đo lường mức độ sai lệch giữa giá trị dự đoán của mô hình và giá trị thực tế
      - **Vai trò**:
@@ -92,6 +57,41 @@ Machine Learning (Học máy) là một nhánh của trí tuệ nhân tạo, cho
    
    - **Training**: Quá trình tối ưu mô hình trên tập dữ liệu huấn luyện
    - **Convergence**: Sự hội tụ của quá trình học, thể hiện qua đồ thị loss function
+
+3. **Học (Learning)**
+   - **Gradient Descent**: Thuật toán tối ưu tham số quan trọng nhất trong học máy
+     - **Gradient là gì?**
+       - Gradient là vector chứa các đạo hàm riêng của hàm mất mát theo từng tham số
+       - Gradient chỉ ra hướng tăng nhanh nhất của hàm mất mát tại một điểm
+       - Ví dụ: Với hàm mất mát J(w,b), gradient là [∂J/∂w, ∂J/∂b]
+     
+     - **Tại sao đi ngược hướng gradient?**
+       - Mục tiêu: Tìm tham số để hàm mất mát đạt giá trị nhỏ nhất
+       - Gradient chỉ hướng tăng nhanh nhất → Ngược gradient là hướng giảm nhanh nhất
+       - Giống như đi xuống đồi: luôn chọn hướng dốc nhất để xuống nhanh nhất
+     
+     - **Quá trình cập nhật tham số**:
+       1. Tính gradient tại vị trí hiện tại
+       2. Cập nhật tham số: θ_new = θ_old - α * gradient
+          - α (learning rate): điều chỉnh độ lớn của bước di chuyển
+          - Nếu α quá lớn: có thể vượt qua điểm tối ưu
+          - Nếu α quá nhỏ: hội tụ chậm
+     
+     - **Ví dụ trực quan**:
+       ![Gradient Descent Example](images/gradient_descent_example.png)
+       - **Đồ thị minh họa**:
+         - Đường cong xanh: Hàm mất mát (Loss function)
+         - Điểm đỏ: Vị trí hiện tại của tham số
+         - Đường đứt nét đỏ: Gradient (độ dốc) tại điểm hiện tại
+         - Mũi tên xanh lá: Hướng cập nhật tham số (ngược với gradient)
+       
+       - **Giải thích**:
+         - Gradient dương (độ dốc đi lên) → Di chuyển sang trái (giảm tham số)
+         - Gradient âm (độ dốc đi xuống) → Di chuyển sang phải (tăng tham số)
+         - Quá trình lặp lại cho đến khi đạt điểm có gradient ≈ 0 (điểm tối ưu)
+
+   - **Learning Rate**: Tốc độ học, quyết định độ lớn của bước cập nhật trong gradient descent
+   - **Iteration**: Số lần lặp lại quá trình học
 
 ### Các Công Cụ Sử Dụng
 - **NumPy**: Thư viện tính toán số học
