@@ -1,6 +1,6 @@
 # Ứng Dụng Giải Tích và Học Máy
 
-Tập hợp ví dụ minh họa về các phép toán vector và ứng dụng trong học máy, tập trung vào cost function và gradient descent.
+Tập hợp ví dụ minh họa về các thuật toán học máy cơ bản, tập trung vào linear regression và logistic regression.
 
 ## Cấu Trúc Dự Án
 
@@ -11,180 +11,133 @@ calculus-machine-learning/
 ├── setup.py                  # File cấu hình cho việc cài đặt package
 ├── src/
 │   └── calculus_ml/         # Package chính
-│       ├── __init__.py      # Khởi tạo package và export các hàm chính
+│       ├── __init__.py      # Khởi tạo package
 │       ├── core/            # Module chứa các hàm tính toán cốt lõi
-│       │   ├── vector.py    # Các phép toán vector cơ bản (cộng, trừ, tích vô hướng)
-│       │   ├── cost_function.py    # Tính toán cost function và tạo dữ liệu mẫu
-│       │   └── gradient_descent.py # Cài đặt thuật toán gradient descent
-│       └── visualization/    # Module chứa các hàm vẽ đồ thị
-│           ├── cost_plot.py        # Vẽ đồ thị cost function và kết quả hồi quy
-│           └── gradient_plot.py    # Vẽ đồ thị quá trình gradient descent
+│       │   ├── base/        # Các class và hàm cơ sở
+│       │   ├── linear/      # Linear regression
+│       │   └── logistic/    # Logistic regression
+│       ├── visualization/    # Module chứa các hàm vẽ đồ thị
+│       │   ├── base/        # Các hàm vẽ cơ bản
+│       │   ├── linear/      # Vẽ cho linear regression
+│       │   └── logistic/    # Vẽ cho logistic regression
+│       └── examples/        # Các ví dụ minh họa
 └── images/                  # Thư mục lưu các hình ảnh được tạo ra
-    ├── cost_function_3d.png        # Bề mặt cost function trong không gian 3D
-    ├── cost_function_contour.png   # Đường đồng mức của cost function
-    ├── gradient_descent_3d.png     # Quá trình gradient descent trên bề mặt 3D
-    ├── gradient_descent_contour.png # Quá trình gradient descent trên contour
-    ├── gradient_descent_steps.png   # Các bước của gradient descent
-    └── cost_history.png            # Lịch sử cost function qua các iteration
+    ├── linear_regression_fit.png    # Đường hồi quy tuyến tính và dữ liệu
+    ├── linear_cost_history.png      # Lịch sử cost function của linear regression
+    ├── logistic_decision_boundary.png # Decision boundary của logistic regression
+    └── logistic_cost_history.png     # Lịch sử cost function của logistic regression
 ```
 
 ## Tính Năng Chính
 
-1. **Phép Toán Vector Cơ Bản**
-   - Cộng, trừ vector
-   - Nhân vector với số vô hướng
-   - Tích vô hướng (dot product)
-   - Chuẩn hóa vector (normalization)
+1. **Linear Regression**
+   - Mô hình hồi quy tuyến tính một biến
+   - Tối ưu hóa bằng gradient descent
+   - Trực quan hóa đường hồi quy và quá trình học
 
-2. **Cost Function trong Học Máy**
-   - Tính toán cost function J(w,b)
-   - Trực quan hóa bề mặt cost 3D
-   - Vẽ đường đồng mức của cost function
-   - Hỗ trợ cả mô hình 1 tham số và 2 tham số
+2. **Logistic Regression**
+   - Mô hình phân loại nhị phân
+   - Tối ưu hóa bằng gradient descent
+   - Trực quan hóa decision boundary và quá trình học
 
-3. **Gradient Descent**
-   - Tính gradient của cost function
-   - Cài đặt thuật toán gradient descent
-   - Trực quan hóa quá trình tối ưu
-   - Theo dõi sự hội tụ qua các iteration
+## Chi Tiết Các Module
 
-## Chi Tiết Các Hàm Chính
-
-### 1. Vector Operations (`vector.py`)
+### 1. Linear Regression
 
 ```python
-def dot_product(v1, v2):
+class LinearRegression:
     """
-    Tính tích vô hướng của hai vector
-    Ví dụ: dot_product([1, 2], [3, 4]) -> 11
+    Mô hình hồi quy tuyến tính
+    y = wx + b
+    
+    Thuộc tính:
+        weights: Trọng số w
+        bias: Độ chệch b
+        learning_rate: Tốc độ học α
+        num_iterations: Số vòng lặp
     """
-    return sum(x * y for x, y in zip(v1, v2))
-
-def vector_norm(v):
-    """
-    Tính độ dài (norm) của vector
-    Ví dụ: vector_norm([3, 4]) -> 5.0
-    """
-    return np.sqrt(sum(x * x for x in v))
-
-def normalize_vector(v):
-    """
-    Chuẩn hóa vector thành vector đơn vị
-    Ví dụ: normalize_vector([3, 4]) -> [0.6, 0.8]
-    """
-    norm = vector_norm(v)
-    return [x / norm for x in v]
+    
+    def predict(self, X):
+        """Dự đoán giá trị y = w*X + b"""
+        return np.dot(X, self.weights) + self.bias
+    
+    def compute_cost(self, X, y):
+        """Tính MSE cost function"""
+        m = len(y)
+        predictions = self.predict(X)
+        return (1/(2*m)) * np.sum((predictions - y)**2)
 ```
 
-### 2. Cost Function (1 tham số) (`cost_function.py`)
+### 2. Logistic Regression
 
 ```python
-def compute_cost(x, y, w, b):
+class LogisticRegression:
     """
-    Tính cost function J(w,b)
-    J(w,b) = (1/2m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)²
+    Mô hình phân loại nhị phân
+    P(y=1) = g(w₁x₁ + w₂x₂ + b)
+    với g(z) = 1/(1+e^(-z))
     
-    Args:
-        x (ndarray): training data
-        y (ndarray): target values
-        w,b (scalar): model parameters
-    
-    Returns:
-        cost (scalar): giá trị của cost function
+    Thuộc tính:
+        weights: Trọng số [w₁, w₂]
+        bias: Độ chệch b
+        learning_rate: Tốc độ học α
+        num_iterations: Số vòng lặp
     """
-    m = len(x)
-    total_cost = sum((w * x[i] + b - y[i]) ** 2 for i in range(m))
-    return total_cost / (2 * m)
+    
+    def predict(self, X):
+        """Dự đoán xác suất P(y=1)"""
+        z = np.dot(X, self.weights) + self.bias
+        return 1 / (1 + np.exp(-z))
+    
+    def compute_cost(self, X, y):
+        """Binary cross-entropy loss"""
+        m = len(y)
+        predictions = self.predict(X)
+        return -(1/m) * np.sum(y*np.log(predictions) + (1-y)*np.log(1-predictions))
 ```
 
-### 3. Gradient Descent (1 tham số) (`gradient_descent.py`)
+## Minh Họa Trực Quan
 
-```python
-def compute_gradient(x, y, w, b):
-    """
-    Tính gradient của cost function J(w,b)
-    
-    Args:
-        x,y: training data
-        w,b: model parameters
-    
-    Returns:
-        dj_dw: gradient theo w
-        dj_db: gradient theo b
-    """
-    m = len(x)
-    dj_dw = sum((w * x[i] + b - y[i]) * x[i] for i in range(m)) / m
-    dj_db = sum(w * x[i] + b - y[i] for i in range(m)) / m
-    return dj_dw, dj_db
+1. **Linear Regression**
+![Linear Regression Fit](images/linear_regression_fit.png)
+- Dữ liệu: Điểm và đường hồi quy tối ưu
+- Đường màu đỏ: mô hình dự đoán
 
-def gradient_descent(x, y, w_init, b_init, alpha, num_iters):
-    """
-    Thực hiện gradient descent để tối ưu w,b
-    
-    Args:
-        x,y: training data
-        w_init,b_init: giá trị khởi tạo
-        alpha: learning rate
-        num_iters: số iteration
-    
-    Returns:
-        w,b: tham số tối ưu
-        J_history: lịch sử cost
-        p_history: lịch sử tham số
-    """
-```
-
-## Minh Họa Trực Quan (1 tham số)
-
-1. **Cost Function 3D**
-![Cost Function 3D](images/cost_function_3d.png)
-- Bề mặt cost function J(w,b)
-- Điểm thấp nhất: tham số tối ưu (w*, b*)
-
-2. **Gradient Descent**
-![Gradient Descent](images/gradient_descent_3d.png)
-- Đường màu đỏ: quá trình tối ưu
-- Điểm đỏ: vị trí bắt đầu
-- Điểm xanh: vị trí kết thúc
-
-3. **Cost History**
-![Cost History](images/cost_history.png)
+![Linear Cost History](images/linear_cost_history.png)
 - Sự hội tụ của cost function
 - Ảnh hưởng của learning rate
 
-## Ví dụ với 1 và 2 tham số
+2. **Logistic Regression**
+![Decision Boundary](images/logistic_decision_boundary.png)
+- Dữ liệu phân loại (đỗ/trượt)
+- Đường màu xanh: decision boundary
 
-### 1. Ví dụ với 1 tham số
+![Logistic Cost History](images/logistic_cost_history.png)
+- Sự hội tụ của binary cross-entropy loss
+- Quá trình tối ưu tham số
+
+## Ví dụ Minh Họa
+
+### 1. Linear Regression
 - **Dữ liệu**: Giá nhà dựa trên kích thước
 - **Mô hình**: y = wx + b
-- **Tham số**: w (giá/sqft), b (giá cơ bản)
+- **Tham số**: 
+  - w: giá tăng theo mỗi 1000 sqft
+  - b: giá cơ bản
 - **Trực quan hóa**: 
-  - Cost function 3D
-  - Đường đồng mức
-  - Quá trình gradient descent
+  - Đường hồi quy tối ưu
+  - Lịch sử cost function
 
-### 2. Ví dụ với 2 tham số
-- **Dữ liệu**: Giá nhà dựa trên kích thước và số phòng ngủ
-- **Mô hình**: y = w₁x₁ + w₂x₂ + b
-- **Tham số**: 
-  - w₁ (giá/sqft)
-  - w₂ (giá/phòng ngủ)
-  - b (giá cơ bản)
-- **Trực quan hóa**:
-  - Cost function trong không gian nhiều chiều
-  - Quá trình tối ưu với nhiều tham số
-
-### 3. Ví dụ với Logistic Regression
+### 2. Logistic Regression
 - **Dữ liệu**: Kết quả tuyển sinh dựa trên điểm thi và GPA
-- **Mô hình**: P(y=1) = g(w₁x₁ + w₂x₂ + b), với g(z) = 1/(1+e^(-z))
+- **Mô hình**: P(y=1) = g(w₁x₁ + w₂x₂ + b)
 - **Tham số**: 
-  - w₁ (trọng số điểm thi)
-  - w₂ (trọng số GPA)
-  - b (độ chệch)
+  - w₁: trọng số điểm thi
+  - w₂: trọng số GPA
+  - b: độ chệch
 - **Trực quan hóa**:
   - Decision boundary
-  - Cost function surface
-  - Quá trình tối ưu
+  - Lịch sử cost function
 
 ## Cài Đặt và Sử Dụng
 
