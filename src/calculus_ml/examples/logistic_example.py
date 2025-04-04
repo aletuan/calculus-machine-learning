@@ -52,11 +52,11 @@ def plot_logistic_results(model, X1, X2, y, history, save_dir='images'):
     plt.colorbar(contour, label='P(Admitted)')
     
     # Vẽ decision boundary với độ dày tăng
-    plt.contour(xx1, xx2, Z, levels=[0.5], colors='purple', linewidths=2, linestyles='--', label='Decision Boundary')
+    plt.contour(xx1, xx2, Z, levels=[0.5], colors='green', linewidths=2, linestyles='--', label='Decision Boundary')
     
     # Vẽ scatter plot các điểm dữ liệu
-    plt.scatter(X1[y==0], X2[y==0], color='orange', alpha=0.7, label='Rejected', edgecolors='k')
-    plt.scatter(X1[y==1], X2[y==1], color='cyan', alpha=0.7, label='Admitted', edgecolors='k')
+    plt.scatter(X1[y==0], X2[y==0], color='red', alpha=0.7, label='Rejected', edgecolors='k')
+    plt.scatter(X1[y==1], X2[y==1], color='blue', alpha=0.7, label='Admitted', edgecolors='k')
     
     plt.legend()
     save_plot(os.path.join(save_dir, 'logistic_decision_boundary.png'))
