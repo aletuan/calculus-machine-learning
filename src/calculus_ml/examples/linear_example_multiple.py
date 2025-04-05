@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from rich.console import Console
 from rich.panel import Panel
 from ..core.linear.regression import LinearRegression
+from ..core.base.scaler import StandardScaler
 from ..visualization.base.plot_utils import setup_plot, save_plot, PlotConfig
 
 console = Console()
@@ -18,7 +19,7 @@ def generate_house_data(n_samples=100, noise=0.1):
     price = 200*area + 50*bedrooms + 100 + np.random.normal(0, noise, n_samples)
     return area, bedrooms, price
 
-def plot_multiple_results(model, X1, X2, y, history, save_dir='images'):
+def plot_multiple_results(model, X1, X2, y, history, scaler=None, save_dir='images'):
     """Vẽ kết quả multiple linear regression"""
     import os
     os.makedirs(save_dir, exist_ok=True)
@@ -36,7 +37,13 @@ def plot_multiple_results(model, X1, X2, y, history, save_dir='images'):
     xx1, xx2 = np.meshgrid(np.linspace(x1_min, x1_max, 10),
                           np.linspace(x2_min, x2_max, 10))
     X_grid = np.column_stack((xx1.ravel(), xx2.ravel()))
-    y_pred = model.predict(X_grid)
+    
+    if scaler is not None:
+        X_grid_scaled = scaler.transform(X_grid)
+        y_pred = model.predict(X_grid_scaled)
+    else:
+        y_pred = model.predict(X_grid)
+    
     y_pred = y_pred.reshape(xx1.shape)
     
     ax.plot_surface(xx1, xx2, y_pred, alpha=0.3, color='red', label='Regression plane')
@@ -66,7 +73,10 @@ def run_multiple_example():
         "3. Gradient:\n"
         "   - ∂J/∂w₁ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₁⁽ⁱ⁾\n"
         "   - ∂J/∂w₂ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₂⁽ⁱ⁾\n"
-        "   - ∂J/∂b = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾)",
+        "   - ∂J/∂b = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾)\n"
+        "4. Feature Scaling:\n"
+        "   - Chuẩn hóa dữ liệu: x' = (x - μ) / σ\n"
+        "   - μ: mean, σ: standard deviation",
         title="Multiple Regression Formulas",
         border_style="cyan"
     ))
@@ -75,20 +85,33 @@ def run_multiple_example():
     area, bedrooms, price = generate_house_data()
     X = np.column_stack((area, bedrooms))
     
-    # Hiển thị thông tin dữ liệu
+    # Hiển thị thông tin dữ liệu gốc
     console.print(Panel(
-        f"[bold green]Dữ liệu mẫu:[/bold green]\n"
+        f"[bold green]Dữ liệu gốc:[/bold green]\n"
         f"- Số lượng mẫu: {len(price)}\n"
         f"- Diện tích: min={area.min():.1f}, max={area.max():.1f}, mean={area.mean():.1f}\n"
         f"- Số phòng ngủ: min={bedrooms.min()}, max={bedrooms.max()}, mean={bedrooms.mean():.1f}\n"
         f"- Giá nhà: min={price.min():.1f}, max={price.max():.1f}, mean={price.mean():.1f}",
-        title="Training Data",
+        title="Original Data",
+        border_style="cyan"
+    ))
+    
+    # Chuẩn hóa dữ liệu
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    
+    # Hiển thị thông tin dữ liệu đã chuẩn hóa
+    console.print(Panel(
+        f"[bold green]Dữ liệu đã chuẩn hóa:[/bold green]\n"
+        f"- Diện tích: min={X_scaled[:,0].min():.2f}, max={X_scaled[:,0].max():.2f}, mean={X_scaled[:,0].mean():.2f}\n"
+        f"- Số phòng ngủ: min={X_scaled[:,1].min():.2f}, max={X_scaled[:,1].max():.2f}, mean={X_scaled[:,1].mean():.2f}",
+        title="Scaled Data",
         border_style="cyan"
     ))
     
     # Khởi tạo và training model
     model = LinearRegression(learning_rate=0.01, num_iterations=1000)
-    history = model.fit(X, price)
+    history = model.fit(X_scaled, price)
     
     # Hiển thị kết quả
     console.print(Panel(
@@ -105,7 +128,7 @@ def run_multiple_example():
     ))
     
     # Vẽ kết quả
-    plot_multiple_results(model, area, bedrooms, price, history)
+    plot_multiple_results(model, area, bedrooms, price, history, scaler)
     console.print("[green]✓[/green] Multiple regression visualization saved")
 
 if __name__ == "__main__":
