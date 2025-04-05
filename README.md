@@ -105,9 +105,11 @@ calculus-machine-learning/
 ├── README.md                 # Tài liệu hướng dẫn và mô tả dự án
 ├── requirements.txt          # Danh sách các thư viện phụ thuộc
 ├── setup.py                  # File cấu hình cho việc cài đặt package
+├── .gitignore               # Các file và thư mục cần bỏ qua khi commit
 ├── src/
 │   └── calculus_ml/         # Package chính
 │       ├── __init__.py      # Khởi tạo package
+│       ├── main.py          # File chính chứa các ví dụ và chạy thử nghiệm
 │       ├── core/            # Module chứa các hàm tính toán cốt lõi
 │       │   ├── base/        # Các class và hàm cơ sở
 │       │   ├── linear/      # Linear regression
@@ -118,10 +120,13 @@ calculus-machine-learning/
 │       │   └── logistic/    # Vẽ cho logistic regression
 │       └── examples/        # Các ví dụ minh họa
 └── images/                  # Thư mục lưu các hình ảnh được tạo ra
-    ├── linear_regression_fit.png    # Đường hồi quy tuyến tính và dữ liệu
-    ├── linear_cost_history.png      # Lịch sử cost function của linear regression
-    ├── logistic_decision_boundary.png # Decision boundary của logistic regression
-    └── logistic_cost_history.png     # Lịch sử cost function của logistic regression
+    ├── gradient_descent_example.png    # Minh họa quá trình gradient descent
+    ├── linear_regression_fit.png       # Đường hồi quy tuyến tính và dữ liệu
+    ├── linear_cost_history.png         # Lịch sử cost function của linear regression
+    ├── multiple_regression_fit.png     # Mặt phẳng hồi quy nhiều biến và dữ liệu
+    ├── multiple_cost_history.png       # Lịch sử cost function của hồi quy nhiều biến
+    ├── logistic_decision_boundary.png  # Decision boundary của logistic regression
+    └── logistic_cost_history.png       # Lịch sử cost function của logistic regression
 ```
 
 ## Ví Dụ Minh Họa
