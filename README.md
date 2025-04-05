@@ -158,7 +158,59 @@ calculus-machine-learning/
   - Trục y: Giá trị hàm mất mát
   - Đường cong giảm thể hiện mô hình đang học tốt
 
-### 2. Logistic Regression - Dự Đoán Kết Quả Tuyển Sinh
+### 2. Linear Regression (Hồi quy tuyến tính)
+
+### 2.1. Hồi quy tuyến tính đơn giản
+
+### 2.2. Hồi quy tuyến tính nhiều biến
+Ví dụ này minh họa hồi quy tuyến tính với hai biến độc lập:
+```python
+y = w₁x₁ + w₂x₂ + b
+```
+
+#### Dữ liệu mẫu
+- Bài toán: Dự đoán giá nhà dựa trên diện tích và số phòng ngủ
+- Dữ liệu:
+  - x₁: Diện tích (1000 sqft), phân phối chuẩn quanh 2.5
+  - x₂: Số phòng ngủ (1-5), phân phối đều
+  - y: Giá nhà (1000$), tương quan với cả diện tích và số phòng
+- Số lượng mẫu: 100 căn nhà
+
+#### Công thức toán học
+1. Hàm dự đoán:
+   ```
+   h(x) = w₁x₁ + w₂x₂ + b
+   ```
+2. Cost function:
+   ```
+   J(w₁,w₂,b) = (1/2m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾)²
+   ```
+3. Gradient:
+   ```
+   ∂J/∂w₁ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₁⁽ⁱ⁾
+   ∂J/∂w₂ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₂⁽ⁱ⁾
+   ∂J/∂b = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾)
+   ```
+
+#### Minh họa trực quan
+1. Biểu đồ 3D:
+   - Trục X: Diện tích nhà (1000 sqft)
+   - Trục Y: Số phòng ngủ
+   - Trục Z: Giá nhà (1000$)
+   - Điểm màu xanh: Dữ liệu mẫu
+   - Mặt phẳng màu đỏ: Mặt phẳng hồi quy
+
+2. Biểu đồ cost history:
+   - Trục X: Số lần lặp
+   - Trục Y: Giá trị cost function
+   - Thể hiện quá trình tối ưu hóa các tham số
+
+#### Kết quả
+- Tìm được các tham số tối ưu w₁, w₂, b
+- Phương trình hồi quy cuối cùng
+- Giá trị cost function sau khi tối ưu
+
+### 3. Logistic Regression - Dự Đoán Kết Quả Tuyển Sinh
 
 #### Mô tả bài toán
 - **Mục tiêu**: Dự đoán kết quả tuyển sinh (Đỗ/Trượt) dựa trên điểm thi và GPA

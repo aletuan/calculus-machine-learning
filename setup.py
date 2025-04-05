@@ -6,9 +6,16 @@ setup(
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     install_requires=[
-        "numpy>=1.24.0",
-        "matplotlib>=3.7.0",
+        "numpy>=1.21.0",
+        "matplotlib>=3.4.0",
+        "rich>=10.0.0",
+        "click>=8.0.0"
     ],
+    entry_points={
+        "console_scripts": [
+            "calculus-ml=calculus_ml.main:main",
+        ],
+    },
     python_requires=">=3.8",
     author="Andy Le",
     author_email="your.email@example.com",

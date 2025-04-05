@@ -1,0 +1,112 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from rich.console import Console
+from rich.panel import Panel
+from ..core.linear.regression import LinearRegression
+from ..visualization.base.plot_utils import setup_plot, save_plot, PlotConfig
+
+console = Console()
+
+def generate_house_data(n_samples=100, noise=0.1):
+    """Tạo dữ liệu mẫu cho bài toán dự đoán giá nhà"""
+    np.random.seed(42)
+    # Diện tích (1000 sqft)
+    area = np.random.normal(2.5, 1, n_samples)
+    # Số phòng ngủ
+    bedrooms = np.random.randint(1, 6, n_samples)
+    # Giá nhà (1000$)
+    price = 200*area + 50*bedrooms + 100 + np.random.normal(0, noise, n_samples)
+    return area, bedrooms, price
+
+def plot_multiple_results(model, X1, X2, y, history, save_dir='images'):
+    """Vẽ kết quả multiple linear regression"""
+    import os
+    os.makedirs(save_dir, exist_ok=True)
+    
+    # Plot 1: Dữ liệu và mặt phẳng hồi quy
+    fig = plt.figure(figsize=(12, 8))
+    ax = fig.add_subplot(111, projection='3d')
+    
+    # Vẽ dữ liệu
+    ax.scatter(X1, X2, y, color='blue', alpha=0.7, label='Data points')
+    
+    # Vẽ mặt phẳng hồi quy
+    x1_min, x1_max = X1.min() - 1, X1.max() + 1
+    x2_min, x2_max = X2.min() - 1, X2.max() + 1
+    xx1, xx2 = np.meshgrid(np.linspace(x1_min, x1_max, 10),
+                          np.linspace(x2_min, x2_max, 10))
+    X_grid = np.column_stack((xx1.ravel(), xx2.ravel()))
+    y_pred = model.predict(X_grid)
+    y_pred = y_pred.reshape(xx1.shape)
+    
+    ax.plot_surface(xx1, xx2, y_pred, alpha=0.3, color='red', label='Regression plane')
+    
+    ax.set_xlabel('Area (1000 sqft)')
+    ax.set_ylabel('Bedrooms')
+    ax.set_zlabel('Price (1000$)')
+    ax.set_title('Multiple Linear Regression')
+    ax.legend()
+    
+    save_plot(os.path.join(save_dir, 'multiple_regression_fit.png'))
+    
+    # Plot 2: Cost history
+    setup_plot('Cost Function History', 'Iteration', 'Cost J(w₁,w₂,b)')
+    plt.plot(history['cost_history'])
+    save_plot(os.path.join(save_dir, 'multiple_cost_history.png'))
+
+def run_multiple_example():
+    """Chạy ví dụ multiple linear regression"""
+    console.print("\n[bold cyan]Multiple Linear Regression Example[/bold cyan]", justify="center")
+    
+    # Hiển thị công thức
+    console.print(Panel(
+        "[bold green]Công thức tính toán:[/bold green]\n"
+        "1. Hàm dự đoán: h(x) = w₁x₁ + w₂x₂ + b\n"
+        "2. Cost function: J(w₁,w₂,b) = (1/2m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾)²\n"
+        "3. Gradient:\n"
+        "   - ∂J/∂w₁ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₁⁽ⁱ⁾\n"
+        "   - ∂J/∂w₂ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₂⁽ⁱ⁾\n"
+        "   - ∂J/∂b = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾)",
+        title="Multiple Regression Formulas",
+        border_style="cyan"
+    ))
+    
+    # Tạo dữ liệu
+    area, bedrooms, price = generate_house_data()
+    X = np.column_stack((area, bedrooms))
+    
+    # Hiển thị thông tin dữ liệu
+    console.print(Panel(
+        f"[bold green]Dữ liệu mẫu:[/bold green]\n"
+        f"- Số lượng mẫu: {len(price)}\n"
+        f"- Diện tích: min={area.min():.1f}, max={area.max():.1f}, mean={area.mean():.1f}\n"
+        f"- Số phòng ngủ: min={bedrooms.min()}, max={bedrooms.max()}, mean={bedrooms.mean():.1f}\n"
+        f"- Giá nhà: min={price.min():.1f}, max={price.max():.1f}, mean={price.mean():.1f}",
+        title="Training Data",
+        border_style="cyan"
+    ))
+    
+    # Khởi tạo và training model
+    model = LinearRegression(learning_rate=0.01, num_iterations=1000)
+    history = model.fit(X, price)
+    
+    # Hiển thị kết quả
+    console.print(Panel(
+        f"[bold green]Kết quả tối ưu:[/bold green]\n"
+        f"1. Tham số tối ưu:\n"
+        f"   w₁ = {model.weights[0]:.4f} (trọng số diện tích)\n"
+        f"   w₂ = {model.weights[1]:.4f} (trọng số số phòng)\n"
+        f"   b = {model.bias:.4f} (độ chệch)\n"
+        f"2. Phương trình hồi quy:\n"
+        f"   Giá = {model.weights[0]:.4f}*Diện_tích + {model.weights[1]:.4f}*Số_phòng + {model.bias:.4f}\n"
+        f"3. Cost cuối cùng: {history['cost_history'][-1]:.4f}",
+        title="Optimization Results",
+        border_style="cyan"
+    ))
+    
+    # Vẽ kết quả
+    plot_multiple_results(model, area, bedrooms, price, history)
+    console.print("[green]✓[/green] Multiple regression visualization saved")
+
+if __name__ == "__main__":
+    run_multiple_example() 

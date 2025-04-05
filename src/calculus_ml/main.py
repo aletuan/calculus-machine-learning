@@ -6,6 +6,7 @@ from rich.table import Table
 from rich.progress import track
 from rich.tree import Tree
 from rich import print as rprint
+import click
 
 # Import core functionality
 from .core.linear.regression import LinearRegression
@@ -13,6 +14,7 @@ from .core.logistic.regression import LogisticRegression
 
 # Import examples
 from .examples.linear_example import run_linear_example
+from .examples.linear_example_multiple import run_multiple_example
 from .examples.logistic_example import run_logistic_example
 
 # Initialize rich console
@@ -53,24 +55,36 @@ def print_generated_images():
     console.print(Panel(tree, title="[bold blue]Thông tin hình ảnh[/bold blue]"))
     console.print("\n")
 
-def main():
-    """Hàm main chạy tất cả các ví dụ"""
-    console.print(Panel.fit(
-        "[bold blue]Ứng Dụng Giải Tích và Học Máy[/bold blue]\n"
-        "[italic]Minh họa các khái niệm cơ bản trong học máy[/italic]",
-        border_style="blue"
-    ))
+@click.command()
+@click.option('--example', type=click.Choice(['linear', 'multiple', 'logistic', 'all']), 
+              default='all', help='Chọn ví dụ để chạy')
+def main(example):
+    """Chạy các ví dụ về machine learning"""
     
-    # Ensure images directory exists
-    ensure_images_dir()
+    if example in ['linear', 'all']:
+        console.print(Panel(
+            "[bold cyan]Ví dụ 1: Hồi quy tuyến tính đơn giản[/bold cyan]\n"
+            "Dự đoán giá nhà dựa trên diện tích",
+            border_style="cyan"
+        ))
+        run_linear_example()
     
-    # Chạy các ví dụ
-    for example in track([
-        run_linear_example,
-        run_logistic_example
-    ], description="Running examples..."):
-        example()
+    if example in ['multiple', 'all']:
+        console.print(Panel(
+            "[bold cyan]Ví dụ 2: Hồi quy tuyến tính nhiều biến[/bold cyan]\n"
+            "Dự đoán giá nhà dựa trên diện tích và số phòng ngủ",
+            border_style="cyan"
+        ))
+        run_multiple_example()
     
+    if example in ['logistic', 'all']:
+        console.print(Panel(
+            "[bold cyan]Ví dụ 3: Hồi quy logistic[/bold cyan]\n"
+            "Dự đoán kết quả tuyển sinh dựa trên điểm thi và GPA",
+            border_style="cyan"
+        ))
+        run_logistic_example()
+
     # In thông tin về các hình ảnh đã tạo
     print_generated_images()
 
