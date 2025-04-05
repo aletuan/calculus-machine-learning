@@ -175,6 +175,13 @@ calculus-machine-learning/
     - x₁: Diện tích (1000 sqft)
     - x₂: Số phòng ngủ (1-5)
   - Biến đầu ra (y): Giá nhà (1000$)
+- **Xử lý dữ liệu**:
+  - Sử dụng StandardScaler để chuẩn hóa dữ liệu đầu vào
+  - Công thức chuẩn hóa: x' = (x - μ) / σ
+  - Mục đích: Cải thiện tốc độ hội tụ của gradient descent
+  - Kết quả chuẩn hóa:
+    - Diện tích: min=-2.78, max=2.16, mean=0.00
+    - Số phòng ngủ: min=-1.26, max=1.74, mean=-0.00
 
 ##### Công thức toán học
 - **Mô hình dự đoán**: y = w₁x₁ + w₂x₂ + b
@@ -248,6 +255,26 @@ calculus-machine-learning/
 
 1. **Core Module**: Cài đặt các thuật toán
 ```python
+class StandardScaler:
+    """Chuẩn hóa dữ liệu bằng phương pháp Standard Scaling"""
+    def fit(self, X):
+        """Tính mean và std từ dữ liệu training"""
+        self.mean = np.mean(X, axis=0)
+        self.std = np.std(X, axis=0)
+        return self
+    
+    def transform(self, X):
+        """Chuẩn hóa dữ liệu"""
+        return (X - self.mean) / self.std
+    
+    def fit_transform(self, X):
+        """Fit và transform dữ liệu"""
+        return self.fit(X).transform(X)
+    
+    def inverse_transform(self, X_scaled):
+        """Chuyển dữ liệu đã chuẩn hóa về dạng gốc"""
+        return X_scaled * self.std + self.mean
+
 class LinearRegression:
     """Mô hình hồi quy tuyến tính: y = wx + b"""
     def predict(self, X):
