@@ -126,16 +126,18 @@ calculus-machine-learning/
 
 ## Ví Dụ Minh Họa
 
-### 1. Linear Regression - Dự Đoán Giá Nhà
+### 1. Linear Regression (Hồi quy tuyến tính)
 
-#### Mô tả bài toán
+#### 1.1. Hồi quy tuyến tính đơn giản - Dự Đoán Giá Nhà
+
+##### Mô tả bài toán
 - **Mục tiêu**: Dự đoán giá nhà dựa trên diện tích
 - **Dữ liệu**: 
   - 100 mẫu nhà với diện tích và giá
   - Biến đầu vào (x): Diện tích (1000 sqft), phân phối chuẩn quanh 2.5 (1-5)
   - Biến đầu ra (y): Giá nhà (1000$), tương quan tuyến tính với diện tích
 
-#### Công thức toán học
+##### Công thức toán học
 - **Mô hình dự đoán**: y = wx + b
   - w: hệ số ảnh hưởng của diện tích đến giá
   - b: giá cơ bản của nhà
@@ -144,7 +146,7 @@ calculus-machine-learning/
   - ∂J/∂w = (1/m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x⁽ⁱ⁾
   - ∂J/∂b = (1/m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)
 
-#### Trực quan hóa kết quả
+##### Trực quan hóa kết quả
 ![Linear Regression Fit](images/linear_regression_fit.png)
 - **Đồ thị dự đoán**:
   - Điểm xanh: dữ liệu thực tế (diện tích, giá)
@@ -158,113 +160,44 @@ calculus-machine-learning/
   - Trục y: Giá trị hàm mất mát
   - Đường cong giảm thể hiện mô hình đang học tốt
 
-### 2. Linear Regression (Hồi quy tuyến tính)
+#### 1.2. Hồi quy tuyến tính nhiều biến - Dự Đoán Giá Nhà
 
-### 2.1. Minh họa - Dự Đoán Giá Nhà
-
-Ví dụ này minh họa hai trường hợp của hồi quy tuyến tính:
-1. Hồi quy tuyến tính đơn giản (1 biến)
-2. Hồi quy tuyến tính nhiều biến
-
-#### Dữ liệu mẫu
-- Bài toán: Dự đoán giá nhà
-- Dữ liệu:
-  - Diện tích (1000 sqft)
-  - Số phòng ngủ (1-5)
-  - Giá nhà (1000$)
-- Số lượng mẫu: 100 căn nhà
-
-#### 2.1.1. Hồi quy tuyến tính đơn giản
-```python
-y = wx + b
-```
+##### Mô tả bài toán
+- **Mục tiêu**: Dự đoán giá nhà dựa trên diện tích và số phòng ngủ
+- **Dữ liệu**: 
+  - 100 mẫu nhà với diện tích, số phòng ngủ và giá
+  - Biến đầu vào:
+    - x₁: Diện tích (1000 sqft)
+    - x₂: Số phòng ngủ (1-5)
+  - Biến đầu ra (y): Giá nhà (1000$)
 
 ##### Công thức toán học
-1. Hàm dự đoán:
-   ```
-   f(x) = wx + b
-   ```
-2. Cost function:
-   ```
-   J(w,b) = (1/2m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)²
-   ```
-3. Gradient:
-   ```
-   ∂J/∂w = (1/m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x⁽ⁱ⁾
-   ∂J/∂b = (1/m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)
-   ```
+- **Mô hình dự đoán**: y = w₁x₁ + w₂x₂ + b
+  - w₁: hệ số ảnh hưởng của diện tích đến giá
+  - w₂: hệ số ảnh hưởng của số phòng ngủ đến giá
+  - b: giá cơ bản của nhà
+- **Hàm mất mát**: J(w₁,w₂,b) = (1/2m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾)²
+- **Gradient descent**: 
+  - ∂J/∂w₁ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₁⁽ⁱ⁾
+  - ∂J/∂w₂ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₂⁽ⁱ⁾
+  - ∂J/∂b = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾)
 
-##### Minh họa trực quan
-1. Biểu đồ hồi quy:
-   - Trục X: Diện tích nhà (1000 sqft)
-   - Trục Y: Giá nhà (1000$)
-   - Điểm màu xanh: Dữ liệu mẫu
-   - Đường màu đỏ: Đường hồi quy
+##### Trực quan hóa kết quả
+![Multiple Regression Fit](images/multiple_regression_fit.png)
+- **Đồ thị dự đoán**:
+  - Điểm xanh: dữ liệu thực tế (diện tích, số phòng ngủ, giá)
+  - Mặt phẳng đỏ: mô hình dự đoán tối ưu
+  - Trục x: Diện tích nhà (1000 sqft)
+  - Trục y: Số phòng ngủ
+  - Trục z: Giá nhà (1000$)
 
-   ![Linear Regression Fit](images/linear_regression_fit.png)
+![Multiple Cost History](images/multiple_cost_history.png)
+- **Đồ thị huấn luyện**:
+  - Trục x: Số vòng lặp
+  - Trục y: Giá trị hàm mất mát
+  - Đường cong giảm thể hiện mô hình đang học tốt
 
-2. Biểu đồ cost history:
-   - Trục X: Số lần lặp
-   - Trục Y: Giá trị cost function
-   - Thể hiện quá trình tối ưu hóa các tham số
-
-   ![Linear Cost History](images/linear_cost_history.png)
-
-#### 2.1.2. Hồi quy tuyến tính nhiều biến
-```python
-y = w₁x₁ + w₂x₂ + b
-```
-
-##### Công thức toán học
-1. Hàm dự đoán:
-   ```
-   h(x) = w₁x₁ + w₂x₂ + b
-   ```
-2. Cost function:
-   ```
-   J(w₁,w₂,b) = (1/2m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾)²
-   ```
-3. Gradient:
-   ```
-   ∂J/∂w₁ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₁⁽ⁱ⁾
-   ∂J/∂w₂ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₂⁽ⁱ⁾
-   ∂J/∂b = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾)
-   ```
-
-##### Minh họa trực quan
-1. Biểu đồ 3D:
-   - Trục X: Diện tích nhà (1000 sqft)
-   - Trục Y: Số phòng ngủ
-   - Trục Z: Giá nhà (1000$)
-   - Điểm màu xanh: Dữ liệu mẫu
-   - Mặt phẳng màu đỏ: Mặt phẳng hồi quy
-
-   ![Multiple Regression Fit](images/multiple_regression_fit.png)
-
-2. Biểu đồ cost history:
-   - Trục X: Số lần lặp
-   - Trục Y: Giá trị cost function
-   - Thể hiện quá trình tối ưu hóa các tham số
-
-   ![Multiple Cost History](images/multiple_cost_history.png)
-
-#### Kết quả
-1. Hồi quy tuyến tính đơn giản:
-   - Tham số tối ưu: w = 199.01, b = 101.95
-   - Phương trình: y = 199.01x + 101.95
-   - Cost cuối cùng: 1113.2251
-
-2. Hồi quy tuyến tính nhiều biến:
-   - Tham số tối ưu: w₁ = 204.7821, w₂ = 52.3781, b = 80.7302
-   - Phương trình: Giá = 204.7821*Diện_tích + 52.3781*Số_phòng + 80.7302
-   - Cost cuối cùng: 15.1844
-
-### 2.2. So sánh hai mô hình
-- Mô hình nhiều biến có cost thấp hơn đáng kể (15.1844 vs 1113.2251)
-- Mô hình nhiều biến phản ánh tốt hơn thực tế vì giá nhà phụ thuộc vào cả diện tích và số phòng
-- Mô hình nhiều biến cho phép phân tích tác động riêng của từng yếu tố lên giá nhà
-
-### 3. Logistic Regression - Dự Đoán Kết Quả Tuyển Sinh
+### 2. Logistic Regression - Dự Đoán Kết Quả Tuyển Sinh
 
 #### Mô tả bài toán
 - **Mục tiêu**: Dự đoán kết quả tuyển sinh (Đỗ/Trượt) dựa trên điểm thi và GPA
