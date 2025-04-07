@@ -209,6 +209,77 @@ calculus-machine-learning/
   - Trục y: Giá trị hàm mất mát
   - Đường cong giảm thể hiện mô hình đang học tốt
 
+#### 1.3. Polynomial Regression với Regularization - Dự đoán giá nhà nâng cao
+
+##### Mô tả bài toán
+- **Mục tiêu**: Dự đoán giá nhà với mô hình phi tuyến, tránh overfitting
+- **Dữ liệu**: 
+  - Tương tự bài toán linear regression đơn giản
+  - Thêm các đặc trưng phi tuyến: x², x³, x⁴
+- **Thách thức**: 
+  - Overfitting với polynomial bậc cao
+  - Cân bằng giữa fit data và model complexity
+
+##### Công thức toán học
+- **Mô hình dự đoán**: 
+  ```
+  f(x) = w₁x + w₂x² + w₃x³ + w₄x⁴ + b
+  ```
+  - wᵢ: Hệ số cho đặc trưng bậc i
+  - b: Độ chệch (bias)
+
+- **Hàm mất mát với regularization**: 
+  ```
+  J(w,b) = (1/2m) * [Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)² + λ * Σwⱼ²]
+  ```
+  - Phần 1: Mean squared error (fit data)
+  - Phần 2: Regularization term (keep wⱼ small)
+  - λ: Hệ số regularization
+    - λ = 0: Không có regularization, có thể overfitting
+    - λ lớn: Model đơn giản hơn, có thể underfitting
+    - λ tối ưu: Cân bằng giữa model complexity và fit data
+
+- **Gradient descent với regularization**: 
+  ```
+  ∂J/∂wⱼ = (1/m) * [Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾) * xⱼ⁽ⁱ⁾ + λ * wⱼ]
+  ∂J/∂b = (1/m) * Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)
+  ```
+  - Thêm thành phần λ * wⱼ vào gradient của wⱼ
+  - Gradient của b không thay đổi (không regularize bias)
+
+##### Trực quan hóa kết quả
+![Polynomial Regression Fit](images/polynomial_regression_fit.png)
+- **Đồ thị so sánh các mô hình**:
+  - Đường màu xanh lá: Linear regression (bậc 1)
+  - Đường màu vàng: Polynomial bậc 2
+  - Đường màu đỏ: Polynomial bậc 4
+  - Điểm đen: Dữ liệu thực tế
+  - Trục x: Diện tích nhà (1000 sqft)
+  - Trục y: Giá nhà (1000$)
+
+![Regularization Effect](images/regularization_effect.png)
+- **Đồ thị ảnh hưởng của regularization**:
+  - Đường màu xanh: λ nhỏ (overfitting)
+  - Đường màu vàng: λ tối ưu (balanced)
+  - Đường màu đỏ: λ lớn (underfitting)
+  - Vùng xám: Độ tin cậy của dự đoán
+
+##### Ý nghĩa thực tiễn
+- **Lợi ích của polynomial features**:
+  - Mô hình hóa được mối quan hệ phi tuyến
+  - Nắm bắt được các pattern phức tạp trong dữ liệu
+  - Tăng độ chính xác của dự đoán
+
+- **Vai trò của regularization**:
+  - Giảm thiểu overfitting
+  - Tăng khả năng tổng quát hóa của mô hình
+  - Tự động chọn mức độ phức tạp phù hợp
+
+- **Hướng dẫn chọn hyperparameters**:
+  - Bậc của polynomial: Thử nghiệm từ 2-5
+  - Hệ số λ: Grid search với cross-validation
+  - Theo dõi train/validation error để tránh overfitting
+
 ### 2. Logistic Regression - Dự Đoán Kết Quả Tuyển Sinh
 
 #### Mô tả bài toán

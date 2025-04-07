@@ -1,3 +1,7 @@
+"""
+Main script to run all examples.
+"""
+
 import os
 import numpy as np
 from rich.console import Console
@@ -16,6 +20,7 @@ from .core.logistic.regression import LogisticRegression
 from .examples.linear_example import run_linear_example
 from .examples.linear_example_multiple import run_multiple_example
 from .examples.logistic_example import run_logistic_example
+from .examples.polynomial_example import main as polynomial_main
 
 # Initialize rich console
 console = Console()
@@ -28,11 +33,13 @@ IMAGES = {
         "multiple_regression_fit.png": "Mặt phẳng hồi quy nhiều biến và dữ liệu",
         "multiple_cost_history.png": "Lịch sử cost function của hồi quy nhiều biến"
     },
+    "Polynomial Regression": {
+        "polynomial_regression_fit.png": "So sánh các mô hình polynomial khác bậc",
+        "regularization_effect.png": "Ảnh hưởng của regularization"
+    },
     "Logistic Regression": {
         "logistic_decision_boundary.png": "Decision boundary của logistic regression",
         "logistic_cost_history.png": "Lịch sử cost function của logistic regression"
-    },
-    "Gradient Descent": {
     }
 }
 
@@ -60,10 +67,11 @@ def print_generated_images():
     console.print("\n")
 
 @click.command()
-@click.option('--example', type=click.Choice(['linear', 'multiple', 'logistic', 'all']), 
+@click.option('--example', type=click.Choice(['linear', 'multiple', 'polynomial', 'logistic', 'all']), 
               default='all', help='Chọn ví dụ để chạy')
 def main(example):
     """Chạy các ví dụ về machine learning"""
+    ensure_images_dir()
     
     if example in ['linear', 'all']:
         console.print(Panel(
@@ -80,10 +88,18 @@ def main(example):
             border_style="cyan"
         ))
         run_multiple_example()
+
+    if example in ['polynomial', 'all']:
+        console.print(Panel(
+            "[bold cyan]Ví dụ 3: Polynomial Regression với Regularization[/bold cyan]\n"
+            "Dự đoán giá nhà với mô hình phi tuyến và kiểm soát overfitting",
+            border_style="cyan"
+        ))
+        polynomial_main()
     
     if example in ['logistic', 'all']:
         console.print(Panel(
-            "[bold cyan]Ví dụ 3: Hồi quy logistic[/bold cyan]\n"
+            "[bold cyan]Ví dụ 4: Hồi quy logistic[/bold cyan]\n"
             "Dự đoán kết quả tuyển sinh dựa trên điểm thi và GPA",
             border_style="cyan"
         ))
