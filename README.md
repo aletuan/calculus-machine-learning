@@ -346,7 +346,28 @@ class StandardScaler:
         """Chuyển dữ liệu đã chuẩn hóa về dạng gốc"""
         return X_scaled * self.std + self.mean
 
-class LinearRegression:
+class RegressionModel:
+    """Lớp cơ sở cho các mô hình hồi quy"""
+    def __init__(self, learning_rate=0.01, num_iterations=1000):
+        self.learning_rate = learning_rate
+        self.num_iterations = num_iterations
+        self.weights = None
+        self.bias = None
+        self.cost_history = []
+    
+    def fit(self, X, y):
+        """Huấn luyện mô hình bằng gradient descent"""
+        m, n = X.shape
+        self.weights = np.zeros(n)
+        self.bias = 0
+        
+        for _ in range(self.num_iterations):
+            dw, db = self.compute_gradient(X, y)
+            self.weights -= self.learning_rate * dw
+            self.bias -= self.learning_rate * db
+            self.cost_history.append(self.compute_cost(X, y))
+
+class LinearRegression(RegressionModel):
     """Mô hình hồi quy tuyến tính: y = wx + b"""
     def predict(self, X):
         return np.dot(X, self.weights) + self.bias
@@ -355,8 +376,73 @@ class LinearRegression:
         m = len(y)
         predictions = self.predict(X)
         return (1/(2*m)) * np.sum((predictions - y)**2)
+    
+    def compute_gradient(self, X, y):
+        m = len(y)
+        predictions = self.predict(X)
+        dw = (1/m) * np.dot(X.T, (predictions - y))
+        db = (1/m) * np.sum(predictions - y)
+        return dw, db
 
-class LogisticRegression:
+class PolynomialRegression(RegressionModel):
+    """Mô hình hồi quy đa thức với regularization"""
+    def __init__(self, degree=2, lambda_reg=0.0, learning_rate=0.01, num_iterations=1000):
+        super().__init__(learning_rate, num_iterations)
+        self.degree = degree
+        self.lambda_reg = lambda_reg
+    
+    def _generate_polynomial_features(self, X):
+        """Tạo các đặc trưng đa thức"""
+        if X.ndim == 1:
+            X = X.reshape(-1, 1)
+        n_samples, n_features = X.shape
+        X_poly = np.ones((n_samples, 1))
+        
+        # Scale X để tránh overflow
+        X_scaled = X / np.max(np.abs(X))
+        
+        for d in range(1, self.degree + 1):
+            X_poly = np.column_stack((X_poly, X_scaled ** d))
+            
+        return X_poly[:, 1:]  # Bỏ hằng số
+    
+    def predict(self, X):
+        """Dự đoán giá trị đầu ra"""
+        X_poly = self._generate_polynomial_features(X)
+        return np.dot(X_poly, self.weights) + self.bias
+    
+    def compute_cost(self, X, y):
+        """Tính cost function với regularization"""
+        m = len(y)
+        y_pred = self.predict(X)
+        
+        # Tính MSE một cách ổn định về mặt số học
+        squared_errors = np.clip((y_pred - y)**2, 0, 1e10)
+        mse = np.mean(squared_errors)
+        
+        # Tính regularization term
+        reg_term = self.lambda_reg * np.mean(np.clip(self.weights**2, 0, 1e10))
+        
+        return mse/2 + reg_term/2
+    
+    def compute_gradient(self, X, y):
+        """Tính gradient với regularization"""
+        m = len(y)
+        X_poly = self._generate_polynomial_features(X)
+        y_pred = self.predict(X)
+        
+        # Giới hạn sai số để tránh overflow
+        errors = np.clip(y_pred - y, -1e10, 1e10)
+        
+        # Tính gradient một cách ổn định
+        dw = np.mean(X_poly * errors[:, np.newaxis], axis=0)
+        dw += self.lambda_reg * np.clip(self.weights, -1e10, 1e10) / m
+        
+        db = np.mean(errors)
+        
+        return dw, db
+
+class LogisticRegression(RegressionModel):
     """Mô hình phân loại nhị phân: P(y=1) = g(w₁x₁ + w₂x₂ + b)"""
     def predict(self, X):
         z = np.dot(X, self.weights) + self.bias
@@ -366,12 +452,33 @@ class LogisticRegression:
         m = len(y)
         predictions = self.predict(X)
         return -(1/m) * np.sum(y*np.log(predictions) + (1-y)*np.log(1-predictions))
+    
+    def compute_gradient(self, X, y):
+        m = len(y)
+        predictions = self.predict(X)
+        dw = (1/m) * np.dot(X.T, (predictions - y))
+        db = (1/m) * np.sum(predictions - y)
+        return dw, db
 ```
 
 2. **Visualization Module**: Trực quan hóa kết quả
 - Vẽ dữ liệu và mô hình dự đoán
 - Vẽ đồ thị hội tụ của hàm mất mát
 - Tạo các đồ thị tương tác
+- Hỗ trợ trực quan hóa cho:
+  - Linear regression (đơn biến và đa biến)
+  - Polynomial regression với regularization
+  - Logistic regression với decision boundary
+
+3. **Examples Module**: Các ví dụ minh họa
+- Linear regression với dữ liệu giá nhà
+- Polynomial regression với regularization
+- Logistic regression với dữ liệu tuyển sinh
+- Mỗi ví dụ bao gồm:
+  - Tạo dữ liệu mẫu
+  - Huấn luyện mô hình
+  - Đánh giá kết quả
+  - Trực quan hóa kết quả
 
 ## Cài Đặt và Sử Dụng
 
@@ -383,7 +490,13 @@ pip install -e .
 
 2. Chạy chương trình:
 ```bash
+# Chạy tất cả các ví dụ
 python -m calculus_ml.main
+
+# Chạy riêng từng ví dụ
+python -m calculus_ml.main --example linear
+python -m calculus_ml.main --example polynomial
+python -m calculus_ml.main --example logistic
 ```
 
 ## Giấy Phép
