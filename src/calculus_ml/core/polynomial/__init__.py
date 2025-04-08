@@ -24,16 +24,22 @@ class PolynomialRegression(RegressionModel):
         super().__init__(learning_rate, num_iterations)
         self.degree = degree
         self.lambda_reg = lambda_reg
+        self.feature_means = None
+        self.feature_stds = None
         
     def _generate_polynomial_features(self, X):
         """Generate polynomial features up to the specified degree."""
         if X.ndim == 1:
             X = X.reshape(-1, 1)
         n_samples, n_features = X.shape
-        X_poly = np.ones((n_samples, 1))
         
-        # Scale X to prevent overflow
-        X_scaled = X / np.max(np.abs(X))
+        # Standardize X first
+        if self.feature_means is None:  # Training phase
+            self.feature_means = np.mean(X, axis=0)
+            self.feature_stds = np.std(X, axis=0) + 1e-8
+        
+        X_scaled = (X - self.feature_means) / self.feature_stds
+        X_poly = np.ones((n_samples, 1))
         
         for d in range(1, self.degree + 1):
             X_poly = np.column_stack((X_poly, X_scaled ** d))
@@ -43,7 +49,7 @@ class PolynomialRegression(RegressionModel):
     def predict(self, X):
         """Make predictions using the trained model."""
         X_poly = self._generate_polynomial_features(X)
-        return np.dot(X_poly, self.weights) + self.bias
+        return np.clip(np.dot(X_poly, self.weights) + self.bias, 0, None)  # Ensure non-negative predictions
     
     def compute_cost(self, X, y):
         """Compute cost with regularization."""
@@ -51,13 +57,13 @@ class PolynomialRegression(RegressionModel):
         y_pred = self.predict(X)
         
         # Compute MSE in a numerically stable way
-        squared_errors = np.clip((y_pred - y)**2, 0, 1e10)  # Prevent overflow
+        squared_errors = np.clip((y_pred - y)**2, 0, 1e10)
         mse = np.mean(squared_errors)
         
-        # Compute regularization term
-        reg_term = self.lambda_reg * np.mean(np.clip(self.weights**2, 0, 1e10))
+        # Compute regularization term with scaling
+        reg_term = self.lambda_reg * np.mean(self.weights**2) / (2 * m)
         
-        return mse/2 + reg_term/2
+        return mse/2 + reg_term
     
     def compute_gradient(self, X, y):
         """Compute gradients with regularization."""
@@ -65,14 +71,16 @@ class PolynomialRegression(RegressionModel):
         X_poly = self._generate_polynomial_features(X)
         y_pred = self.predict(X)
         
-        # Clip predictions to prevent overflow
-        errors = np.clip(y_pred - y, -1e10, 1e10)
-        
         # Compute gradients with numerical stability
+        errors = y_pred - y
         dw = np.mean(X_poly * errors[:, np.newaxis], axis=0)
-        dw += self.lambda_reg * np.clip(self.weights, -1e10, 1e10) / m
+        dw += (self.lambda_reg * self.weights) / m
         
         db = np.mean(errors)
+        
+        # Clip gradients to prevent explosion
+        dw = np.clip(dw, -1e10, 1e10)
+        db = np.clip(db, -1e10, 1e10)
         
         return dw, db
 
@@ -81,8 +89,8 @@ class PolynomialRegression(RegressionModel):
         # Generate polynomial features
         X_poly = self._generate_polynomial_features(X)
         
-        # Initialize parameters
-        self.weights = np.zeros(X_poly.shape[1])
+        # Initialize parameters with small random values
+        self.weights = np.random.randn(X_poly.shape[1]) * 0.01
         self.bias = 0
         self.cost_history = []
         
@@ -92,18 +100,18 @@ class PolynomialRegression(RegressionModel):
             # Forward pass
             y_pred = self.predict(X)
             
-            # Compute gradients with regularization
+            # Compute gradients
             dw, db = self.compute_gradient(X, y)
             
-            # Update parameters
-            self.weights -= self.learning_rate * dw
-            self.bias -= self.learning_rate * db
+            # Update parameters with gradient clipping
+            self.weights -= np.clip(self.learning_rate * dw, -1.0, 1.0)
+            self.bias -= np.clip(self.learning_rate * db, -1.0, 1.0)
             
-            # Compute cost with regularization
+            # Compute cost
             cost = self.compute_cost(X, y)
             self.cost_history.append(cost)
             
-            # Early stopping if cost change is very small
+            # Early stopping if cost is very small or not changing
             if i > 0 and abs(self.cost_history[-1] - self.cost_history[-2]) < 1e-8:
                 break
                 

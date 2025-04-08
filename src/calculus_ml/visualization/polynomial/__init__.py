@@ -12,9 +12,9 @@ def plot_polynomial_comparison(X, y, models, degrees, save_path=None):
     Parameters
     ----------
     X : array-like
-        Input features
+        Input features (house sizes in 1000 sqft)
     y : array-like
-        Target values
+        Target values (house prices in 1000$)
     models : list of PolynomialRegression
         Fitted models with different degrees
     degrees : list of int
@@ -53,9 +53,9 @@ def plot_regularization_effect(X, y, models, lambdas, save_path=None):
     Parameters
     ----------
     X : array-like
-        Input features
+        Input features (house sizes in 1000 sqft)
     y : array-like
-        Target values
+        Target values (house prices in 1000$)
     models : list of PolynomialRegression
         Fitted models with different lambda values
     lambdas : list of float
