@@ -8,6 +8,7 @@ from ..visualization.polynomial import (
     plot_polynomial_comparison,
     plot_regularization_effect
 )
+import matplotlib.pyplot as plt
 
 def generate_nonlinear_data(n_samples=100, noise=0.3):
     """Generate synthetic nonlinear data."""
@@ -61,9 +62,36 @@ def run_regularization_example(base_model):
         save_path='images/regularization_effect.png'
     )
 
+def plot_house_price_data(X, y, save_path='images/house_price_data.png'):
+    """Plot house price data.
+    
+    Parameters
+    ----------
+    X : ndarray of shape (n_samples, 1)
+        House sizes in 1000 sqft
+    y : ndarray of shape (n_samples,)
+        House prices in 100k$
+    save_path : str
+        Path to save the plot
+    """
+    plt.figure(figsize=(10, 6))
+    plt.scatter(X, y, color='blue', alpha=0.5, label='House Data')
+    plt.xlabel('Diện tích (1000 sqft)')
+    plt.ylabel('Giá nhà (100k$)')
+    plt.title('Dữ liệu giá nhà')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+
 def main():
     """Run all polynomial regression examples."""
     print("Running polynomial regression examples...")
+    
+    # Generate and plot house price data
+    X, y = generate_nonlinear_data()
+    plot_house_price_data(X, y)
+    print("Generated house_price_data.png")
     
     # Run polynomial comparison
     base_model = run_polynomial_comparison()

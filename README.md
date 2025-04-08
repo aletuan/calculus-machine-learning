@@ -280,6 +280,18 @@ calculus-machine-learning/
   - Hệ số λ: Grid search với cross-validation
   - Theo dõi train/validation error để tránh overfitting
 
+### 1.3.1. Dữ liệu giá nhà
+
+- **Mô tả**: Dữ liệu được tạo ra để mô phỏng mối quan hệ phi tuyến giữa diện tích nhà và giá nhà.
+- **Đặc điểm**:
+  - Diện tích nhà (trục x) được biểu diễn trong đơn vị 1000 sqft.
+  - Giá nhà (trục y) được biểu diễn trong đơn vị 100k$.
+  - Dữ liệu được tạo ra với sự biến động cục bộ và nhiễu để phản ánh thực tế thị trường.
+
+![Dữ liệu giá nhà](images/house_price_data.png)
+
+- **Ý nghĩa**: Hình ảnh này giúp minh họa dữ liệu đầu vào cho mô hình hồi quy đa thức, cho thấy sự phân bố và mối quan hệ giữa diện tích và giá nhà. Điều này rất quan trọng để hiểu rõ hơn về cách mô hình học từ dữ liệu và dự đoán giá nhà.
+
 ### 2. Logistic Regression - Dự Đoán Kết Quả Tuyển Sinh
 
 #### Mô tả bài toán
