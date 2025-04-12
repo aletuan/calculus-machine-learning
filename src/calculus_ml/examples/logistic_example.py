@@ -52,13 +52,20 @@ def plot_logistic_results(model, X1, X2, y, history, save_dir='images'):
     plt.colorbar(contour, label='P(Admitted)')
     
     # Vẽ decision boundary với độ dày tăng
-    plt.contour(xx1, xx2, Z, levels=[0.5], colors='green', linewidths=2, linestyles='--', label='Decision Boundary')
+    decision_boundary = plt.contour(xx1, xx2, Z, levels=[0.5], colors='green', linewidths=2, linestyles='--')
+    
+    # Tạo proxy artist cho decision boundary trong legend
+    from matplotlib.lines import Line2D
+    proxy = Line2D([0], [0], color='green', linestyle='--', linewidth=2, label='Decision Boundary')
     
     # Vẽ scatter plot các điểm dữ liệu
     plt.scatter(X1[y==0], X2[y==0], color='red', alpha=0.7, label='Rejected', edgecolors='k')
     plt.scatter(X1[y==1], X2[y==1], color='blue', alpha=0.7, label='Admitted', edgecolors='k')
     
-    plt.legend()
+    # Thêm legend với proxy artist
+    plt.legend(handles=[proxy, plt.scatter([], [], color='red', alpha=0.7, label='Rejected', edgecolors='k'),
+                       plt.scatter([], [], color='blue', alpha=0.7, label='Admitted', edgecolors='k')])
+    
     save_plot(os.path.join(save_dir, 'logistic_decision_boundary.png'))
     
     # Plot 2: Cost history
