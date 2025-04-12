@@ -21,6 +21,7 @@ from .examples.linear_example import run_linear_example
 from .examples.linear_example_multiple import run_multiple_example
 from .examples.logistic_example import run_logistic_example
 from .examples.polynomial_example import main as polynomial_main
+from .examples.perceptron.train import train_perceptron
 
 # Initialize rich console
 console = Console()
@@ -40,6 +41,10 @@ IMAGES = {
     "Logistic Regression": {
         "logistic_decision_boundary.png": "Decision boundary của logistic regression",
         "logistic_cost_history.png": "Lịch sử cost function của logistic regression"
+    },
+    "Perceptron": {
+        "perceptron_decision_boundary.png": "Decision boundary của perceptron",
+        "perceptron_training_history.png": "Lịch sử training của perceptron"
     }
 }
 
@@ -67,7 +72,7 @@ def print_generated_images():
     console.print("\n")
 
 @click.command()
-@click.option('--example', type=click.Choice(['linear', 'multiple', 'polynomial', 'logistic', 'all']), 
+@click.option('--example', type=click.Choice(['linear', 'multiple', 'polynomial', 'logistic', 'perceptron', 'all']), 
               default='all', help='Chọn ví dụ để chạy')
 def main(example):
     """Chạy các ví dụ về machine learning"""
@@ -105,6 +110,14 @@ def main(example):
         ))
         run_logistic_example()
 
+    if example in ['perceptron', 'all']:
+        console.print(Panel(
+            "[bold cyan]Ví dụ 5: Perceptron[/bold cyan]\n"
+            "Huấn luyện perceptron học hàm AND",
+            border_style="cyan"
+        ))
+        train_perceptron()
+
     # In thông tin về các hình ảnh đã tạo
     print_generated_images()
 
@@ -120,9 +133,12 @@ def main(example):
     print("│ │   ├── 📄 house_price_data.png (size) - Dữ liệu giá nhà                                               │")
     print("│ │   ├── 📄 polynomial_regression_fit.png (160.1KB) - So sánh các mô hình polynomial khác bậc            │")
     print("│ │   └── 📄 regularization_effect.png (224.0KB) - Ảnh hưởng của regularization                           │")
-    print("│ └── 📁 Logistic Regression                                                                              │")
-    print("│     ├── 📄 logistic_decision_boundary.png (37.4KB) - Decision boundary của logistic regression          │")
-    print("│     └── 📄 logistic_cost_history.png (22.5KB) - Lịch sử cost function của logistic regression           │")
+    print("│ ├── 📁 Logistic Regression                                                                              │")
+    print("│ │   ├── 📄 logistic_decision_boundary.png (37.4KB) - Decision boundary của logistic regression          │")
+    print("│ │   └── 📄 logistic_cost_history.png (22.5KB) - Lịch sử cost function của logistic regression           │")
+    print("│ └── 📁 Perceptron                                                                                       │")
+    print("│     ├── 📄 perceptron_decision_boundary.png - Decision boundary của perceptron                          │")
+    print("│     └── 📄 perceptron_training_history.png - Lịch sử training của perceptron                            │")
     print("╰─────────────────────────────────────────────────────────────────────────────────────────────────────────╯")
 
 if __name__ == "__main__":
