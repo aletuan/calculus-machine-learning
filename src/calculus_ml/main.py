@@ -116,6 +116,29 @@ def main(example):
             "Huấn luyện perceptron học hàm AND",
             border_style="cyan"
         ))
+        
+        console.print(Panel(
+            "[bold yellow]Công thức Perceptron[/bold yellow]\n"
+            "1. Hàm kích hoạt (Activation function):\n"
+            "   f(z) = 1 / (1 + e^(-z))  (Sigmoid)\n\n"
+            "2. Hàm dự đoán (Prediction):\n"
+            "   y_hat = f(w₁x₁ + w₂x₂ + b)\n\n"
+            "3. Loss function:\n"
+            "   L(y, y_hat) = -(y * log(y_hat) + (1-y) * log(1-y_hat))\n\n"
+            "4. Gradient descent:\n"
+            "   w₁ = w₁ - α * (y_hat - y) * x₁\n"
+            "   w₂ = w₂ - α * (y_hat - y) * x₂\n"
+            "   b = b - α * (y_hat - y)\n\n"
+            "Trong đó:\n"
+            "- w₁, w₂: trọng số (weights)\n"
+            "- b: độ chệch (bias)\n"
+            "- α: learning rate\n"
+            "- x₁, x₂: đầu vào (input features)\n"
+            "- y: nhãn thực tế (true label)\n"
+            "- y_hat: dự đoán (prediction)",
+            border_style="yellow"
+        ))
+        
         train_perceptron()
 
     # In thông tin về các hình ảnh đã tạo
