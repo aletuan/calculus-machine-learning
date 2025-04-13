@@ -33,7 +33,8 @@ IMAGES = {
         "linear_regression_fit.png": "Đường hồi quy tuyến tính và dữ liệu",
         "linear_cost_history.png": "Lịch sử cost function của linear regression",
         "multiple_regression_fit.png": "Mặt phẳng hồi quy nhiều biến và dữ liệu",
-        "multiple_cost_history.png": "Lịch sử cost function của hồi quy nhiều biến"
+        "multiple_cost_history.png": "Lịch sử cost function của hồi quy nhiều biến",
+        "gradient_descent_example.png": "Minh họa quá trình gradient descent"
     },
     "Polynomial Regression": {
         "polynomial_regression_fit.png": "So sánh các mô hình polynomial khác bậc",
