@@ -101,32 +101,48 @@ Machine Learning (Học máy) là một nhánh của trí tuệ nhân tạo, cho
 ## Cấu Trúc Dự Án
 
 ```
-calculus-machine-learning/
-├── README.md                 # Tài liệu hướng dẫn và mô tả dự án
-├── requirements.txt          # Danh sách các thư viện phụ thuộc
-├── setup.py                  # File cấu hình cho việc cài đặt package
-├── .gitignore               # Các file và thư mục cần bỏ qua khi commit
-├── src/
-│   └── calculus_ml/         # Package chính
-│       ├── __init__.py      # Khởi tạo package
-│       ├── main.py          # File chính chứa các ví dụ và chạy thử nghiệm
-│       ├── core/            # Module chứa các hàm tính toán cốt lõi
-│       │   ├── base/        # Các class và hàm cơ sở
-│       │   ├── linear/      # Linear regression
-│       │   └── logistic/    # Logistic regression
-│       ├── visualization/    # Module chứa các hàm vẽ đồ thị
-│       │   ├── base/        # Các hàm vẽ cơ bản
-│       │   ├── linear/      # Vẽ cho linear regression
-│       │   └── logistic/    # Vẽ cho logistic regression
-│       └── examples/        # Các ví dụ minh họa
-└── images/                  # Thư mục lưu các hình ảnh được tạo ra
-    ├── gradient_descent_example.png    # Minh họa quá trình gradient descent
-    ├── linear_regression_fit.png       # Đường hồi quy tuyến tính và dữ liệu
-    ├── linear_cost_history.png         # Lịch sử cost function của linear regression
-    ├── multiple_regression_fit.png     # Mặt phẳng hồi quy nhiều biến và dữ liệu
-    ├── multiple_cost_history.png       # Lịch sử cost function của hồi quy nhiều biến
-    ├── logistic_decision_boundary.png  # Decision boundary của logistic regression
-    └── logistic_cost_history.png       # Lịch sử cost function của logistic regression
+src/calculus_ml/
+├── core/                    # Core functionality
+│   ├── linear/             # Linear regression implementation
+│   │   └── regression.py   # Linear regression class
+│   ├── logistic/           # Logistic regression implementation
+│   │   └── regression.py   # Logistic regression class
+│   └── base/               # Base classes and utilities
+│       └── scaler.py       # Feature scaling utilities
+│
+├── examples/               # Example implementations
+│   ├── linear_regression/  # Linear regression examples
+│   │   ├── single_linear_example.py    # Simple linear regression
+│   │   └── multiple_linear_example.py  # Multiple linear regression
+│   ├── polynomial_example.py           # Polynomial regression
+│   ├── logistic_example.py             # Logistic regression
+│   ├── perceptron/         # Perceptron implementation
+│   │   ├── perceptron.py   # Perceptron class
+│   │   └── train.py        # Training script
+│   └── single_hidden_layer/ # Single hidden layer neural network
+│       ├── model_numpy.py  # Neural network implementation
+│       ├── activations.py  # Activation functions
+│       └── train.py        # Training script
+│
+├── visualization/          # Visualization utilities
+│   └── base/
+│       ├── plot_utils.py   # Plotting utilities
+│       └── gradient_example.py  # Gradient descent visualization
+│
+└── main.py                # Main entry point
+
+images/                    # Generated visualization images
+├── linear_regression_fit.png        # Linear regression fit
+├── linear_cost_history.png         # Linear regression cost history
+├── multiple_regression_fit.png     # Multiple regression fit
+├── multiple_cost_history.png       # Multiple regression cost history
+├── gradient_descent_example.png    # Gradient descent visualization
+├── polynomial_regression_fit.png   # Polynomial regression fit
+├── regularization_effect.png       # Regularization effect
+├── logistic_decision_boundary.png  # Logistic regression decision boundary
+├── logistic_cost_history.png       # Logistic regression cost history
+├── perceptron_training_history.png # Perceptron training history
+└── neural_network_training_history.png # Neural network training history
 ```
 
 ## Ví Dụ Minh Họa

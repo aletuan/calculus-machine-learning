@@ -17,8 +17,8 @@ from .core.linear.regression import LinearRegression
 from .core.logistic.regression import LogisticRegression
 
 # Import examples
-from .examples.linear_example import run_linear_example
-from .examples.linear_example_multiple import run_multiple_example
+from .examples.linear_regression.single_linear_example import run_linear_example
+from .examples.linear_regression.multiple_linear_example import run_multiple_example
 from .examples.logistic_example import run_logistic_example
 from .examples.polynomial_example import main as polynomial_main
 from .examples.perceptron.train import train_perceptron

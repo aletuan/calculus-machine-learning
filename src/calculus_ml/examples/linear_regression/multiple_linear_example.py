@@ -2,9 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from rich.console import Console
 from rich.panel import Panel
-from ..core.linear.regression import LinearRegression
-from ..core.base.scaler import StandardScaler
-from ..visualization.base.plot_utils import setup_plot, save_plot, PlotConfig
+from src.calculus_ml.core.linear.regression import LinearRegression
+from src.calculus_ml.core.base.scaler import StandardScaler
+from src.calculus_ml.visualization.base.plot_utils import setup_plot, save_plot, PlotConfig
 
 console = Console()
 
