@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from rich.console import Console
 from rich.panel import Panel
+from rich.progress import Progress
 from ..core.logistic.regression import LogisticRegression
 from ..visualization.base.plot_utils import setup_plot, save_plot, create_meshgrid, PlotConfig
 
@@ -107,9 +108,20 @@ def run_logistic_example():
         border_style="cyan"
     ))
     
-    # Khởi tạo và training model
+    # Khởi tạo model
     model = LogisticRegression(learning_rate=0.01, num_iterations=1000)
-    history = model.fit(X, y)
+    
+    # Hiển thị quá trình training
+    with Progress() as progress:
+        task = progress.add_task("[cyan]Training...", total=model.num_iterations)
+        
+        def callback(epoch, cost):
+            progress.update(task, advance=1)
+            if epoch % 100 == 0 or epoch == model.num_iterations - 1:
+                console.print(f"[yellow]Epoch {epoch + 1}/{model.num_iterations}[/yellow] - Loss: {cost:.4f}")
+        
+        # Training model với callback
+        history = model.fit(X, y, callback=callback)
     
     # Hiển thị kết quả
     console.print(Panel(
