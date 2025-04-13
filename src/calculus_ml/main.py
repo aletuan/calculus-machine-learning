@@ -23,6 +23,7 @@ from .examples.logistic_example import run_logistic_example
 from .examples.polynomial_example import main as polynomial_main
 from .examples.perceptron.train import train_perceptron
 from .examples.single_hidden_layer.train import main as run_neural_network
+from .examples.tf_one_hidden_layer.train import main as run_tf_neural_network
 
 # Initialize rich console
 console = Console()
@@ -49,6 +50,9 @@ IMAGES = {
     },
     "Neural Network": {
         "neural_network_training_history.png": "Lịch sử training của neural network"
+    },
+    "TensorFlow Neural Network": {
+        "tf_and_training.png": "Lịch sử training của TensorFlow neural network"
     }
 }
 
@@ -76,7 +80,7 @@ def print_generated_images():
     console.print("\n")
 
 @click.command()
-@click.option('--example', type=click.Choice(['linear', 'multiple', 'polynomial', 'logistic', 'perceptron', 'neural', 'all']), 
+@click.option('--example', type=click.Choice(['linear', 'multiple', 'polynomial', 'logistic', 'perceptron', 'neural', 'tf_neural', 'all']), 
               default='all', help='Chọn ví dụ để chạy')
 def main(example):
     """Chạy các ví dụ về machine learning"""
@@ -100,8 +104,8 @@ def main(example):
 
     if example in ['polynomial', 'all']:
         console.print(Panel(
-            "[bold cyan]Ví dụ 3: Polynomial Regression với Regularization[/bold cyan]\n"
-            "Dự đoán giá nhà với mô hình phi tuyến và kiểm soát overfitting",
+            "[bold cyan]Ví dụ 3: Hồi quy đa thức[/bold cyan]\n"
+            "Dự đoán giá nhà với các mô hình đa thức khác nhau",
             border_style="cyan"
         ))
         polynomial_main()
@@ -109,7 +113,7 @@ def main(example):
     if example in ['logistic', 'all']:
         console.print(Panel(
             "[bold cyan]Ví dụ 4: Hồi quy logistic[/bold cyan]\n"
-            "Dự đoán kết quả tuyển sinh dựa trên điểm thi và GPA",
+            "Phân loại học sinh đỗ/trượt dựa trên điểm thi",
             border_style="cyan"
         ))
         run_logistic_example()
@@ -117,75 +121,27 @@ def main(example):
     if example in ['perceptron', 'all']:
         console.print(Panel(
             "[bold cyan]Ví dụ 5: Perceptron[/bold cyan]\n"
-            "Huấn luyện perceptron học hàm AND",
+            "Học hàm AND với perceptron",
             border_style="cyan"
         ))
-        
-        console.print(Panel(
-            "[bold yellow]Công thức Perceptron[/bold yellow]\n"
-            "1. Hàm kích hoạt (Activation function):\n"
-            "   f(z) = 1 / (1 + e^(-z))  (Sigmoid)\n\n"
-            "2. Hàm dự đoán (Prediction):\n"
-            "   y_hat = f(w₁x₁ + w₂x₂ + b)\n\n"
-            "3. Loss function:\n"
-            "   L(y, y_hat) = -(y * log(y_hat) + (1-y) * log(1-y_hat))\n\n"
-            "4. Gradient descent:\n"
-            "   w₁ = w₁ - α * (y_hat - y) * x₁\n"
-            "   w₂ = w₂ - α * (y_hat - y) * x₂\n"
-            "   b = b - α * (y_hat - y)\n\n"
-            "Trong đó:\n"
-            "- w₁, w₂: trọng số (weights)\n"
-            "- b: độ chệch (bias)\n"
-            "- α: learning rate\n"
-            "- x₁, x₂: đầu vào (input features)\n"
-            "- y: nhãn thực tế (true label)\n"
-            "- y_hat: dự đoán (prediction)",
-            border_style="yellow"
-        ))
-        
         train_perceptron()
-
+    
     if example in ['neural', 'all']:
         console.print(Panel(
             "[bold cyan]Ví dụ 6: Neural Network[/bold cyan]\n"
-            "Huấn luyện mạng neural với một lớp ẩn để giải quyết bài toán XOR",
+            "Học hàm XOR với neural network một lớp ẩn",
             border_style="cyan"
         ))
-        
-        console.print(Panel(
-            "[bold yellow]Công thức Neural Network[/bold yellow]\n"
-            "1. Hàm kích hoạt (Activation function):\n"
-            "   f(z) = 1 / (1 + e^(-z))  (Sigmoid)\n\n"
-            "2. Lan truyền tiến (Forward propagation):\n"
-            "   Z1 = X·W1 + b1\n"
-            "   A1 = f(Z1)\n"
-            "   Z2 = A1·W2 + b2\n"
-            "   A2 = f(Z2)\n\n"
-            "3. Lan truyền ngược (Backward propagation):\n"
-            "   dZ2 = A2 - Y\n"
-            "   dW2 = A1ᵀ·dZ2\n"
-            "   db2 = sum(dZ2)\n"
-            "   dZ1 = dZ2·W2ᵀ * f'(Z1)\n"
-            "   dW1 = Xᵀ·dZ1\n"
-            "   db1 = sum(dZ1)\n\n"
-            "4. Cập nhật tham số:\n"
-            "   W2 = W2 - α·dW2\n"
-            "   b2 = b2 - α·db2\n"
-            "   W1 = W1 - α·dW1\n"
-            "   b1 = b1 - α·db1\n\n"
-            "Trong đó:\n"
-            "- W1, W2: ma trận trọng số\n"
-            "- b1, b2: vector độ chệch\n"
-            "- α: learning rate\n"
-            "- X: ma trận đầu vào\n"
-            "- Y: vector nhãn thực tế\n"
-            "- A2: dự đoán",
-            border_style="yellow"
-        ))
-        
         run_neural_network()
-
-    # In thông tin về các hình ảnh đã tạo
+    
+    if example in ['tf_neural', 'all']:
+        console.print(Panel(
+            "[bold cyan]Ví dụ 7: TensorFlow Neural Network[/bold cyan]\n"
+            "Học hàm AND với neural network sử dụng TensorFlow",
+            border_style="cyan"
+        ))
+        run_tf_neural_network()
+    
     print_generated_images()
 
 if __name__ == "__main__":
