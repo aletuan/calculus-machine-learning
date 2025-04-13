@@ -95,7 +95,7 @@ class Perceptron:
             total_loss += loss
         return total_loss / len(X)
     
-    def train(self, X, y, epochs=1000):
+    def train(self, X, y, epochs=1000, callback=None):
         """
         Huấn luyện perceptron trên tập dữ liệu.
         
@@ -103,6 +103,7 @@ class Perceptron:
             X (numpy.ndarray): Ma trận đầu vào
             y (numpy.ndarray): Vector nhãn
             epochs (int): Số lần lặp huấn luyện
+            callback (callable, optional): Hàm callback được gọi sau mỗi epoch
         """
         for epoch in range(epochs):
             for i in range(len(X)):
@@ -122,9 +123,9 @@ class Perceptron:
             # Lưu vào lịch sử
             self.history['loss'].append(loss)
             
-            # In thông tin mỗi 100 epochs
-            if (epoch + 1) % 100 == 0:
-                print(f"Epoch {epoch + 1}/{epochs} - Loss: {loss:.4f}")
+            # Gọi callback nếu có
+            if callback is not None:
+                callback(epoch, loss)
     
     def predict(self, x):
         """

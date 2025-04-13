@@ -92,7 +92,7 @@ class NeuralNetwork:
         self.W2 -= learning_rate * dW2
         self.b2 -= learning_rate * db2
     
-    def train(self, X, y, epochs=10000):
+    def train(self, X, y, epochs=10000, callback=None):
         """
         Huấn luyện mạng neural.
         
@@ -100,6 +100,7 @@ class NeuralNetwork:
             X (numpy.ndarray): Ma trận đầu vào
             y (numpy.ndarray): Vector nhãn
             epochs (int): Số lần lặp huấn luyện
+            callback (callable, optional): Hàm callback được gọi sau mỗi epoch
         """
         for epoch in range(epochs):
             # Lan truyền tiến
@@ -112,9 +113,9 @@ class NeuralNetwork:
             loss = np.mean(np.square(A2 - y))
             self.history['loss'].append(loss)
             
-            # In loss mỗi 1000 epochs
-            if epoch % 1000 == 0:
-                print(f"Epoch {epoch}, Loss: {loss:.4f}")
+            # Gọi callback nếu có
+            if callback is not None:
+                callback(epoch, loss)
     
     def predict(self, X):
         """

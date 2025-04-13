@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from rich.console import Console
 from rich.panel import Panel
+from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
 from src.calculus_ml.core.linear.regression import LinearRegression
 from src.calculus_ml.visualization.base.plot_utils import setup_plot, save_plot, PlotConfig
 
@@ -72,9 +73,27 @@ def run_linear_example():
         border_style="cyan"
     ))
     
-    # Khởi tạo và training model
+    # Khởi tạo model
     model = LinearRegression(learning_rate=0.01, num_iterations=1000)
-    history = model.fit(X, y)
+    
+    # Hiển thị quá trình training
+    console.print("\n[bold yellow]Quá trình training:[/bold yellow]")
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TaskProgressColumn(),
+        console=console
+    ) as progress:
+        task = progress.add_task("[cyan]Training...", total=model.num_iterations)
+        
+        def training_callback(epoch, cost):
+            progress.update(task, advance=1)
+            if epoch % 100 == 0 or epoch == model.num_iterations - 1:
+                console.print(f"Epoch {epoch:4d}: Loss = {cost:.4f}")
+        
+        # Training model với callback
+        history = model.fit(X, y, callback=training_callback)
     
     # Hiển thị kết quả
     console.print(Panel(
