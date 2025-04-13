@@ -84,7 +84,7 @@ class PolynomialRegression(RegressionModel):
         
         return dw, db
 
-    def fit(self, X, y):
+    def fit(self, X, y, callback=None):
         """Fit the polynomial regression model."""
         # Generate polynomial features
         X_poly = self._generate_polynomial_features(X)
@@ -111,10 +111,18 @@ class PolynomialRegression(RegressionModel):
             cost = self.compute_cost(X, y)
             self.cost_history.append(cost)
             
+            # Call callback if provided
+            if callback is not None:
+                callback(i, cost)
+            
             # Early stopping if cost is very small or not changing
             if i > 0 and abs(self.cost_history[-1] - self.cost_history[-2]) < 1e-8:
                 break
-                
+        
+        return {
+            'cost_history': self.cost_history
+        }
+
     def _generate_polynomial_features(self, X):
         """Generate polynomial features up to the specified degree."""
         if X.ndim == 1:
