@@ -18,6 +18,7 @@ class NeuralNetwork:
         b1 (numpy.ndarray): Vector độ chệch lớp ẩn
         W2 (numpy.ndarray): Ma trận trọng số lớp đầu ra
         b2 (numpy.ndarray): Vector độ chệch lớp đầu ra
+        history (dict): Lịch sử training, bao gồm loss
     """
     
     def __init__(self, input_size, hidden_size, output_size):
@@ -39,6 +40,9 @@ class NeuralNetwork:
         self.b1 = np.zeros((1, self.hidden_size))
         self.W2 = np.random.randn(self.hidden_size, self.output_size)
         self.b2 = np.zeros((1, self.output_size))
+        
+        # Khởi tạo lịch sử training
+        self.history = {'loss': []}
     
     def forward(self, X):
         """
@@ -104,9 +108,12 @@ class NeuralNetwork:
             # Lan truyền ngược và cập nhật
             self.backward(X, y, Z1, A1, Z2, A2)
             
+            # Tính và lưu loss
+            loss = np.mean(np.square(A2 - y))
+            self.history['loss'].append(loss)
+            
             # In loss mỗi 1000 epochs
             if epoch % 1000 == 0:
-                loss = np.mean(np.square(A2 - y))
                 print(f"Epoch {epoch}, Loss: {loss:.4f}")
     
     def predict(self, X):

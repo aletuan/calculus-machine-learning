@@ -13,6 +13,7 @@ class Perceptron:
         weights (numpy.ndarray): Vector trọng số
         bias (float): Độ chệch
         lr (float): Tốc độ học
+        history (dict): Lịch sử training, bao gồm loss
     """
     
     def __init__(self, input_dim, lr=0.01):
@@ -29,6 +30,8 @@ class Perceptron:
         self.bias = 0
         # Lưu tốc độ học
         self.lr = lr
+        # Khởi tạo lịch sử training
+        self.history = {'loss': []}
     
     def sigmoid(self, z):
         """
@@ -73,6 +76,25 @@ class Perceptron:
         # Cập nhật độ chệch
         self.bias -= self.lr * error
     
+    def compute_loss(self, X, y):
+        """
+        Tính loss function cho toàn bộ tập dữ liệu.
+        
+        Args:
+            X (numpy.ndarray): Ma trận đầu vào
+            y (numpy.ndarray): Vector nhãn
+            
+        Returns:
+            float: Giá trị loss trung bình
+        """
+        total_loss = 0
+        for i in range(len(X)):
+            y_hat = self.forward(X[i])
+            # Binary cross-entropy loss
+            loss = -(y[i] * np.log(y_hat) + (1 - y[i]) * np.log(1 - y_hat))
+            total_loss += loss
+        return total_loss / len(X)
+    
     def train(self, X, y, epochs=1000):
         """
         Huấn luyện perceptron trên tập dữ liệu.
@@ -82,7 +104,7 @@ class Perceptron:
             y (numpy.ndarray): Vector nhãn
             epochs (int): Số lần lặp huấn luyện
         """
-        for _ in range(epochs):
+        for epoch in range(epochs):
             for i in range(len(X)):
                 # Lấy mẫu dữ liệu
                 x_i = X[i]
@@ -93,6 +115,16 @@ class Perceptron:
                 
                 # Lan truyền ngược và cập nhật
                 self.backward(x_i, y_i, y_hat)
+            
+            # Tính loss sau mỗi epoch
+            loss = self.compute_loss(X, y)
+            
+            # Lưu vào lịch sử
+            self.history['loss'].append(loss)
+            
+            # In thông tin mỗi 100 epochs
+            if (epoch + 1) % 100 == 0:
+                print(f"Epoch {epoch + 1}/{epochs} - Loss: {loss:.4f}")
     
     def predict(self, x):
         """

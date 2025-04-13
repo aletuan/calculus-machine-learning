@@ -327,6 +327,105 @@ calculus-machine-learning/
   - Trục y: Giá trị hàm mất mát
   - Đường cong giảm thể hiện mô hình đang học tốt
 
+### 4. Perceptron - Học Hàm Logic AND
+
+#### Mô tả bài toán
+- **Mục tiêu**: Huấn luyện perceptron học hàm logic AND
+- **Dữ liệu**:
+  - Đầu vào: Các cặp giá trị nhị phân (0,0), (0,1), (1,0), (1,1)
+  - Đầu ra: Kết quả của phép AND (0, 0, 0, 1)
+- **Đặc điểm**:
+  - Là mô hình neural network đơn giản nhất
+  - Chỉ có một lớp đầu vào và một nơ-ron đầu ra
+  - Sử dụng hàm kích hoạt sigmoid để tạo đầu ra liên tục
+
+#### Công thức toán học
+- **Mô hình dự đoán**:
+  ```
+  z = w₁x₁ + w₂x₂ + b
+  y_hat = σ(z) = 1 / (1 + e^(-z))
+  ```
+  - w₁, w₂: trọng số (weights)
+  - b: độ chệch (bias)
+  - σ: hàm sigmoid
+
+- **Hàm mất mát**:
+  ```
+  L(y, y_hat) = -(y * log(y_hat) + (1-y) * log(1-y_hat))
+  ```
+  - Binary Cross-Entropy Loss
+  - Phù hợp với bài toán phân loại nhị phân
+
+- **Gradient descent**:
+  ```
+  w₁ = w₁ - α * (y_hat - y) * x₁
+  w₂ = w₂ - α * (y_hat - y) * x₂
+  b = b - α * (y_hat - y)
+  ```
+  - α: learning rate
+  - (y_hat - y): sai số dự đoán
+
+#### Trực quan hóa kết quả
+![Perceptron Training History](images/perceptron_training_history.png)
+- **Đồ thị huấn luyện**:
+  - Trục x: Số vòng lặp
+  - Trục y: Giá trị hàm mất mát
+  - Đường cong giảm thể hiện perceptron đang học tốt
+
+### 5. Single Hidden Layer Neural Network - Giải Bài Toán XOR
+
+#### Mô tả bài toán
+- **Mục tiêu**: Huấn luyện mạng neural với một lớp ẩn để giải quyết bài toán XOR
+- **Dữ liệu**:
+  - Đầu vào: Các cặp giá trị nhị phân (0,0), (0,1), (1,0), (1,1)
+  - Đầu ra: Kết quả của phép XOR (0, 1, 1, 0)
+- **Đặc điểm**:
+  - Bài toán không thể giải quyết bằng perceptron đơn giản
+  - Cần ít nhất một lớp ẩn để học mối quan hệ phi tuyến
+  - Minh họa sức mạnh của neural network so với perceptron
+
+#### Công thức toán học
+- **Lan truyền tiến (Forward propagation)**:
+  ```
+  Z1 = X·W1 + b1
+  A1 = σ(Z1)
+  Z2 = A1·W2 + b2
+  A2 = σ(Z2)
+  ```
+  - W1, W2: ma trận trọng số
+  - b1, b2: vector độ chệch
+  - σ: hàm sigmoid
+
+- **Lan truyền ngược (Backward propagation)**:
+  ```
+  dZ2 = A2 - Y
+  dW2 = A1ᵀ·dZ2
+  db2 = sum(dZ2)
+  dZ1 = dZ2·W2ᵀ * σ'(Z1)
+  dW1 = Xᵀ·dZ1
+  db1 = sum(dZ1)
+  ```
+  - Tính gradient cho từng tham số
+  - Sử dụng chain rule để lan truyền sai số ngược
+
+- **Cập nhật tham số**:
+  ```
+  W2 = W2 - α·dW2
+  b2 = b2 - α·db2
+  W1 = W1 - α·dW1
+  b1 = b1 - α·db1
+  ```
+  - α: learning rate
+  - Cập nhật theo hướng ngược gradient
+
+#### Trực quan hóa kết quả
+![Neural Network Training History](images/neural_network_training_history.png)
+- **Đồ thị huấn luyện**:
+  - Trục x: Số vòng lặp
+  - Trục y: Giá trị hàm mất mát
+  - Đường cong giảm thể hiện mạng neural đang học tốt
+  - So sánh với perceptron cho thấy khả năng học mối quan hệ phi tuyến
+
 ## Chi Tiết Triển Khai
 
 ### Các Module Chính

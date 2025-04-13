@@ -45,11 +45,9 @@ IMAGES = {
         "logistic_cost_history.png": "Lịch sử cost function của logistic regression"
     },
     "Perceptron": {
-        "perceptron_decision_boundary.png": "Decision boundary của perceptron",
         "perceptron_training_history.png": "Lịch sử training của perceptron"
     },
     "Neural Network": {
-        "neural_network_decision_boundary.png": "Decision boundary của neural network",
         "neural_network_training_history.png": "Lịch sử training của neural network"
     }
 }
@@ -189,29 +187,6 @@ def main(example):
 
     # In thông tin về các hình ảnh đã tạo
     print_generated_images()
-
-    # Print image information
-    print("\n\n╭────────────────────────────────────────── Thông tin hình ảnh ───────────────────────────────────────────╮")
-    print("│ 📊 Hình ảnh đã tạo                                                                                      │")
-    print("│ ├── 📁 Linear Regression                                                                                │")
-    print("│ │   ├── 📄 linear_regression_fit.png (46.5KB) - Đường hồi quy tuyến tính và dữ liệu                     │")
-    print("│ │   ├── 📄 linear_cost_history.png (26.2KB) - Lịch sử cost function của linear regression               │")
-    print("│ │   ├── 📄 multiple_regression_fit.png (142.0KB) - Mặt phẳng hồi quy nhiều biến và dữ liệu              │")
-    print("│ │   └── 📄 multiple_cost_history.png (26.7KB) - Lịch sử cost function của hồi quy nhiều biến            │")
-    print("│ ├── 📁 Polynomial Regression                                                                            │")
-    print("│ │   ├── 📄 house_price_data.png (size) - Dữ liệu giá nhà                                               │")
-    print("│ │   ├── 📄 polynomial_regression_fit.png (160.1KB) - So sánh các mô hình polynomial khác bậc            │")
-    print("│ │   └── 📄 regularization_effect.png (224.0KB) - Ảnh hưởng của regularization                           │")
-    print("│ ├── 📁 Logistic Regression                                                                              │")
-    print("│ │   ├── 📄 logistic_decision_boundary.png (37.4KB) - Decision boundary của logistic regression          │")
-    print("│ │   └── 📄 logistic_cost_history.png (22.5KB) - Lịch sử cost function của logistic regression           │")
-    print("│ ├── 📁 Perceptron                                                                                       │")
-    print("│ │   ├── 📄 perceptron_decision_boundary.png - Decision boundary của perceptron                          │")
-    print("│ │   └── 📄 perceptron_training_history.png - Lịch sử training của perceptron                            │")
-    print("│ └── 📁 Neural Network                                                                                    │")
-    print("│     ├── 📄 neural_network_decision_boundary.png - Decision boundary của neural network                    │")
-    print("│     └── 📄 neural_network_training_history.png - Lịch sử training của neural network                    │")
-    print("╰─────────────────────────────────────────────────────────────────────────────────────────────────────────╯")
 
 if __name__ == "__main__":
     main() 
