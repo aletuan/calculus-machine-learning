@@ -210,7 +210,6 @@ def main():
     console.print("\n[bold cyan]Regularization Example[/bold cyan]")
     lambdas = [0.0, 0.01, 1.0]
     reg_models = []
-    reg_costs = []
     
     for lambda_reg in lambdas:
         console.print(f"\n[bold cyan]Training with regularization (λ={lambda_reg})[/bold cyan]")
@@ -230,7 +229,6 @@ def main():
             model.fit(X, y, callback=callback)
         
         reg_models.append(model)
-        reg_costs.append(model.cost_history[-1])
         
         # Hiển thị kết quả cho từng model
         console.print(Panel(
@@ -250,28 +248,6 @@ def main():
         save_path='images/regularization_effect.png'
     )
     console.print("[green]✓[/green] Generated regularization_effect.png")
-    
-    # Hiển thị đánh giá regularization
-    best_lambda = lambdas[np.argmin(reg_costs)]
-    best_reg_model = reg_models[np.argmin(reg_costs)]
-    console.print(Panel(
-        f"[bold green]Đánh giá Regularization:[/bold green]\n"
-        f"1. So sánh các mô hình:\n"
-        f"   - λ = 0.0: Cost = {reg_costs[0]:.4f}\n"
-        f"   - λ = 0.01: Cost = {reg_costs[1]:.4f}\n"
-        f"   - λ = 1.0: Cost = {reg_costs[2]:.4f}\n\n"
-        f"2. Mô hình tối ưu nhất:\n"
-        f"   - λ = {best_lambda}\n"
-        f"   - Phương trình: y = {' + '.join([f'{w:.4f}x^{i}' for i, w in enumerate(best_reg_model.weights)])}\n"
-        f"   - Cost: {min(reg_costs):.4f}\n\n"
-        f"3. Nhận xét:\n"
-        f"   - Regularization với λ = 0.01 cho kết quả tốt nhất\n"
-        f"   - Các tham số của mô hình với λ = 0.01 có giá trị ổn định hơn\n"
-        f"   - Regularization giúp kiểm soát overfitting nhưng không cải thiện đáng kể cost\n"
-        f"   - Mô hình bậc 2 vẫn là lựa chọn tốt hơn so với mô hình bậc 4 có regularization",
-        title="Regularization Evaluation",
-        border_style="cyan"
-    ))
 
 if __name__ == '__main__':
     main() 

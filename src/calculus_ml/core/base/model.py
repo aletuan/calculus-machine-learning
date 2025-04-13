@@ -27,18 +27,8 @@ class RegressionModel(ABC):
         """Tính gradient của cost function"""
         pass
     
-    def fit(self, X, y, callback=None):
-        """Thực hiện gradient descent để tối ưu tham số
-        
-        Parameters
-        ----------
-        X : array-like
-            Input features
-        y : array-like
-            Target values
-        callback : callable, optional
-            Function to call after each iteration with signature (epoch, cost)
-        """
+    def fit(self, X, y):
+        """Thực hiện gradient descent để tối ưu tham số"""
         # Khởi tạo tham số
         n_features = X.shape[1] if len(X.shape) > 1 else 1
         self.weights = np.zeros(n_features)
@@ -55,13 +45,8 @@ class RegressionModel(ABC):
             
             # Lưu lịch sử
             if i < 100000:
-                cost = self.compute_cost(X, y)
-                self.cost_history.append(cost)
+                self.cost_history.append(self.compute_cost(X, y))
                 self.param_history.append([self.weights.copy(), self.bias])
-                
-                # Gọi callback nếu có
-                if callback is not None:
-                    callback(i, cost)
         
         return {
             'cost_history': self.cost_history,
