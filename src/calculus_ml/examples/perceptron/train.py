@@ -1,23 +1,23 @@
 """
-Train a perceptron to learn the AND gate function.
-This example demonstrates how a simple neural network can learn basic logical functions.
+Huấn luyện perceptron học hàm AND.
+Ví dụ này minh họa cách một mạng neural đơn giản có thể học các hàm logic cơ bản.
 """
 
 from .perceptron import Perceptron
 from .and_dataset import load_and_data
 
 def train_perceptron():
-    """Train a perceptron to learn the AND gate function"""
-    # Load the AND gate dataset
+    """Huấn luyện perceptron học hàm AND"""
+    # Tải dữ liệu hàm AND
     X, y = load_and_data()
 
-    # Initialize and train the perceptron
-    model = Perceptron(input_dim=2, lr=0.1)  # 2 input features, learning rate 0.1
-    model.train(X, y, epochs=1000)           # Train for 1000 epochs
+    # Khởi tạo và huấn luyện perceptron
+    model = Perceptron(input_dim=2, lr=0.1)  # 2 đặc trưng đầu vào, learning rate 0.1
+    model.train(X, y, epochs=1000)           # Huấn luyện trong 1000 epochs
 
-    # Test the model on all possible inputs
-    print("\nTesting the trained perceptron:")
-    print("Input (x1, x2) | Prediction | Label")
+    # Kiểm tra mô hình trên tất cả các đầu vào có thể
+    print("\nKiểm tra perceptron đã được huấn luyện:")
+    print("Đầu vào (x1, x2) | Dự đoán | Nhãn")
     print("-" * 35)
     for x_i, y_i in zip(X, y):
         y_hat = model.predict(x_i)

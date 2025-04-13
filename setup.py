@@ -2,21 +2,16 @@ from setuptools import setup, find_packages
 
 setup(
     name="calculus_ml",
-    version="0.1.0",
+    version="0.1",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     install_requires=[
-        "numpy>=1.21.0",
-        "matplotlib>=3.4.0",
-        "rich>=10.0.0",
-        "click>=8.0.0"
+        "numpy",
+        "matplotlib",
+        "rich",
+        "click"
     ],
-    entry_points={
-        "console_scripts": [
-            "calculus-ml=calculus_ml.main:main",
-        ],
-    },
-    python_requires=">=3.8",
+    python_requires=">=3.7",
     author="Andy Le",
     author_email="your.email@example.com",
     description="A collection of examples demonstrating vector operations and their applications in machine learning",
@@ -28,6 +23,7 @@ setup(
         "Intended Audience :: Education",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",

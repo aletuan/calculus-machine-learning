@@ -1,31 +1,27 @@
+"""
+Tạo dữ liệu cho hàm logic AND.
+Hàm AND trả về 1 nếu cả hai đầu vào đều là 1, ngược lại trả về 0.
+"""
+
 import numpy as np
 
 def load_and_data():
-    """Load the AND gate dataset.
-    
-    The AND gate is a logical function that returns 1 only when both inputs are 1.
-    Truth table:
-        x1 | x2 | y
-        -----------
-        0  | 0  | 0
-        0  | 1  | 0
-        1  | 0  | 0
-        1  | 1  | 1
+    """
+    Tạo dữ liệu cho hàm AND.
     
     Returns:
-        tuple: (X, y) where
-            X (ndarray): Input features of shape (4, 2)
-            y (ndarray): Target values of shape (4,)
+        X (numpy.ndarray): Ma trận đầu vào với các cặp giá trị (0,0), (0,1), (1,0), (1,1)
+        y (numpy.ndarray): Vector nhãn tương ứng với kết quả của hàm AND
     """
-    # Input features: all possible combinations of 0 and 1
+    # Tạo tất cả các tổ hợp có thể của đầu vào
     X = np.array([
-        [0, 0],  # Both inputs 0
-        [0, 1],  # First input 0, second 1
-        [1, 0],  # First input 1, second 0
-        [1, 1]   # Both inputs 1
+        [0, 0],  # 0 AND 0 = 0
+        [0, 1],  # 0 AND 1 = 0
+        [1, 0],  # 1 AND 0 = 0
+        [1, 1]   # 1 AND 1 = 1
     ])
     
-    # Target values: 1 only when both inputs are 1
+    # Tạo nhãn tương ứng với kết quả của hàm AND
     y = np.array([0, 0, 0, 1])
     
     return X, y

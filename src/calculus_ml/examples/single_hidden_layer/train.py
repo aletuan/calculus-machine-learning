@@ -3,8 +3,8 @@ Huấn luyện mạng neural với dữ liệu XOR.
 """
 
 import numpy as np
-from model_numpy import NeuralNetwork
-from activations import sigmoid, sigmoid_derivative
+from .model_numpy import NeuralNetwork
+from .activations import sigmoid, sigmoid_derivative
 
 def main():
     # Dữ liệu XOR

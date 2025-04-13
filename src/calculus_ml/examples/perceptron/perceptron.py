@@ -1,66 +1,107 @@
+"""
+Triển khai perceptron đơn giản sử dụng hàm kích hoạt sigmoid.
+Perceptron là đơn vị cơ bản của mạng neural, có thể học các hàm logic đơn giản.
+"""
+
 import numpy as np
 
 class Perceptron:
-    """Perceptron model for binary classification.
-    
-    This implementation uses sigmoid activation function and gradient descent
-    for training. It can be used to learn simple logical functions like AND, OR.
+    """
+    Lớp Perceptron triển khai một neuron đơn giản với hàm kích hoạt sigmoid.
     
     Attributes:
-        w (ndarray): Weight vector of shape (input_dim,)
-        b (float): Bias term
-        lr (float): Learning rate for gradient descent
+        weights (numpy.ndarray): Vector trọng số
+        bias (float): Độ chệch
+        lr (float): Tốc độ học
     """
     
-    def __init__(self, input_dim, lr=0.1):
-        """Initialize the perceptron.
-        
-        Args:
-            input_dim (int): Number of input features
-            lr (float): Learning rate for gradient descent (default: 0.1)
+    def __init__(self, input_dim, lr=0.01):
         """
-        self.w = np.zeros(input_dim)  # Initialize weights to zeros
-        self.b = 0.0                  # Initialize bias to zero
-        self.lr = lr                  # Learning rate
-
-    def sigmoid(self, z):
-        """Sigmoid activation function.
+        Khởi tạo perceptron với số chiều đầu vào và tốc độ học.
         
         Args:
-            z (float): Linear combination of inputs
+            input_dim (int): Số chiều của vector đầu vào
+            lr (float): Tốc độ học, mặc định là 0.01
+        """
+        # Khởi tạo trọng số ngẫu nhiên với phân phối chuẩn
+        self.weights = np.random.randn(input_dim)
+        # Khởi tạo độ chệch bằng 0
+        self.bias = 0
+        # Lưu tốc độ học
+        self.lr = lr
+    
+    def sigmoid(self, z):
+        """
+        Hàm kích hoạt sigmoid.
+        
+        Args:
+            z (float): Giá trị đầu vào
             
         Returns:
-            float: Probability between 0 and 1
+            float: Giá trị đầu ra của hàm sigmoid
         """
         return 1 / (1 + np.exp(-z))
-
-    def predict(self, x):
-        """Make a prediction for input x.
+    
+    def forward(self, x):
+        """
+        Thực hiện lan truyền tiến (forward propagation).
         
         Args:
-            x (ndarray): Input vector of shape (input_dim,)
+            x (numpy.ndarray): Vector đầu vào
             
         Returns:
-            float: Predicted probability between 0 and 1
+            float: Giá trị dự đoán
         """
-        z = np.dot(self.w, x) + self.b  # Linear combination
-        return self.sigmoid(z)           # Apply sigmoid activation
-
-    def train(self, X, y, epochs=100):
-        """Train the perceptron using gradient descent.
+        # Tính tổng có trọng số
+        z = np.dot(x, self.weights) + self.bias
+        # Áp dụng hàm sigmoid
+        return self.sigmoid(z)
+    
+    def backward(self, x, y, y_hat):
+        """
+        Thực hiện lan truyền ngược (backward propagation) và cập nhật tham số.
         
         Args:
-            X (ndarray): Training data of shape (n_samples, input_dim)
-            y (ndarray): Target values of shape (n_samples,)
-            epochs (int): Number of training epochs (default: 100)
+            x (numpy.ndarray): Vector đầu vào
+            y (float): Giá trị thực tế
+            y_hat (float): Giá trị dự đoán
         """
-        for epoch in range(epochs):
+        # Tính đạo hàm của loss function theo các tham số
+        error = y_hat - y
+        # Cập nhật trọng số
+        self.weights -= self.lr * error * x
+        # Cập nhật độ chệch
+        self.bias -= self.lr * error
+    
+    def train(self, X, y, epochs=1000):
+        """
+        Huấn luyện perceptron trên tập dữ liệu.
+        
+        Args:
+            X (numpy.ndarray): Ma trận đầu vào
+            y (numpy.ndarray): Vector nhãn
+            epochs (int): Số lần lặp huấn luyện
+        """
+        for _ in range(epochs):
             for i in range(len(X)):
-                x_i = X[i]              # Get current sample
-                y_i = y[i]              # Get current label
-                y_hat = self.predict(x_i)  # Make prediction
-                error = y_hat - y_i      # Compute error
+                # Lấy mẫu dữ liệu
+                x_i = X[i]
+                y_i = y[i]
                 
-                # Update weights and bias using gradient descent
-                self.w -= self.lr * error * x_i  # Update weights
-                self.b -= self.lr * error        # Update bias
+                # Lan truyền tiến
+                y_hat = self.forward(x_i)
+                
+                # Lan truyền ngược và cập nhật
+                self.backward(x_i, y_i, y_hat)
+    
+    def predict(self, x):
+        """
+        Dự đoán đầu ra cho một mẫu dữ liệu.
+        
+        Args:
+            x (numpy.ndarray): Vector đầu vào
+            
+        Returns:
+            float: Xác suất dự đoán
+        """
+        return self.forward(x)

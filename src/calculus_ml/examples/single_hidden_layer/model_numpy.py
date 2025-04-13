@@ -4,7 +4,7 @@ Mạng này có thể học các hàm logic phức tạp hơn như XOR.
 """
 
 import numpy as np
-from activations import sigmoid, sigmoid_derivative
+from .activations import sigmoid, sigmoid_derivative
 
 class NeuralNetwork:
     """
