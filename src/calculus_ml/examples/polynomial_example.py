@@ -3,12 +3,14 @@ Example of Polynomial Regression with Regularization.
 """
 
 import numpy as np
-from ..core.polynomial import PolynomialRegression
-from ..visualization.polynomial import (
+import matplotlib.pyplot as plt
+from rich.console import Console
+from rich.panel import Panel
+from ..core.polynomial.regression import PolynomialRegression
+from ..visualization.polynomial.plot_utils import (
     plot_polynomial_comparison,
     plot_regularization_effect
 )
-import matplotlib.pyplot as plt
 
 def generate_nonlinear_data(n_samples=100, noise=0.3):
     """Generate synthetic nonlinear data."""
