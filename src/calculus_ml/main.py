@@ -22,6 +22,7 @@ from .examples.linear_example_multiple import run_multiple_example
 from .examples.logistic_example import run_logistic_example
 from .examples.polynomial_example import main as polynomial_main
 from .examples.perceptron.train import train_perceptron
+from .examples.single_hidden_layer.train import main as run_neural_network
 
 # Initialize rich console
 console = Console()
@@ -45,6 +46,10 @@ IMAGES = {
     "Perceptron": {
         "perceptron_decision_boundary.png": "Decision boundary của perceptron",
         "perceptron_training_history.png": "Lịch sử training của perceptron"
+    },
+    "Neural Network": {
+        "neural_network_decision_boundary.png": "Decision boundary của neural network",
+        "neural_network_training_history.png": "Lịch sử training của neural network"
     }
 }
 
@@ -72,7 +77,7 @@ def print_generated_images():
     console.print("\n")
 
 @click.command()
-@click.option('--example', type=click.Choice(['linear', 'multiple', 'polynomial', 'logistic', 'perceptron', 'all']), 
+@click.option('--example', type=click.Choice(['linear', 'multiple', 'polynomial', 'logistic', 'perceptron', 'neural', 'all']), 
               default='all', help='Chọn ví dụ để chạy')
 def main(example):
     """Chạy các ví dụ về machine learning"""
@@ -141,6 +146,46 @@ def main(example):
         
         train_perceptron()
 
+    if example in ['neural', 'all']:
+        console.print(Panel(
+            "[bold cyan]Ví dụ 6: Neural Network[/bold cyan]\n"
+            "Huấn luyện mạng neural với một lớp ẩn để giải quyết bài toán XOR",
+            border_style="cyan"
+        ))
+        
+        console.print(Panel(
+            "[bold yellow]Công thức Neural Network[/bold yellow]\n"
+            "1. Hàm kích hoạt (Activation function):\n"
+            "   f(z) = 1 / (1 + e^(-z))  (Sigmoid)\n\n"
+            "2. Lan truyền tiến (Forward propagation):\n"
+            "   Z1 = X·W1 + b1\n"
+            "   A1 = f(Z1)\n"
+            "   Z2 = A1·W2 + b2\n"
+            "   A2 = f(Z2)\n\n"
+            "3. Lan truyền ngược (Backward propagation):\n"
+            "   dZ2 = A2 - Y\n"
+            "   dW2 = A1ᵀ·dZ2\n"
+            "   db2 = sum(dZ2)\n"
+            "   dZ1 = dZ2·W2ᵀ * f'(Z1)\n"
+            "   dW1 = Xᵀ·dZ1\n"
+            "   db1 = sum(dZ1)\n\n"
+            "4. Cập nhật tham số:\n"
+            "   W2 = W2 - α·dW2\n"
+            "   b2 = b2 - α·db2\n"
+            "   W1 = W1 - α·dW1\n"
+            "   b1 = b1 - α·db1\n\n"
+            "Trong đó:\n"
+            "- W1, W2: ma trận trọng số\n"
+            "- b1, b2: vector độ chệch\n"
+            "- α: learning rate\n"
+            "- X: ma trận đầu vào\n"
+            "- Y: vector nhãn thực tế\n"
+            "- A2: dự đoán",
+            border_style="yellow"
+        ))
+        
+        run_neural_network()
+
     # In thông tin về các hình ảnh đã tạo
     print_generated_images()
 
@@ -159,9 +204,12 @@ def main(example):
     print("│ ├── 📁 Logistic Regression                                                                              │")
     print("│ │   ├── 📄 logistic_decision_boundary.png (37.4KB) - Decision boundary của logistic regression          │")
     print("│ │   └── 📄 logistic_cost_history.png (22.5KB) - Lịch sử cost function của logistic regression           │")
-    print("│ └── 📁 Perceptron                                                                                       │")
-    print("│     ├── 📄 perceptron_decision_boundary.png - Decision boundary của perceptron                          │")
-    print("│     └── 📄 perceptron_training_history.png - Lịch sử training của perceptron                            │")
+    print("│ ├── 📁 Perceptron                                                                                       │")
+    print("│ │   ├── 📄 perceptron_decision_boundary.png - Decision boundary của perceptron                          │")
+    print("│ │   └── 📄 perceptron_training_history.png - Lịch sử training của perceptron                            │")
+    print("│ └── 📁 Neural Network                                                                                    │")
+    print("│     ├── 📄 neural_network_decision_boundary.png - Decision boundary của neural network                    │")
+    print("│     └── 📄 neural_network_training_history.png - Lịch sử training của neural network                    │")
     print("╰─────────────────────────────────────────────────────────────────────────────────────────────────────────╯")
 
 if __name__ == "__main__":
