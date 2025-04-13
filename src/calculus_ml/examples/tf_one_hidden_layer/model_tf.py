@@ -1,15 +1,15 @@
 import tensorflow as tf
 from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dense, Input
 
 def build_model():
     model = Sequential([
-        Dense(4, activation='relu', input_shape=(2,)),  # hidden layer with more neurons
-        Dense(1, activation='sigmoid')                  # output layer
+        Input(shape=(2,)),
+        Dense(4, activation='relu'),
+        Dense(1, activation='sigmoid')
     ])
     model.compile(
         optimizer=tf.keras.optimizers.Adam(learning_rate=0.01),  # smaller learning rate
-        loss='binary_crossentropy',
-        metrics=['accuracy']
+        loss='binary_crossentropy'
     )
     return model
