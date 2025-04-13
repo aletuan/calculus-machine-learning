@@ -79,13 +79,83 @@ def print_generated_images():
     console.print(Panel(tree, title="[bold blue]Thông tin hình ảnh[/bold blue]"))
     console.print("\n")
 
-@click.command()
-@click.option('--example', type=click.Choice(['linear', 'multiple', 'polynomial', 'logistic', 'perceptron', 'neural', 'tf_neural', 'all']), 
-              default='all', help='Chọn ví dụ để chạy')
-def main(example):
-    """Chạy các ví dụ về machine learning"""
-    ensure_images_dir()
+def print_examples_table():
+    """In bảng các ví dụ có sẵn"""
+    table = Table(title="Machine Learning Examples")
+    table.add_column("Example", style="cyan", justify="left")
+    table.add_column("Description", style="green", justify="left")
     
+    examples = [
+        ("1. Linear Regression", 
+         "Dự đoán giá nhà dựa trên diện tích"),
+        ("2. Multiple Linear Regression",
+         "Dự đoán giá nhà dựa trên diện tích và số phòng ngủ"),
+        ("3. Polynomial Regression",
+         "Dự đoán giá nhà với các mô hình đa thức"),
+        ("4. Logistic Regression",
+         "Phân loại học sinh đỗ/trượt dựa trên điểm thi"),
+        ("5. Perceptron",
+         "Học hàm AND với perceptron"),
+        ("6. Neural Network",
+         "Học hàm XOR với neural network một lớp ẩn"),
+        ("7. TensorFlow Neural Network",
+         "Học hàm AND với neural network sử dụng TensorFlow")
+    ]
+    
+    for example in examples:
+        table.add_row(*example)
+    
+    console.print("\n")
+    console.print(Panel(table, title="[bold blue]Available Examples[/bold blue]"))
+    console.print("\n")
+
+def get_user_choice():
+    """Lấy lựa chọn của người dùng"""
+    while True:
+        try:
+            console.print("\n[bold]Chọn ví dụ để chạy:[/bold]")
+            console.print("1. Chạy tất cả các ví dụ")
+            console.print("2. Chọn ví dụ cụ thể")
+            choice = int(console.input("\n[bold]Nhập lựa chọn (1-2): [/bold]"))
+            if choice in [1, 2]:
+                break
+            console.print("[red]Vui lòng nhập 1 hoặc 2[/red]")
+        except ValueError:
+            console.print("[red]Vui lòng nhập số hợp lệ[/red]")
+    
+    if choice == 1:
+        return 'all'
+    
+    while True:
+        try:
+            console.print("\n[bold]Chọn ví dụ cụ thể:[/bold]")
+            console.print("1. Linear Regression")
+            console.print("2. Multiple Linear Regression")
+            console.print("3. Polynomial Regression")
+            console.print("4. Logistic Regression")
+            console.print("5. Perceptron")
+            console.print("6. Neural Network")
+            console.print("7. TensorFlow Neural Network")
+            example_choice = int(console.input("\n[bold]Nhập số ví dụ (1-7): [/bold]"))
+            if 1 <= example_choice <= 7:
+                break
+            console.print("[red]Vui lòng nhập số từ 1 đến 7[/red]")
+        except ValueError:
+            console.print("[red]Vui lòng nhập số hợp lệ[/red]")
+    
+    example_map = {
+        1: 'linear',
+        2: 'multiple',
+        3: 'polynomial',
+        4: 'logistic',
+        5: 'perceptron',
+        6: 'neural',
+        7: 'tf_neural'
+    }
+    return example_map[example_choice]
+
+def run_example(example):
+    """Chạy ví dụ được chọn"""
     if example in ['linear', 'all']:
         console.print(Panel(
             "[bold cyan]Ví dụ 1: Hồi quy tuyến tính đơn giản[/bold cyan]\n"
@@ -141,7 +211,20 @@ def main(example):
             border_style="cyan"
         ))
         run_tf_neural_network()
+
+@click.command()
+@click.option('--example', type=click.Choice(['linear', 'multiple', 'polynomial', 'logistic', 'perceptron', 'neural', 'tf_neural', 'all']), 
+              default=None, help='Chọn ví dụ để chạy')
+def main(example):
+    """Chạy các ví dụ về machine learning"""
+    ensure_images_dir()
+    print_examples_table()
     
+    # Nếu không có lựa chọn từ command line, hỏi người dùng
+    if example is None:
+        example = get_user_choice()
+    
+    run_example(example)
     print_generated_images()
 
 if __name__ == "__main__":
