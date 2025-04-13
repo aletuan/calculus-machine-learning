@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from rich.console import Console
 from rich.panel import Panel
+from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
 from src.calculus_ml.core.linear.regression import LinearRegression
 from src.calculus_ml.core.base.scaler import StandardScaler
 from src.calculus_ml.visualization.base.plot_utils import setup_plot, save_plot, PlotConfig
@@ -109,20 +110,40 @@ def run_multiple_example():
         border_style="cyan"
     ))
     
-    # Khởi tạo và training model
-    model = LinearRegression(learning_rate=0.01, num_iterations=1000)
-    history = model.fit(X_scaled, price)
+    # Hiển thị quá trình training
+    console.print("\n[bold yellow]Quá trình training:[/bold yellow]")
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TaskProgressColumn(),
+        console=console
+    ) as progress:
+        task = progress.add_task("[cyan]Training...", total=1000)
+        
+        def training_callback(epoch, cost):
+            progress.update(task, advance=1)
+            if epoch % 100 == 0 or epoch == 999:
+                console.print(f"Epoch {epoch:4d}: Cost = {cost:.4f}")
+        
+        # Khởi tạo và training model
+        model = LinearRegression(learning_rate=0.01, num_iterations=1000)
+        history = model.fit(X_scaled, price, callback=training_callback)
     
     # Hiển thị kết quả
+    results = [
+        "[bold green]Kết quả tối ưu:[/bold green]",
+        "1. Tham số tối ưu:",
+        f"   w₁ = {model.weights[0]:.4f} (trọng số diện tích)",
+        f"   w₂ = {model.weights[1]:.4f} (trọng số số phòng)",
+        f"   b = {model.bias:.4f} (độ chệch)",
+        "2. Phương trình hồi quy:",
+        f"   Giá = {model.weights[0]:.4f}*Diện_tích + {model.weights[1]:.4f}*Số_phòng + {model.bias:.4f}",
+        f"3. Cost cuối cùng: {history['cost_history'][-1]:.4f}"
+    ]
+    
     console.print(Panel(
-        f"[bold green]Kết quả tối ưu:[/bold green]\n"
-        f"1. Tham số tối ưu:\n"
-        f"   w₁ = {model.weights[0]:.4f} (trọng số diện tích)\n"
-        f"   w₂ = {model.weights[1]:.4f} (trọng số số phòng)\n"
-        f"   b = {model.bias:.4f} (độ chệch)\n"
-        f"2. Phương trình hồi quy:\n"
-        f"   Giá = {model.weights[0]:.4f}*Diện_tích + {model.weights[1]:.4f}*Số_phòng + {model.bias:.4f}\n"
-        f"3. Cost cuối cùng: {history['cost_history'][-1]:.4f}",
+        "\n".join(results),
         title="Optimization Results",
         border_style="cyan"
     ))
