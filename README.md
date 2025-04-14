@@ -1,21 +1,44 @@
-# Regression Models in Machine Learning
+# Prediction Models in Machine Learning
 
-Triển khai và trực quan hóa hai mô hình học máy cơ bản: Linear Regression và Logistic Regression, với các ví dụ thực tế về dự đoán giá nhà và phân loại kết quả tuyển sinh.
+Triển khai và trực quan hóa các mô hình học máy cơ bản, từ hồi quy tuyến tính đến mạng neural, với các ví dụ thực tế về dự đoán giá nhà, phân loại kết quả tuyển sinh, và học các hàm logic cơ bản.
 
 ## Giới Thiệu Khái Niệm
 
 ### Machine Learning là gì?
-Machine Learning (Học máy) là một nhánh của trí tuệ nhân tạo, cho phép máy tính "học" từ dữ liệu mà không cần được lập trình một cách tường minh. Trong project này, chúng ta tập trung vào học có giám sát (supervised learning) với hai dạng bài toán phổ biến:
+Machine Learning (Học máy) là một nhánh của trí tuệ nhân tạo, cho phép máy tính "học" từ dữ liệu mà không cần được lập trình một cách tường minh. Trong project này, chúng ta tập trung vào học có giám sát (supervised learning) với các dạng bài toán phổ biến:
 
 ### 1. Regression (Hồi quy)
 - **Định nghĩa**: Dự đoán một giá trị liên tục dựa trên các đặc trưng đầu vào
-- **Ví dụ**: Dự đoán giá nhà, dự báo nhiệt độ, dự đoán doanh thu
+- **Ví dụ**: Dự đoán giá nhà dựa trên diện tích và số phòng ngủ
+- **Các loại hồi quy**:
+  - Linear Regression (Hồi quy tuyến tính)
+  - Multiple Linear Regression (Hồi quy nhiều biến)
+  - Polynomial Regression (Hồi quy đa thức)
 - **Đánh giá**: Sử dụng các metrics như MSE (Mean Squared Error), MAE (Mean Absolute Error)
 
 ### 2. Classification (Phân loại)
 - **Định nghĩa**: Phân loại dữ liệu vào các nhóm/lớp rời rạc
-- **Ví dụ**: Phân loại email (spam/không spam), chẩn đoán bệnh (có/không)
+- **Ví dụ**: 
+  - Phân loại học sinh đỗ/trượt dựa trên điểm thi
+  - Học các hàm logic (AND, XOR) với perceptron và neural network
+- **Các mô hình**:
+  - Logistic Regression
+  - Perceptron
+  - Neural Network (một lớp ẩn)
+  - TensorFlow Neural Network
 - **Đánh giá**: Accuracy, Precision, Recall, F1-score
+
+### 3. Neural Networks (Mạng Neural)
+- **Định nghĩa**: Mô hình học máy lấy cảm hứng từ cấu trúc não bộ
+- **Ví dụ**:
+  - Học hàm XOR với neural network một lớp ẩn
+  - Học hàm AND với TensorFlow neural network
+- **Các thành phần**:
+  - Input Layer (Lớp đầu vào)
+  - Hidden Layer (Lớp ẩn)
+  - Output Layer (Lớp đầu ra)
+  - Activation Functions (Hàm kích hoạt)
+  - Backpropagation (Lan truyền ngược)
 
 ### Các Khái Niệm Quan Trọng
 
@@ -343,9 +366,14 @@ images/                    # Generated visualization images
   - Trục y: Giá trị hàm mất mát
   - Đường cong giảm thể hiện mô hình đang học tốt
 
-### 4. Perceptron - Học Hàm Logic AND
+### 4. Neural Networks - Từ Perceptron Đơn Giản Đến Mạng Neural
 
-#### Mô tả bài toán
+#### Giới Thiệu
+Neural Networks (Mạng Neural) là một trong những mô hình học máy mạnh mẽ nhất, lấy cảm hứng từ cấu trúc và cách hoạt động của não bộ con người. Trong project này, chúng ta sẽ khám phá sự phát triển từ mô hình đơn giản nhất (perceptron) đến mạng neural với một lớp ẩn, thông qua các ví dụ học các hàm logic cơ bản.
+
+#### 4.1. Perceptron - Mô Hình Neural Đơn Giản Nhất
+
+##### Mô tả bài toán
 - **Mục tiêu**: Huấn luyện perceptron học hàm logic AND
 - **Dữ liệu**:
   - Đầu vào: Các cặp giá trị nhị phân (0,0), (0,1), (1,0), (1,1)
@@ -355,7 +383,7 @@ images/                    # Generated visualization images
   - Chỉ có một lớp đầu vào và một nơ-ron đầu ra
   - Sử dụng hàm kích hoạt sigmoid để tạo đầu ra liên tục
 
-#### Công thức toán học
+##### Công thức toán học
 - **Mô hình dự đoán**:
   ```
   z = w₁x₁ + w₂x₂ + b
@@ -381,16 +409,16 @@ images/                    # Generated visualization images
   - α: learning rate
   - (y_hat - y): sai số dự đoán
 
-#### Trực quan hóa kết quả
+##### Trực quan hóa kết quả
 ![Perceptron Training History](images/perceptron_training_history.png)
 - **Đồ thị huấn luyện**:
   - Trục x: Số vòng lặp
   - Trục y: Giá trị hàm mất mát
   - Đường cong giảm thể hiện perceptron đang học tốt
 
-### 5. Single Hidden Layer Neural Network - Giải Bài Toán XOR
+#### 4.2. Single Hidden Layer Neural Network - Vượt Qua Giới Hạn Của Perceptron
 
-#### Mô tả bài toán
+##### Mô tả bài toán
 - **Mục tiêu**: Huấn luyện mạng neural với một lớp ẩn để giải quyết bài toán XOR
 - **Dữ liệu**:
   - Đầu vào: Các cặp giá trị nhị phân (0,0), (0,1), (1,0), (1,1)
@@ -400,7 +428,7 @@ images/                    # Generated visualization images
   - Cần ít nhất một lớp ẩn để học mối quan hệ phi tuyến
   - Minh họa sức mạnh của neural network so với perceptron
 
-#### Công thức toán học
+##### Công thức toán học
 - **Lan truyền tiến (Forward propagation)**:
   ```
   Z1 = X·W1 + b1
@@ -434,7 +462,7 @@ images/                    # Generated visualization images
   - α: learning rate
   - Cập nhật theo hướng ngược gradient
 
-#### Trực quan hóa kết quả
+##### Trực quan hóa kết quả
 ![Neural Network Training History](images/neural_network_training_history.png)
 - **Đồ thị huấn luyện**:
   - Trục x: Số vòng lặp
