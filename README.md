@@ -142,10 +142,15 @@ src/calculus_ml/
 │   ├── perceptron/         # Perceptron implementation
 │   │   ├── perceptron.py   # Perceptron class
 │   │   └── train.py        # Training script
-│   └── single_hidden_layer/ # Single hidden layer neural network
-│       ├── model_numpy.py  # Neural network implementation
-│       ├── activations.py  # Activation functions
-│       └── train.py        # Training script
+│   ├── single_hidden_layer/ # Single hidden layer neural network
+│   │   ├── model_numpy.py  # Neural network implementation
+│   │   ├── activations.py  # Activation functions
+│   │   └── train.py        # Training script
+│   └── tf_one_hidden_layer/ # TensorFlow neural network
+│       ├── model_tf.py     # TensorFlow model implementation
+│       ├── dataset.py      # Dataset generation and handling
+│       ├── train.py        # Training script
+│       └── predict.py      # Prediction script
 │
 ├── visualization/          # Visualization utilities
 │   └── base/
@@ -165,7 +170,8 @@ images/                    # Generated visualization images
 ├── logistic_decision_boundary.png  # Logistic regression decision boundary
 ├── logistic_cost_history.png       # Logistic regression cost history
 ├── perceptron_training_history.png # Perceptron training history
-└── neural_network_training_history.png # Neural network training history
+├── neural_network_training_history.png # Neural network training history
+└── tf_and_training.png             # TensorFlow neural network training history
 ```
 
 ## Ví Dụ Minh Họa
@@ -368,7 +374,6 @@ images/                    # Generated visualization images
 
 ### 4. Neural Networks - Từ Perceptron Đơn Giản Đến Mạng Neural
 
-#### Giới Thiệu
 Neural Networks (Mạng Neural) là một trong những mô hình học máy mạnh mẽ nhất, lấy cảm hứng từ cấu trúc và cách hoạt động của não bộ con người. Trong project này, chúng ta sẽ khám phá sự phát triển từ mô hình đơn giản nhất (perceptron) đến mạng neural với một lớp ẩn, thông qua các ví dụ học các hàm logic cơ bản.
 
 #### 4.1. Perceptron - Mô Hình Neural Đơn Giản Nhất
@@ -469,6 +474,66 @@ Neural Networks (Mạng Neural) là một trong những mô hình học máy m�
   - Trục y: Giá trị hàm mất mát
   - Đường cong giảm thể hiện mạng neural đang học tốt
   - So sánh với perceptron cho thấy khả năng học mối quan hệ phi tuyến
+
+#### 4.3. TensorFlow Neural Network - Học Hàm AND với Framework Hiện Đại
+
+##### Mô tả bài toán
+- **Mục tiêu**: Huấn luyện mạng neural với TensorFlow để học hàm logic AND
+- **Dữ liệu**:
+  - Đầu vào: Các cặp giá trị nhị phân (0,0), (0,1), (1,0), (1,1)
+  - Đầu ra: Kết quả của phép AND (0, 0, 0, 1)
+- **Đặc điểm**:
+  - Sử dụng TensorFlow - framework deep learning hiện đại
+  - Kiến trúc mạng: Input layer (2 nơ-ron) → Hidden layer (4 nơ-ron) → Output layer (1 nơ-ron)
+  - Tận dụng các tính năng của TensorFlow:
+    - Automatic differentiation
+    - Optimized tensor operations
+    - GPU acceleration (nếu có)
+
+##### Công thức toán học
+- **Kiến trúc mạng**:
+  ```
+  Input Layer (2) → Hidden Layer (4) → Output Layer (1)
+  ```
+  - Input Layer: 2 nơ-ron (x₁, x₂)
+  - Hidden Layer: 4 nơ-ron với hàm kích hoạt ReLU
+  - Output Layer: 1 nơ-ron với hàm kích hoạt sigmoid
+
+- **Hàm mất mát**:
+  ```
+  L(y, y_hat) = BinaryCrossentropy(y, y_hat)
+  ```
+  - Binary Cross-Entropy Loss
+  - Phù hợp với bài toán phân loại nhị phân
+
+- **Tối ưu hóa**:
+  ```
+  optimizer = Adam(learning_rate=0.01)
+  ```
+  - Sử dụng Adam optimizer
+  - Learning rate = 0.01
+  - Adaptive learning rate cho từng tham số
+
+##### Trực quan hóa kết quả
+![TensorFlow Neural Network Training](images/tf_and_training.png)
+- **Đồ thị huấn luyện**:
+  - Trục x: Số vòng lặp
+  - Trục y: Giá trị hàm mất mát
+  - Đường cong giảm thể hiện mạng neural đang học tốt
+  - Hội tụ nhanh hơn so với cài đặt từ đầu
+
+##### So sánh với các phương pháp khác
+- **Ưu điểm của TensorFlow**:
+  - Tự động tính gradient (automatic differentiation)
+  - Tối ưu hóa hiệu suất tính toán
+  - Dễ dàng mở rộng cho các bài toán phức tạp hơn
+  - Hỗ trợ GPU acceleration
+  - Có sẵn nhiều layer và optimizer
+
+- **Kết quả**:
+  - Đạt độ chính xác 100% trên tập test
+  - Hội tụ nhanh hơn so với cài đặt từ đầu
+  - Dễ dàng mở rộng cho các bài toán phức tạp hơn
 
 ## Chi Tiết Triển Khai
 
