@@ -53,6 +53,9 @@ IMAGES = {
     },
     "TensorFlow Neural Network": {
         "tf_and_training.png": "Lịch sử training của TensorFlow neural network"
+    },
+    "Decision Tree": {
+        "decision_tree_boundary.png": "Decision boundary của Decision Tree"
     }
 }
 
@@ -99,7 +102,9 @@ def print_examples_table():
         ("6. Neural Network",
          "Học hàm XOR với neural network một lớp ẩn"),
         ("7. TensorFlow Neural Network",
-         "Học hàm AND với neural network sử dụng TensorFlow")
+         "Học hàm AND với neural network sử dụng TensorFlow"),
+        ("8. Decision Tree",
+         "Phân loại hoa Iris sử dụng Decision Tree")
     ]
     
     for example in examples:
@@ -136,10 +141,11 @@ def get_user_choice():
             console.print("5. Perceptron")
             console.print("6. Neural Network")
             console.print("7. TensorFlow Neural Network")
-            example_choice = int(console.input("\n[bold]Nhập số ví dụ (1-7): [/bold]"))
-            if 1 <= example_choice <= 7:
+            console.print("8. Decision Tree")
+            example_choice = int(console.input("\n[bold]Nhập số ví dụ (1-8): [/bold]"))
+            if 1 <= example_choice <= 8:
                 break
-            console.print("[red]Vui lòng nhập số từ 1 đến 7[/red]")
+            console.print("[red]Vui lòng nhập số từ 1 đến 8[/red]")
         except ValueError:
             console.print("[red]Vui lòng nhập số hợp lệ[/red]")
     
@@ -150,7 +156,8 @@ def get_user_choice():
         4: 'logistic',
         5: 'perceptron',
         6: 'neural',
-        7: 'tf_neural'
+        7: 'tf_neural',
+        8: 'decision_tree'
     }
     return example_map[example_choice]
 
@@ -212,9 +219,20 @@ def run_example(example):
         ))
         run_tf_neural_network()
 
+    if example in ['decision_tree', 'all']:
+        console.print(Panel(
+            "[bold cyan]Ví dụ 8: Decision Tree[/bold cyan]\n"
+            "Phân loại hoa Iris sử dụng Decision Tree",
+            border_style="cyan"
+        ))
+        from .examples.decision_tree.example import run_decision_tree_example
+        run_decision_tree_example()
+
 @click.command()
-@click.option('--example', type=click.Choice(['linear', 'multiple', 'polynomial', 'logistic', 'perceptron', 'neural', 'tf_neural', 'all']), 
-              default=None, help='Chọn ví dụ để chạy')
+@click.option('--example', type=click.Choice([
+    'linear', 'multiple', 'polynomial', 'logistic', 
+    'perceptron', 'neural', 'tf_neural', 'decision_tree'
+]), help='Chọn ví dụ để chạy')
 def main(example):
     """Chạy các ví dụ về machine learning"""
     ensure_images_dir()
@@ -226,6 +244,28 @@ def main(example):
     
     run_example(example)
     print_generated_images()
+
+    if example == 'decision_tree':
+        console.print("\n[bold green]Decision Tree Example[/bold green]")
+        console.print("Phân loại hoa Iris sử dụng Decision Tree")
+        console.print("Thuật toán xây dựng cây dựa trên:")
+        console.print("1. Information Gain")
+        console.print("2. Entropy")
+        console.print("\nCông thức:")
+        console.print("- Entropy: H(S) = -Σ p(x) * log2(p(x))")
+        console.print("- Information Gain: IG(S,A) = H(S) - Σ |Sv|/|S| * H(Sv)")
+        
+        print_images(['decision_tree_boundary.png'])
+
+def print_images(image_names):
+    """In thông tin về các hình ảnh được chỉ định"""
+    for img_name in image_names:
+        img_path = os.path.join('images', img_name)
+        if os.path.exists(img_path):
+            size = os.path.getsize(img_path) / 1024  # Convert to KB
+            console.print(f"📄 {img_name} ({size:.1f}KB)")
+        else:
+            console.print(f"❌ {img_name} (không tìm thấy)")
 
 if __name__ == "__main__":
     main() 

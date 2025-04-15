@@ -146,6 +146,10 @@ src/calculus_ml/
 │   │   ├── model_numpy.py  # Neural network implementation
 │   │   ├── activations.py  # Activation functions
 │   │   └── train.py        # Training script
+│   ├── single_hidden_layer/ # Single hidden layer neural network
+│   │   ├── model_numpy.py  # Neural network implementation
+│   │   ├── activations.py  # Activation functions
+│   │   └── train.py        # Training script
 │   └── tf_one_hidden_layer/ # TensorFlow neural network
 │       ├── model_tf.py     # TensorFlow model implementation
 │       ├── dataset.py      # Dataset generation and handling
@@ -536,6 +540,40 @@ Neural Networks (Mạng Neural) là một trong những mô hình học máy m�
   - Đạt độ chính xác 100% trên tập test
   - Hội tụ nhanh hơn so với cài đặt từ đầu
   - Dễ dàng mở rộng cho các bài toán phức tạp hơn
+
+### 5. Decision Tree - Cây Quyết Định với Information Gain
+
+#### Mô tả bài toán
+- **Mục tiêu**: Phân loại hoa Iris dựa trên các đặc trưng
+- **Dữ liệu**: 
+  - Tập dữ liệu Iris (2 class đầu tiên)
+  - Đặc trưng: Chiều dài đài hoa, Chiều rộng đài hoa
+  - Nhãn: Loại hoa (0 hoặc 1)
+
+#### Công thức toán học
+- **Entropy**: Đo độ không chắc chắn của tập dữ liệu
+  ```
+  H(S) = -Σ p(x) * log2(p(x))
+  ```
+  - S: tập dữ liệu
+  - p(x): xác suất của class x
+
+- **Information Gain**: Đo lượng thông tin thu được khi split
+  ```
+  IG(S,A) = H(S) - Σ |Sv|/|S| * H(Sv)
+  ```
+  - S: tập dữ liệu gốc
+  - A: thuộc tính split
+  - Sv: tập con sau khi split
+  - |Sv|/|S|: tỷ lệ số mẫu trong tập con
+
+#### Trực quan hóa kết quả
+![Decision Tree Boundary](images/decision_tree_boundary.png)
+- **Đồ thị decision boundary**:
+  - Trái: Kết quả trên tập train
+  - Phải: Dự đoán trên tập test
+  - Màu sắc: Vùng quyết định cho mỗi class
+  - Điểm: Dữ liệu thực tế
 
 ## Chi Tiết Triển Khai
 
