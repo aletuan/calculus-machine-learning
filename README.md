@@ -542,7 +542,9 @@ Neural Networks (Mạng Neural) là một trong những mô hình học máy m�
 ### Các Module Chính
 
 1. **Core Module**: Cài đặt các thuật toán
+
 ```python
+# Phần 1: StandardScaler - Chuẩn hóa dữ liệu
 class StandardScaler:
     """Chuẩn hóa dữ liệu bằng phương pháp Standard Scaling"""
     def fit(self, X):
@@ -562,7 +564,11 @@ class StandardScaler:
     def inverse_transform(self, X_scaled):
         """Chuyển dữ liệu đã chuẩn hóa về dạng gốc"""
         return X_scaled * self.std + self.mean
+```
+→ **Vai trò**: Class này thực hiện chuẩn hóa dữ liệu bằng cách trừ mean và chia cho độ lệch chuẩn. Giúp các thuật toán học máy hoạt động hiệu quả hơn bằng cách đưa các features về cùng một scale.
 
+```python
+# Phần 2: RegressionModel - Lớp cơ sở cho các mô hình hồi quy
 class RegressionModel:
     """Lớp cơ sở cho các mô hình hồi quy"""
     def __init__(self, learning_rate=0.01, num_iterations=1000):
@@ -583,7 +589,11 @@ class RegressionModel:
             self.weights -= self.learning_rate * dw
             self.bias -= self.learning_rate * db
             self.cost_history.append(self.compute_cost(X, y))
+```
+→ **Vai trò**: Lớp cơ sở định nghĩa cấu trúc chung cho tất cả các mô hình hồi quy. Cung cấp phương thức `fit` để huấn luyện mô hình bằng gradient descent và lưu lại lịch sử training.
 
+```python
+# Phần 3: LinearRegression - Mô hình hồi quy tuyến tính
 class LinearRegression(RegressionModel):
     """Mô hình hồi quy tuyến tính: y = wx + b"""
     def predict(self, X):
@@ -600,7 +610,11 @@ class LinearRegression(RegressionModel):
         dw = (1/m) * np.dot(X.T, (predictions - y))
         db = (1/m) * np.sum(predictions - y)
         return dw, db
+```
+→ **Vai trò**: Cài đặt mô hình hồi quy tuyến tính với hàm dự đoán y = wx + b. Sử dụng MSE làm hàm mất mát và tính gradient tương ứng để cập nhật tham số.
 
+```python
+# Phần 4: PolynomialRegression - Mô hình hồi quy đa thức với regularization
 class PolynomialRegression(RegressionModel):
     """Mô hình hồi quy đa thức với regularization"""
     def __init__(self, degree=2, lambda_reg=0.0, learning_rate=0.01, num_iterations=1000):
@@ -622,43 +636,11 @@ class PolynomialRegression(RegressionModel):
             X_poly = np.column_stack((X_poly, X_scaled ** d))
             
         return X_poly[:, 1:]  # Bỏ hằng số
-    
-    def predict(self, X):
-        """Dự đoán giá trị đầu ra"""
-        X_poly = self._generate_polynomial_features(X)
-        return np.dot(X_poly, self.weights) + self.bias
-    
-    def compute_cost(self, X, y):
-        """Tính cost function với regularization"""
-        m = len(y)
-        y_pred = self.predict(X)
-        
-        # Tính MSE một cách ổn định về mặt số học
-        squared_errors = np.clip((y_pred - y)**2, 0, 1e10)
-        mse = np.mean(squared_errors)
-        
-        # Tính regularization term
-        reg_term = self.lambda_reg * np.mean(np.clip(self.weights**2, 0, 1e10))
-        
-        return mse/2 + reg_term/2
-    
-    def compute_gradient(self, X, y):
-        """Tính gradient với regularization"""
-        m = len(y)
-        X_poly = self._generate_polynomial_features(X)
-        y_pred = self.predict(X)
-        
-        # Giới hạn sai số để tránh overflow
-        errors = np.clip(y_pred - y, -1e10, 1e10)
-        
-        # Tính gradient một cách ổn định
-        dw = np.mean(X_poly * errors[:, np.newaxis], axis=0)
-        dw += self.lambda_reg * np.clip(self.weights, -1e10, 1e10) / m
-        
-        db = np.mean(errors)
-        
-        return dw, db
+```
+→ **Vai trò**: Mở rộng mô hình tuyến tính để học các mối quan hệ phi tuyến. Tự động tạo các đặc trưng bậc cao (x², x³, ...) và có thêm regularization để tránh overfitting.
 
+```python
+# Phần 5: LogisticRegression - Mô hình phân loại nhị phân
 class LogisticRegression(RegressionModel):
     """Mô hình phân loại nhị phân: P(y=1) = g(w₁x₁ + w₂x₂ + b)"""
     def predict(self, X):
@@ -677,6 +659,168 @@ class LogisticRegression(RegressionModel):
         db = (1/m) * np.sum(predictions - y)
         return dw, db
 ```
+→ **Vai trò**: Cài đặt mô hình phân loại nhị phân, sử dụng hàm sigmoid để chuyển đầu ra về khoảng [0,1] và binary cross-entropy làm hàm mất mát. Phù hợp cho các bài toán phân loại 2 lớp.
+
+```python
+# Phần 6: Perceptron - Mô hình neural đơn giản nhất
+class Perceptron:
+    """Mô hình perceptron đơn giản"""
+    def __init__(self, learning_rate=0.01, num_iterations=1000):
+        self.learning_rate = learning_rate
+        self.num_iterations = num_iterations
+        self.weights = None
+        self.bias = None
+        self.cost_history = []
+    
+    def predict(self, X):
+        """Dự đoán đầu ra với hàm sigmoid"""
+        z = np.dot(X, self.weights) + self.bias
+        return 1 / (1 + np.exp(-z))
+    
+    def compute_cost(self, X, y):
+        """Tính binary cross-entropy loss"""
+        m = len(y)
+        predictions = self.predict(X)
+        return -(1/m) * np.sum(y*np.log(predictions) + (1-y)*np.log(1-predictions))
+    
+    def fit(self, X, y):
+        """Huấn luyện perceptron"""
+        m, n = X.shape
+        self.weights = np.zeros(n)
+        self.bias = 0
+        
+        for _ in range(self.num_iterations):
+            predictions = self.predict(X)
+            dw = (1/m) * np.dot(X.T, (predictions - y))
+            db = (1/m) * np.sum(predictions - y)
+            
+            self.weights -= self.learning_rate * dw
+            self.bias -= self.learning_rate * db
+            self.cost_history.append(self.compute_cost(X, y))
+```
+→ **Vai trò**: Cài đặt mô hình perceptron đơn giản nhất, là nền tảng cho các mạng neural phức tạp hơn. Sử dụng hàm sigmoid và binary cross-entropy loss.
+
+```python
+# Phần 7: SingleHiddenLayer - Mạng neural một lớp ẩn
+class SingleHiddenLayer:
+    """Mạng neural với một lớp ẩn"""
+    def __init__(self, hidden_size=4, learning_rate=0.01, num_iterations=1000):
+        self.hidden_size = hidden_size
+        self.learning_rate = learning_rate
+        self.num_iterations = num_iterations
+        self.W1 = None  # Weights cho lớp ẩn
+        self.b1 = None  # Bias cho lớp ẩn
+        self.W2 = None  # Weights cho lớp đầu ra
+        self.b2 = None  # Bias cho lớp đầu ra
+        self.cost_history = []
+    
+    def _sigmoid(self, z):
+        """Hàm kích hoạt sigmoid"""
+        return 1 / (1 + np.exp(-z))
+    
+    def _sigmoid_derivative(self, z):
+        """Đạo hàm của hàm sigmoid"""
+        s = self._sigmoid(z)
+        return s * (1 - s)
+    
+    def forward_propagation(self, X):
+        """Lan truyền tiến"""
+        Z1 = np.dot(X, self.W1) + self.b1
+        A1 = self._sigmoid(Z1)
+        Z2 = np.dot(A1, self.W2) + self.b2
+        A2 = self._sigmoid(Z2)
+        return Z1, A1, Z2, A2
+    
+    def backward_propagation(self, X, y, Z1, A1, Z2, A2):
+        """Lan truyền ngược"""
+        m = len(y)
+        
+        # Tính gradient cho lớp đầu ra
+        dZ2 = A2 - y
+        dW2 = (1/m) * np.dot(A1.T, dZ2)
+        db2 = (1/m) * np.sum(dZ2, axis=0)
+        
+        # Tính gradient cho lớp ẩn
+        dZ1 = np.dot(dZ2, self.W2.T) * self._sigmoid_derivative(Z1)
+        dW1 = (1/m) * np.dot(X.T, dZ1)
+        db1 = (1/m) * np.sum(dZ1, axis=0)
+        
+        return dW1, db1, dW2, db2
+    
+    def fit(self, X, y):
+        """Huấn luyện mạng neural"""
+        m, n = X.shape
+        self.W1 = np.random.randn(n, self.hidden_size) * 0.01
+        self.b1 = np.zeros((1, self.hidden_size))
+        self.W2 = np.random.randn(self.hidden_size, 1) * 0.01
+        self.b2 = np.zeros((1, 1))
+        
+        for _ in range(self.num_iterations):
+            Z1, A1, Z2, A2 = self.forward_propagation(X)
+            dW1, db1, dW2, db2 = self.backward_propagation(X, y, Z1, A1, Z2, A2)
+            
+            self.W1 -= self.learning_rate * dW1
+            self.b1 -= self.learning_rate * db1
+            self.W2 -= self.learning_rate * dW2
+            self.b2 -= self.learning_rate * db2
+            
+            self.cost_history.append(self.compute_cost(X, y))
+```
+→ **Vai trò**: Cài đặt mạng neural với một lớp ẩn, có khả năng học các mối quan hệ phi tuyến phức tạp. Sử dụng backpropagation để tính gradient và cập nhật tham số.
+
+```python
+# Phần 8: TensorFlowOneHiddenLayer - Mạng neural với TensorFlow
+import tensorflow as tf
+
+class TensorFlowOneHiddenLayer:
+    """Mạng neural một lớp ẩn sử dụng TensorFlow"""
+    def __init__(self, hidden_size=4, learning_rate=0.01):
+        self.hidden_size = hidden_size
+        self.learning_rate = learning_rate
+        self.model = self._build_model()
+    
+    def _build_model(self):
+        """Xây dựng mô hình TensorFlow"""
+        model = tf.keras.Sequential([
+            tf.keras.layers.Dense(self.hidden_size, activation='relu', input_shape=(2,)),
+            tf.keras.layers.Dense(1, activation='sigmoid')
+        ])
+        
+        model.compile(
+            optimizer=tf.keras.optimizers.Adam(learning_rate=self.learning_rate),
+            loss='binary_crossentropy',
+            metrics=['accuracy']
+        )
+        
+        return model
+    
+    def fit(self, X, y, epochs=1000, batch_size=32):
+        """Huấn luyện mô hình"""
+        history = self.model.fit(
+            X, y,
+            epochs=epochs,
+            batch_size=batch_size,
+            verbose=0
+        )
+        return history
+    
+    def predict(self, X):
+        """Dự đoán đầu ra"""
+        return self.model.predict(X)
+```
+→ **Vai trò**: Cài đặt mạng neural sử dụng TensorFlow framework, tận dụng các tính năng hiện đại như automatic differentiation và GPU acceleration. Sử dụng ReLU cho lớp ẩn và sigmoid cho lớp đầu ra.
+
+Mỗi phần code trên đều có vai trò riêng trong hệ thống:
+- `StandardScaler`: Tiền xử lý dữ liệu
+- `RegressionModel`: Cung cấp framework chung
+- `LinearRegression`: Học mối quan hệ tuyến tính
+- `PolynomialRegression`: Học mối quan hệ phi tuyến
+- `LogisticRegression`: Giải quyết bài toán phân loại
+- `Perceptron`: Mô hình neural đơn giản nhất
+- `SingleHiddenLayer`: Mạng neural một lớp ẩn
+- `TensorFlowOneHiddenLayer`: Mạng neural với framework hiện đại
+
+Các class này được thiết kế để làm việc cùng nhau, với mức độ phức tạp tăng dần từ các mô hình hồi quy cơ bản đến các mạng neural phức tạp.
 
 2. **Visualization Module**: Trực quan hóa kết quả
 - Vẽ dữ liệu và mô hình dự đoán
