@@ -349,8 +349,10 @@ images/                    # Generated visualization images
   - w₁: trọng số của điểm thi
   - w₂: trọng số của GPA
   - b: độ chệch
-- **Binary cross-entropy loss**: 
+- **Binary cross-entropy loss**:
+``` 
   J(w₁,w₂,b) = -(1/m) * Σ[y⁽ⁱ⁾log(h(x⁽ⁱ⁾)) + (1-y⁽ⁱ⁾)log(1-h(x⁽ⁱ⁾))]
+```
 - **Gradient descent**:
   - ∂J/∂w₁ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₁⁽ⁱ⁾
   - ∂J/∂w₂ = (1/m) * Σ(h(x⁽ⁱ⁾) - y⁽ⁱ⁾) * x₂⁽ⁱ⁾
