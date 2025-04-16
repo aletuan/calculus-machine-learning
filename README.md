@@ -7,6 +7,28 @@ Triển khai và trực quan hóa các mô hình học máy cơ bản, từ hồ
 ### Machine Learning là gì?
 Machine Learning (Học máy) là một nhánh của trí tuệ nhân tạo, cho phép máy tính "học" từ dữ liệu mà không cần được lập trình một cách tường minh. Trong project này, chúng ta tập trung vào học có giám sát (supervised learning) với các dạng bài toán phổ biến:
 
+### Supervised Learning (Học có giám sát)
+- **Định nghĩa**: Là một nhánh của học máy mà trong đó dữ liệu huấn luyện luôn bao gồm cặp (input, output), tức là mỗi mẫu dữ liệu đầu vào (feature) đều có label (nhãn) tương ứng.
+- **Vai trò của Label**:
+  - Label là giá trị đầu ra đúng (ground truth) cho mỗi mẫu dữ liệu đầu vào
+  - Trong quá trình huấn luyện, mô hình sẽ:
+    - Dự đoán output cho mỗi input
+    - So sánh output dự đoán với label thực tế để tính toán loss function
+    - Sử dụng loss để cập nhật tham số mô hình
+- **Ví dụ trong dự án**:
+  - **Regression**: 
+    - Input: Diện tích nhà
+    - Label: Giá nhà thực tế
+  - **Classification**:
+    - Input: Điểm thi, GPA
+    - Label: Đỗ (1) hoặc Trượt (0)
+  - **Neural Network**:
+    - Input: Cặp số nhị phân
+    - Label: Kết quả phép toán logic (AND, XOR)
+- **Khác biệt với Unsupervised Learning**:
+  - Unsupervised learning: Dữ liệu không có label, mô hình tự tìm cấu trúc/nhóm trong dữ liệu
+  - Supervised learning: Dữ liệu có label, mô hình học trực tiếp từ cặp input-label
+
 ### 1. Regression (Hồi quy)
 - **Định nghĩa**: Dự đoán một giá trị liên tục dựa trên các đặc trưng đầu vào
 - **Ví dụ**: Dự đoán giá nhà dựa trên diện tích và số phòng ngủ
