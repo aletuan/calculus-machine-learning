@@ -245,27 +245,5 @@ def main(example):
     run_example(example)
     print_generated_images()
 
-    if example == 'decision_tree':
-        console.print("\n[bold green]Decision Tree Example[/bold green]")
-        console.print("Phân loại hoa Iris sử dụng Decision Tree")
-        console.print("Thuật toán xây dựng cây dựa trên:")
-        console.print("1. Information Gain")
-        console.print("2. Entropy")
-        console.print("\nCông thức:")
-        console.print("- Entropy: H(S) = -Σ p(x) * log2(p(x))")
-        console.print("- Information Gain: IG(S,A) = H(S) - Σ |Sv|/|S| * H(Sv)")
-        
-        print_images(['decision_tree_boundary.png'])
-
-def print_images(image_names):
-    """In thông tin về các hình ảnh được chỉ định"""
-    for img_name in image_names:
-        img_path = os.path.join('images', img_name)
-        if os.path.exists(img_path):
-            size = os.path.getsize(img_path) / 1024  # Convert to KB
-            console.print(f"📄 {img_name} ({size:.1f}KB)")
-        else:
-            console.print(f"❌ {img_name} (không tìm thấy)")
-
 if __name__ == "__main__":
     main() 
