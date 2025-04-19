@@ -24,6 +24,7 @@ from .examples.polynomial_example import main as polynomial_main
 from .examples.perceptron.train import train_perceptron
 from .examples.single_hidden_layer.train import main as run_neural_network
 from .examples.tf_one_hidden_layer.train import main as run_tf_neural_network
+from .examples.sklearn.linear_regression import main as run_sklearn_linear
 
 # Initialize rich console
 console = Console()
@@ -104,7 +105,9 @@ def print_examples_table():
         ("7. TensorFlow Neural Network",
          "Học hàm AND với neural network sử dụng TensorFlow"),
         ("8. Decision Tree",
-         "Phân loại hoa Iris sử dụng Decision Tree")
+         "Phân loại hoa Iris sử dụng Decision Tree"),
+        ("9. Scikit-learn Linear Regression",
+         "Dự đoán giá nhà dựa trên diện tích với Scikit-learn")
     ]
     
     for example in examples:
@@ -142,10 +145,11 @@ def get_user_choice():
             console.print("6. Neural Network")
             console.print("7. TensorFlow Neural Network")
             console.print("8. Decision Tree")
-            example_choice = int(console.input("\n[bold]Nhập số ví dụ (1-8): [/bold]"))
-            if 1 <= example_choice <= 8:
+            console.print("9. Scikit-learn Linear Regression")
+            example_choice = int(console.input("\n[bold]Nhập số ví dụ (1-9): [/bold]"))
+            if 1 <= example_choice <= 9:
                 break
-            console.print("[red]Vui lòng nhập số từ 1 đến 8[/red]")
+            console.print("[red]Vui lòng nhập số từ 1 đến 9[/red]")
         except ValueError:
             console.print("[red]Vui lòng nhập số hợp lệ[/red]")
     
@@ -157,7 +161,8 @@ def get_user_choice():
         5: 'perceptron',
         6: 'neural',
         7: 'tf_neural',
-        8: 'decision_tree'
+        8: 'decision_tree',
+        9: 'sklearn'
     }
     return example_map[example_choice]
 
@@ -228,11 +233,16 @@ def run_example(example):
         from .examples.decision_tree.example import run_decision_tree_example
         run_decision_tree_example()
 
+    if example in ['sklearn', 'all']:
+        console.print(Panel(
+            "[bold cyan]Ví dụ 9: Scikit-learn Linear Regression[/bold cyan]\n"
+            "Dự đoán giá nhà dựa trên diện tích với Scikit-learn",
+            border_style="cyan"
+        ))
+        run_sklearn_linear()
+
 @click.command()
-@click.option('--example', type=click.Choice([
-    'linear', 'multiple', 'polynomial', 'logistic', 
-    'perceptron', 'neural', 'tf_neural', 'decision_tree'
-]), help='Chọn ví dụ để chạy')
+@click.option('--example', type=click.Choice(['linear', 'multiple', 'polynomial', 'logistic', 'perceptron', 'neural', 'tf_neural', 'decision_tree', 'sklearn']), help='Example to run')
 def main(example):
     """Chạy các ví dụ về machine learning"""
     ensure_images_dir()

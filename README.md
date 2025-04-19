@@ -597,6 +597,69 @@ Neural Networks (Mạng Neural) là một trong những mô hình học máy m�
   - Màu sắc: Vùng quyết định cho mỗi class
   - Điểm: Dữ liệu thực tế
 
+### 6. Scikit-learn - Machine Learning với Thư Viện Hiện Đại
+
+Scikit-learn là một trong những thư viện machine learning phổ biến nhất trong Python, cung cấp các công cụ mạnh mẽ cho việc phân tích dữ liệu và xây dựng mô hình học máy. Thư viện này được xây dựng dựa trên NumPy, SciPy và matplotlib, cung cấp giao diện đơn giản và nhất quán cho các thuật toán học máy.
+
+#### Đặc điểm nổi bật của Scikit-learn:
+- **Tính nhất quán**: Tất cả các mô hình đều có cùng giao diện (fit, predict, score)
+- **Tính mô-đun**: Các thành phần có thể kết hợp linh hoạt
+- **Tính mở rộng**: Dễ dàng tích hợp với các thư viện khác
+- **Tài liệu phong phú**: Có nhiều ví dụ và hướng dẫn chi tiết
+
+#### 6.1. Linear Regression với Scikit-learn - Dự Đoán Giá Nhà từ Kaggle
+
+##### Mô tả bài toán
+- **Mục tiêu**: Dự đoán giá nhà dựa trên thu nhập trung bình của khu vực
+- **Dữ liệu**: 
+  - Sử dụng bộ dữ liệu California Housing từ Kaggle
+  - 20,640 mẫu dữ liệu về nhà ở California
+  - Feature: median_income (thu nhập trung bình)
+  - Target: median_house_value (giá nhà trung bình)
+- **Xử lý dữ liệu**:
+  - Chia dữ liệu thành tập train (80%) và test (20%)
+  - Sử dụng random_state=42 để đảm bảo tính tái lập
+  - Không cần chuẩn hóa dữ liệu vì LinearRegression của Scikit-learn tự động xử lý
+
+##### Công thức toán học
+- **Mô hình dự đoán**: y = θ₀ + θ₁x
+  - θ₀: intercept (44,459.73)
+  - θ₁: coefficient (41,933.85)
+  - x: median_income
+  - y: median_house_value
+
+- **Hàm mất mát (Mean Squared Error)**:
+  ```
+  MSE = (1/m) * Σ(y_pred - y_true)²
+  ```
+  - m: số lượng mẫu
+  - y_pred: giá trị dự đoán
+  - y_true: giá trị thực tế
+
+- **Đánh giá mô hình**:
+  - R² Score: 0.46 (46% phương sai được giải thích)
+  - MSE: 7,091,157,771.77
+
+##### Trực quan hóa kết quả
+![Scikit-learn Linear Regression](images/sklearn_linear_regression.png)
+- **Đồ thị dự đoán**:
+  - Điểm xanh: dữ liệu thực tế (thu nhập, giá nhà)
+  - Đường đỏ: mô hình dự đoán tối ưu
+  - Trục x: Thu nhập trung bình
+  - Trục y: Giá nhà trung bình
+
+##### So sánh với cài đặt từ đầu
+- **Ưu điểm của Scikit-learn**:
+  - Tự động tối ưu hóa tham số
+  - Xử lý dữ liệu hiệu quả
+  - Có sẵn các metrics đánh giá
+  - Dễ dàng mở rộng cho các bài toán phức tạp hơn
+
+- **Kết quả**:
+  - Mô hình có thể giải thích được 46% phương sai của dữ liệu
+  - Có mối quan hệ dương giữa thu nhập và giá nhà
+  - MSE khá lớn, cho thấy có thể cần thêm các feature khác để cải thiện dự đoán
+
 ## Chi Tiết Triển Khai
 
 ### Các Module Chính
