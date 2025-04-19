@@ -660,6 +660,79 @@ Scikit-learn là một trong những thư viện machine learning phổ biến n
   - Có mối quan hệ dương giữa thu nhập và giá nhà
   - MSE khá lớn, cho thấy có thể cần thêm các feature khác để cải thiện dự đoán
 
+#### 6.2. Multiple Linear Regression với Scikit-learn - Dự Đoán Giá Nhà với Nhiều Đặc Trưng
+
+##### Mô tả bài toán
+- **Mục tiêu**: Dự đoán giá nhà dựa trên nhiều đặc trưng khác nhau
+- **Dữ liệu**: 
+  - Sử dụng bộ dữ liệu California Housing từ Kaggle
+  - 20,640 mẫu dữ liệu về nhà ở California
+  - Features:
+    - median_income: Thu nhập trung bình của khu vực
+    - housing_median_age: Tuổi trung bình của nhà
+    - total_rooms: Tổng số phòng
+    - total_bedrooms: Tổng số phòng ngủ
+    - population: Dân số khu vực
+    - households: Số hộ gia đình
+    - longitude: Kinh độ
+    - latitude: Vĩ độ
+  - Target: median_house_value (giá nhà trung bình)
+
+##### Xử lý dữ liệu
+- **Tiền xử lý**:
+  - Xử lý giá trị thiếu (NaN) bằng cách điền giá trị trung vị
+  - Chia dữ liệu thành tập train (80%) và test (20%)
+  - Sử dụng random_state=42 để đảm bảo tính tái lập
+
+##### Kết quả và phân tích
+- **Độ chính xác của mô hình**:
+  - R² Score: 0.61 (61% phương sai được giải thích)
+  - MSE: 5,059,928,371.17
+  - So với mô hình đơn giản (chỉ dùng median_income), R² tăng từ 0.46 lên 0.61
+
+- **Phân tích hệ số**:
+  ```
+  Intercept (θ₀): -3,578,224.23
+  median_income:      40,538.40    (Ảnh hưởng dương mạnh nhất)
+  longitude:         -42,632.39    (Ảnh hưởng âm mạnh)
+  latitude:          -42,450.07    (Ảnh hưởng âm mạnh)
+  housing_median_age:  1,182.81    (Ảnh hưởng dương nhẹ)
+  total_bedrooms:       116.26     (Ảnh hưởng dương nhẹ)
+  households:            46.34     (Ảnh hưởng dương rất nhẹ)
+  population:           -38.49     (Ảnh hưởng âm nhẹ)
+  total_rooms:           -8.19     (Ảnh hưởng âm rất nhẹ)
+  ```
+
+- **Ý nghĩa các hệ số**:
+  - Thu nhập trung bình có ảnh hưởng dương mạnh nhất: Tăng 1 đơn vị thu nhập làm tăng giá nhà 40,538.40$
+  - Vị trí địa lý (longitude, latitude) có ảnh hưởng mạnh: Phản ánh sự khác biệt giá nhà theo khu vực
+  - Tuổi nhà có ảnh hưởng dương: Có thể do nhà cũ thường ở vị trí đắc địa hơn
+  - Số phòng ngủ có ảnh hưởng dương: Nhiều phòng ngủ làm tăng giá nhà
+  - Dân số có ảnh hưởng âm: Khu vực đông dân có thể làm giảm giá nhà
+
+##### Trực quan hóa kết quả
+![Feature Importance](images/sklearn_multiple_linear_regression.png)
+- **Đồ thị feature importance**:
+  - Trục x: Các đặc trưng
+  - Trục y: Mức độ ảnh hưởng (%)
+  - Cho thấy thu nhập và vị trí địa lý là những yếu tố quan trọng nhất
+
+##### So sánh với cài đặt từ đầu
+- **Ưu điểm của Scikit-learn**:
+  - Xử lý dữ liệu thiếu tự động và hiệu quả
+  - Tự động chuẩn hóa dữ liệu khi cần
+  - Tối ưu hóa tham số nhanh chóng
+  - Có sẵn nhiều metrics đánh giá
+  - Dễ dàng mở rộng cho các bài toán phức tạp hơn
+
+- **Kết luận**:
+  - Mô hình đa biến cho kết quả tốt hơn đáng kể so với mô hình đơn biến
+  - Thu nhập và vị trí địa lý là những yếu tố quan trọng nhất quyết định giá nhà
+  - Có thể cải thiện thêm bằng cách:
+    - Thêm các đặc trưng phi tuyến
+    - Xử lý outliers
+    - Thử nghiệm các mô hình phức tạp hơn
+
 ## Chi Tiết Triển Khai
 
 ### Các Module Chính
