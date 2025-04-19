@@ -58,6 +58,10 @@ IMAGES = {
     },
     "Decision Tree": {
         "decision_tree_boundary.png": "Decision boundary của Decision Tree"
+    },
+    "Scikit-learn": {
+        "sklearn_linear_regression.png": "Kết quả hồi quy tuyến tính với scikit-learn",
+        "sklearn_multiple_linear_regression.png": "Feature importance của hồi quy nhiều biến với scikit-learn"
     }
 }
 
